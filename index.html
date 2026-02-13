@@ -2,820 +2,1203 @@
 <html lang="es">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#ffeaf3" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Para Saharaim 💘</title>
 
   <style>
     :root{
-      --ink:#2b2b35;
-      --mut:#5c5c6a;
-      --card:rgba(255,255,255,.74);
-      --shadow: 0 18px 50px rgba(41, 16, 36, .12);
-      --shadow2: 0 8px 24px rgba(41, 16, 36, .10);
-      --radius:22px;
+      --bg1:#fff3f8;
+      --bg2:#f6f8ff;
+      --card: rgba(255,255,255,.78);
+      --card2: rgba(255,255,255,.88);
+      --stroke: rgba(0,0,0,.06);
+      --txt:#1f1f2b;
+      --mut: rgba(31,31,43,.62);
+      --pink:#ff5aa5;
+      --pink2:#ff8bc5;
+      --purple:#7c6cff;
+      --shadow: 0 18px 55px rgba(28,18,40,.14);
       --ease: cubic-bezier(.2,.9,.2,1);
-      --glass: blur(14px);
-      --font: ui-rounded, system-ui, -apple-system, "SF Pro Rounded", "Segoe UI", Roboto, Arial, sans-serif;
-
-      /* ✅ TU FOTO DE FONDO (sube assets/fondo.jpg) */
-      --bgimg: url("./assets/fondo.jpg");
+      --radius: 22px;
     }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box }
+    html,body{ height:100% }
     body{
       margin:0;
-      font-family: var(--font);
-      color:var(--ink);
-      background: #fff;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      color:var(--txt);
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,90,165,.18), transparent 60%),
+        radial-gradient(1000px 700px at 85% 20%, rgba(124,108,255,.16), transparent 60%),
+        linear-gradient(180deg, var(--bg1), var(--bg2));
       overflow-x:hidden;
     }
 
-    /* Fondo con foto SIN estirar, sin pixelote (cover) */
-    body::before{
+    /* Optional background image (when you upload one) */
+    body.has-bg::before{
       content:"";
-      position:fixed; inset:0;
+      position:fixed;
+      inset:0;
       background-image: var(--bgimg);
       background-size: cover;
       background-position:center;
       background-repeat:no-repeat;
-      transform: scale(1.06);
-      filter: blur(10px) brightness(.88) saturate(1.05);
-      opacity:.75;
-      pointer-events:none;
+      filter: saturate(1.05) contrast(1.02);
+      opacity:.22;              /* no estira, no pixelea tanto */
+      transform: scale(1.02);   /* evita bordes */
       z-index:-2;
     }
-    /* Capa suave para legibilidad */
-    body::after{
+    body.has-bg::after{
       content:"";
-      position:fixed; inset:0;
-      background: radial-gradient(1000px 600px at 20% 20%, rgba(255,255,255,.75), rgba(255,255,255,.50)),
-                  linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.65));
-      pointer-events:none;
+      position:fixed;
+      inset:0;
+      background: linear-gradient(180deg, rgba(255,243,248,.72), rgba(246,248,255,.86));
       z-index:-1;
     }
 
     .wrap{
-      min-height:100%;
-      display:grid;
-      place-items:center;
-      padding: 18px 14px 26px;
-    }
-    .app{
-      width:min(920px, 96vw);
-      background: var(--card);
-      border: 1px solid rgba(255,255,255,.9);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: var(--glass);
-      -webkit-backdrop-filter: var(--glass);
-      overflow:hidden;
+      max-width: 1100px;
+      margin: 28px auto;
+      padding: 0 16px 40px;
     }
 
     .topbar{
       display:flex;
+      gap:10px;
       align-items:center;
       justify-content:space-between;
-      gap:12px;
-      padding: 14px 14px 10px;
-      border-bottom: 1px solid rgba(255,255,255,.75);
-      background: linear-gradient(90deg, rgba(255,255,255,.65), rgba(255,255,255,.35));
+      flex-wrap:wrap;
+      background: var(--card);
+      border:1px solid var(--stroke);
+      border-radius: 999px;
+      padding: 10px 12px;
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
 
     .brand{
-      display:flex; align-items:center; gap:10px;
-      font-weight:900; letter-spacing:.2px;
-      flex-wrap:wrap;
+      display:flex;
+      gap:10px;
+      align-items:center;
+      padding-left: 4px;
     }
-
     .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.74);
-      box-shadow: var(--shadow2);
-      border: 1px solid rgba(255,255,255,.92);
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 9px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: var(--card2);
+      font-weight: 800;
+      letter-spacing:.2px;
+      user-select:none;
       white-space:nowrap;
     }
     .dot{
-      width:10px;height:10px;border-radius:50%;
-      background: conic-gradient(from 0deg, #ff6fae, #a78bfa, #4fd1c5, #ff6fae);
-      box-shadow: 0 0 18px rgba(255,111,174,.35);
-      animation: pulse 1.8s var(--ease) infinite;
+      width:10px;height:10px;border-radius:99px;
+      background: linear-gradient(90deg, var(--pink), var(--purple));
+      box-shadow: 0 6px 16px rgba(255,90,165,.35);
     }
-    @keyframes pulse { 50% { transform: scale(1.25); filter: brightness(1.05);} }
 
     .actions{
-      display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
-    .btnSmall{
-      border: 1px solid rgba(255,255,255,.92);
-      background: rgba(255,255,255,.74);
-      padding: 10px 12px;
-      border-radius: 14px;
+    button, .btn{
+      border:1px solid var(--stroke);
+      background: var(--card2);
+      border-radius: 999px;
+      padding: 9px 12px;
       cursor:pointer;
-      box-shadow: var(--shadow2);
-      font-weight: 850;
-      transition: transform .15s var(--ease), opacity .15s var(--ease);
+      font-weight:800;
+      color:var(--txt);
+      transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
       user-select:none;
-      touch-action: manipulation;
     }
-    .btnSmall:hover{ transform: translateY(-1px) scale(1.02); }
-    .btnSmall:active{ transform: translateY(0px) scale(.98); }
-
-    .main{
-      display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 14px;
-      padding: 14px;
+    button:hover, .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 26px rgba(28,18,40,.12); }
+    button:active, .btn:active{ transform: translateY(0px) scale(.99); }
+    button.primary{
+      background: linear-gradient(90deg, rgba(255,90,165,.95), rgba(255,139,197,.95));
+      color:white;
+      border-color: rgba(255,90,165,.30);
+      box-shadow: 0 16px 34px rgba(255,90,165,.25);
     }
-    @media (max-width: 860px){
-      .main{ grid-template-columns: 1fr; }
-    }
-
-    .panel{
-      background: rgba(255,255,255,.62);
-      border: 1px solid rgba(255,255,255,.9);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow2);
-      padding: 14px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .screen{ display:none; animation: in .28s var(--ease); }
-    .screen.active{ display:block; }
-    @keyframes in { from{opacity:0; transform: translateY(10px) scale(.99);} to{opacity:1; transform: translateY(0) scale(1);} }
-
-    .hero h1{
-      margin: 6px 0 8px;
-      font-size: clamp(22px, 3.6vw, 40px);
-      line-height: 1.1;
-    }
-    .hero p{
-      margin:0 0 14px;
-      color:var(--mut);
-      line-height:1.55;
-      font-weight: 650;
+    button.ghost{
+      background: transparent;
     }
 
     .grid{
       display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .panel{
+      background: var(--card);
+      border:1px solid var(--stroke);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      overflow:hidden;
+    }
+
+    .panelHeader{
+      padding: 16px 16px 10px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      border-bottom: 1px solid rgba(0,0,0,.04);
+    }
+    .panelHeader h1{
+      font-size: 18px;
+      margin:0;
+      font-weight: 950;
+    }
+    .panelHeader .sub{
+      margin:0;
+      color: var(--mut);
+      font-weight: 700;
+      font-size: 13px;
+    }
+
+    .content{
+      padding: 16px;
+    }
+
+    .menu{
+      display:grid;
       grid-template-columns: repeat(2, minmax(0,1fr));
       gap: 12px;
-      margin-top: 12px;
     }
-    @media (max-width: 520px){
-      .grid{ grid-template-columns: 1fr; }
+    @media (min-width: 820px){
+      .menu{ grid-template-columns: repeat(4, minmax(0,1fr)); }
+      .grid{ grid-template-columns: 1.12fr .88fr; align-items:start; }
     }
 
     .tile{
-      border: 1px solid rgba(255,255,255,.9);
-      background: rgba(255,255,255,.76);
-      border-radius: 18px;
       padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.72);
       cursor:pointer;
-      box-shadow: var(--shadow2);
-      transition: transform .18s var(--ease), background .18s var(--ease);
-      position:relative;
-      overflow:hidden;
-      user-select:none;
-      touch-action: manipulation;
+      transition: transform .15s var(--ease), box-shadow .15s var(--ease);
+      min-height: 92px;
+      display:flex;
+      flex-direction:column;
+      justify-content:space-between;
     }
-    .tile:hover{ transform: translateY(-2px) scale(1.01); background: rgba(255,255,255,.86); }
-    .tile:active{ transform: translateY(0px) scale(.98); }
-
-    .tile .t-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .tile .name{ font-weight: 950; letter-spacing:.2px; }
-    .tile .desc{ margin-top:6px; color:var(--mut); font-weight:650; line-height:1.4; font-size: 13.5px; }
-    .badge{
+    .tile:hover{ transform: translateY(-2px); box-shadow: 0 18px 40px rgba(28,18,40,.12); }
+    .tile .t{
+      font-weight: 950;
+      font-size: 14.5px;
+    }
+    .tile .d{
+      color: var(--mut);
+      font-weight: 700;
+      font-size: 12.5px;
+      margin-top: 6px;
+      line-height: 1.2;
+    }
+    .tile.locked{
+      opacity: .55;
+      position: relative;
+    }
+    .tile.locked::after{
+      content:"🔒 Bloqueado";
+      position:absolute;
+      top:10px;
+      right:10px;
+      font-weight: 900;
       font-size: 12px;
-      font-weight: 950;
-      padding: 6px 10px;
+      color: rgba(31,31,43,.68);
+      background: rgba(255,255,255,.85);
+      border:1px solid rgba(0,0,0,.06);
+      padding: 6px 9px;
       border-radius: 999px;
-      background: rgba(255,255,255,.78);
-      border: 1px solid rgba(255,255,255,.92);
-      box-shadow: var(--shadow2);
-      white-space:nowrap;
     }
-    .locked{ opacity:.62; }
 
-    .backRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom: 10px; }
-    .back{
-      display:inline-flex; align-items:center; gap:8px;
-      border: 1px solid rgba(255,255,255,.92);
-      background: rgba(255,255,255,.76);
-      padding: 10px 12px;
-      border-radius: 14px;
-      cursor:pointer;
-      font-weight: 950;
-      box-shadow: var(--shadow2);
-      transition: transform .15s var(--ease);
-      user-select:none;
-      touch-action: manipulation;
-    }
-    .back:hover{ transform: translateY(-1px); }
-    .back:active{ transform: translateY(0) scale(.98); }
-
-    /* Carta más “papel real” */
-    .letterShell{
-      border-radius: 20px;
-      padding: 16px;
-      border: 1px solid rgba(255,255,255,.92);
-      background: rgba(255,255,255,.64);
-      box-shadow: var(--shadow2);
-      position:relative;
-      overflow:hidden;
-    }
-    .letterShell::before{
-      content:"";
-      position:absolute; inset:-8px;
-      background:
-        repeating-linear-gradient(0deg, rgba(0,0,0,.02) 0 1px, transparent 1px 22px),
-        radial-gradient(520px 190px at 20% 10%, rgba(255,204,122,.22), transparent 60%),
-        radial-gradient(520px 190px at 90% 90%, rgba(255,111,174,.18), transparent 60%);
-      opacity:.7;
-      pointer-events:none;
+    /* Letter */
+    .letterWrap{
+      display:grid;
+      gap:12px;
     }
     .paper{
-      position:relative;
-      background: rgba(255,255,255,.92);
-      border: 1px solid rgba(0,0,0,.04);
+      background: rgba(255,255,255,.86);
+      border: 1px solid rgba(0,0,0,.06);
       border-radius: 18px;
-      padding: 16px 16px 14px;
-      box-shadow: 0 10px 30px rgba(41,16,36,.08);
+      padding: 16px;
+      box-shadow: 0 18px 40px rgba(28,18,40,.10);
+      position:relative;
+      overflow:hidden;
     }
-    .paper::after{
+    .paper::before{
       content:"";
-      position:absolute;
-      right: 14px; top: 14px;
-      width: 14px; height:14px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(255,111,174,.9), rgba(255,111,174,.35));
-      box-shadow: 0 0 0 6px rgba(255,111,174,.10);
-      opacity:.9;
+      position:absolute; inset:-40px;
+      background: radial-gradient(circle at 20% 10%, rgba(255,90,165,.10), transparent 55%),
+                  radial-gradient(circle at 80% 10%, rgba(124,108,255,.10), transparent 55%);
+      filter: blur(14px);
+      pointer-events:none;
     }
-    .paper p{
-      margin:0;
-      line-height:1.75;
-      font-weight: 650;
-      font-size: 15px;
-      white-space:pre-wrap;
-      padding-right: 18px;
+    .paperInner{ position:relative; }
+    .paperTitle{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 10px;
     }
-    .signature{
+    .paperTitle h2{ margin:0; font-size: 18px; font-weight: 950; }
+    .paperTitle span{ color:var(--mut); font-weight:800; font-size: 12.5px; }
+    .letterText{
+      white-space: pre-wrap;
+      line-height: 1.55;
+      font-weight: 700;
+      color: rgba(31,31,43,.88);
+      font-size: 14.5px;
+      min-height: 180px;
+    }
+    .sig{
       margin-top: 14px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:10px;
-      flex-wrap:wrap;
+      font-weight: 950;
+      color: rgba(31,31,43,.92);
+    }
+
+    /* Photos */
+    .photoGrid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 12px;
+    }
+    .photoCard{
+      grid-column: span 6;
+      background: rgba(255,255,255,.82);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
+      padding: 12px;
+      box-shadow: 0 18px 45px rgba(28,18,40,.12);
+      transition: transform .18s var(--ease), box-shadow .18s var(--ease);
+      cursor:pointer;
+      transform: rotate(var(--tilt, 0deg));
+      position: relative;
+      overflow:hidden;
+    }
+    .photoCard:hover{
+      transform: rotate(var(--tilt, 0deg)) translateY(-3px) scale(1.01);
+      box-shadow: 0 22px 58px rgba(28,18,40,.16);
+    }
+    .photoCard.big{ grid-column: span 7; }
+    .photoCard.med{ grid-column: span 5; }
+    .photoCard.small{ grid-column: span 4; }
+    @media (max-width: 860px){
+      .photoCard.big,.photoCard.med,.photoCard.small{ grid-column: span 12; transform:none; }
+      .photoCard:hover{ transform: translateY(-2px) scale(1.01); }
+    }
+    .tape{
+      position:absolute; top: 10px; left: 12px;
+      width: 92px; height: 26px;
+      background: rgba(255,90,165,.18);
+      border: 1px solid rgba(255,90,165,.22);
+      border-radius: 10px;
+      transform: rotate(-7deg);
+      box-shadow: 0 10px 22px rgba(28,18,40,.10);
+      pointer-events:none;
+    }
+    .tape::after{
+      content:"";
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(90deg, rgba(255,255,255,.26) 0 6px, transparent 6px 12px);
+      border-radius: 10px;
+      opacity:.7;
+    }
+    .photoImgWrap{
+      border-radius: 14px;
+      overflow:hidden;
+      border: 1px solid rgba(0,0,0,.06);
+      background:#fff;
+    }
+    .photoImg{
+      width:100%;
+      height: 260px;
+      object-fit: cover;
+      object-position:center;
+      display:block;
+    }
+    .photoCard.big .photoImg{ height: 300px; }
+    .photoCard.small .photoImg{ height: 230px; }
+    .photoText{
+      margin-top: 10px;
+      font-weight: 950;
+      font-size: 13.8px;
+    }
+    .photoSub{
+      margin-top: 4px;
+      color: var(--mut);
+      font-weight: 800;
+      font-size: 12.6px;
+      line-height: 1.25;
+    }
+
+    /* Mini test */
+    .q{
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(0,0,0,.06);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: 0 16px 40px rgba(28,18,40,.10);
+      display:grid;
+      gap: 10px;
+    }
+    .q p{ margin:0; font-weight: 950; }
+    .opts{ display:grid; gap:8px; }
+    .opt{
+      display:flex; gap:10px; align-items:center;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,.06);
+      background: rgba(255,255,255,.86);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s var(--ease), box-shadow .12s var(--ease);
+    }
+    .opt:hover{ transform: translateY(-1px); box-shadow: 0 12px 24px rgba(28,18,40,.10); }
+    .opt input{ transform: scale(1.1); }
+
+    .notice{
+      margin-top: 10px;
+      color: var(--mut);
+      font-weight: 800;
+      font-size: 12.7px;
+      line-height: 1.35;
+    }
+    .result{
+      margin-top: 10px;
+      font-weight: 950;
+    }
+
+    /* Question (Valentín) */
+    .bigAsk{
+      display:grid;
+      gap: 12px;
+      text-align:center;
+    }
+    .askTitle{
+      font-size: 20px;
+      font-weight: 1000;
+      margin: 0;
+    }
+    .askSub{
+      margin: 0;
       color: var(--mut);
       font-weight: 800;
       font-size: 13.5px;
     }
-    .signName{
-      font-weight: 950;
-      color: #2b2b35;
+    .askBtns{
+      display:flex;
+      gap:10px;
+      justify-content:center;
+      flex-wrap:wrap;
+      margin-top: 8px;
     }
 
-    .btnRow{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top: 12px; }
-    .btn{
-      border: 1px solid rgba(255,255,255,.92);
-      background: rgba(255,255,255,.78);
-      padding: 12px 14px;
-      border-radius: 16px;
-      cursor:pointer;
-      font-weight: 950;
-      min-width: 150px;
-      box-shadow: var(--shadow2);
-      transition: transform .16s var(--ease);
-      user-select:none;
-      touch-action: manipulation;
-    }
-    .btn:hover{ transform: translateY(-2px) scale(1.02); }
-    .btn:active{ transform: translateY(0) scale(.98); }
-    .btn.primary{
-      background: linear-gradient(180deg, rgba(255,111,174,.22), rgba(255,255,255,.78));
-      border-color: rgba(255,111,174,.35);
-    }
-    .btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
-
-    #fx{ position:fixed; inset:0; pointer-events:none; z-index: 999; }
-    .toast{
+    /* Lightbox */
+    .lightbox{
       position: fixed;
-      left: 50%;
-      bottom: 18px;
-      transform: translateX(-50%);
-      background: rgba(255,255,255,.88);
-      border: 1px solid rgba(255,255,255,.95);
-      box-shadow: var(--shadow2);
-      padding: 10px 14px;
-      border-radius: 999px;
-      font-weight: 950;
+      inset:0;
       display:none;
-      max-width: calc(100vw - 24px);
+      z-index: 5000;
+    }
+    .lightbox.show{ display:block; }
+    .lbBackdrop{
+      position:absolute; inset:0;
+      background: rgba(10,10,18,.55);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+    .lbCard{
+      position:absolute;
+      left:50%; top:50%;
+      transform: translate(-50%,-50%);
+      width: min(900px, 94vw);
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(255,255,255,.92);
+      border-radius: 22px;
+      box-shadow: 0 30px 90px rgba(0,0,0,.35);
+      padding: 12px;
+    }
+    .lbCard img{
+      width:100%;
+      max-height: 72vh;
+      object-fit: contain;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,.06);
+      background:#fff;
+    }
+    .lbCaption{
+      margin-top: 10px;
       text-align:center;
-      z-index: 1000;
+      font-weight: 950;
+    }
+    .lbClose{
+      position:absolute;
+      top: 10px; right: 12px;
+      border:1px solid rgba(0,0,0,.08);
+      background: rgba(255,255,255,.88);
+      border-radius: 12px;
+      padding: 8px 10px;
+      cursor:pointer;
+      font-weight: 1000;
     }
 
-    @media (prefers-reduced-motion: reduce){
-      *{ animation: none !important; transition: none !important; }
+    /* Floating hearts */
+    .hearts{
+      position: fixed;
+      inset:0;
+      pointer-events:none;
+      overflow:hidden;
+      z-index: 2000;
     }
+    .heart{
+      position:absolute;
+      bottom:-20px;
+      font-size: 18px;
+      opacity:.85;
+      animation: floatUp var(--dur) linear forwards;
+      filter: drop-shadow(0 10px 18px rgba(255,90,165,.18));
+    }
+    @keyframes floatUp{
+      from{ transform: translateY(0) translateX(0) scale(1); opacity:.85; }
+      to{ transform: translateY(-110vh) translateX(var(--drift)) scale(1.15); opacity:0; }
+    }
+
+    /* Hidden screens */
+    .screen{ display:none; }
+    .screen.active{ display:block; }
+
+    .row{
+      display:flex; gap:10px; align-items:center; flex-wrap:wrap;
+    }
+    .backBtn{ font-weight: 900; }
   </style>
 </head>
 
 <body>
-  <canvas id="fx"></canvas>
-  <div class="toast" id="toast"></div>
-
   <div class="wrap">
-    <div class="app">
-      <div class="topbar">
-        <div class="brand">
-          <span class="pill"><span class="dot"></span> sorpresa</span>
-          <span class="pill">para <b id="girlNameTop">Saharaim</b> 💘</span>
-        </div>
-
-        <div class="actions">
-          <button class="btnSmall" id="heartsBtn">💖 Corazones: ON</button>
-          <button class="btnSmall" id="copyBtn">📋 Copiar link</button>
-        </div>
+    <div class="topbar">
+      <div class="brand">
+        <div class="pill"><span class="dot"></span>valentine.app</div>
+        <div class="pill">para <span id="whoName">Saharaim</span> 💘</div>
       </div>
 
-      <div class="main">
-        <!-- LEFT -->
-        <div class="panel">
+      <div class="actions">
+        <button id="musicBtn" class="btn">🎵 Música: OFF</button>
+        <button id="heartsBtn" class="btn">💗 Corazones: ON</button>
+        <button id="copyBtn" class="btn">📋 Copiar link</button>
+        <button id="resetBtn" class="ghost">♻️ Reset</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: screens -->
+      <div class="panel">
+        <div class="panelHeader">
+          <div>
+            <h1 id="title">Menú</h1>
+            <p class="sub" id="subtitle">Todo está hecho para ti ✨</p>
+          </div>
+          <div class="row">
+            <button class="btn backBtn" id="backBtn" style="display:none;">← Volver</button>
+          </div>
+        </div>
+
+        <div class="content">
           <!-- HOME -->
-          <div class="screen active hero" id="home">
-            <h1 id="homeTitle">Hey Saharaim 💘</h1>
-            <p id="homeSubtitle">
-              Te hice algo chiquito pero con mucho cariño. Explóralo con calma.
-            </p>
-
-            <div class="grid">
+          <div class="screen active" id="home">
+            <div class="menu">
               <div class="tile" data-go="letter">
-                <div class="t-top">
-                  <div class="name">💌 Carta</div>
-                  <div class="badge">leer</div>
-                </div>
-                <div class="desc">Una carta para ti, sin prisa.</div>
+                <div class="t">Carta 💌</div>
+                <div class="d">Para leerla con calma (y con cariño).</div>
               </div>
-
-              <div class="tile" data-go="test" id="tileTest">
-                <div class="t-top">
-                  <div class="name">🧠 Mini test</div>
-                  <div class="badge" id="tBadge">start</div>
-                </div>
-                <div class="desc">Responde y desbloqueas la pregunta 💘</div>
-              </div>
-
-              <div class="tile locked" data-go="question" id="tileQuestion">
-                <div class="t-top">
-                  <div class="name">💘 Pregunta</div>
-                  <div class="badge" id="qBadge">🔒</div>
-                </div>
-                <div class="desc">Primero completa el mini test 😼</div>
-              </div>
-
               <div class="tile" data-go="photos">
-                <div class="t-top">
-                  <div class="name">📸 Fotos</div>
-                  <div class="badge">pronto</div>
-                </div>
-                <div class="desc">Aquí metemos fotos cuando me las pases.</div>
+                <div class="t">Fotos 📸</div>
+                <div class="d">Un collage con nuestros momentos.</div>
+              </div>
+              <div class="tile" data-go="test">
+                <div class="t">Mini test 🧠</div>
+                <div class="d">Desbloquea la sorpresa final.</div>
+              </div>
+              <div class="tile locked" id="askTile" data-go="ask">
+                <div class="t">Pregunta 💞</div>
+                <div class="d">Se desbloquea con el mini test.</div>
               </div>
             </div>
+
+            <p class="notice" id="homeNotice">
+              Tip: si no ves cambios en tu celular, abre en incógnito o actualiza fuerte.
+            </p>
           </div>
 
           <!-- LETTER -->
           <div class="screen" id="letter">
-            <div class="backRow">
-              <div class="back" data-go="home">← Menú</div>
-              <div class="badge">carta</div>
-            </div>
-
-            <div class="letterShell">
+            <div class="letterWrap">
               <div class="paper">
-                <p id="letterText"></p>
-
-                <div class="signature">
-                  <span>Con cariño,</span>
-                  <span class="signName" id="signatureName"></span>
+                <div class="paperInner">
+                  <div class="paperTitle">
+                    <h2>Una carta para ti 💌</h2>
+                    <span>modo: romántico</span>
+                  </div>
+                  <div class="letterText" id="letterText"></div>
+                  <div class="sig" id="signature">Con mucho cariño y amor, tu hombre Sergio.</div>
                 </div>
               </div>
 
-              <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="btnSmall" id="retypeBtn">✨ Releer con efecto</button>
-                <button class="btnSmall" data-go="test">🧠 Ir al mini test</button>
-              </div>
-            </div>
-          </div>
-
-          <!-- TEST (por ahora 3, luego lo subimos a 5 con tus preguntas) -->
-          <div class="screen" id="test">
-            <div class="backRow">
-              <div class="back" data-go="home">← Menú</div>
-              <div class="badge" id="testBadge">test</div>
-            </div>
-
-            <div class="letterShell">
-              <div class="paper">
-                <p style="font-weight:950; margin:0 0 10px;">Mini test 🧠</p>
-                <p style="color:var(--mut); margin:0 0 12px;">
-                  Contesta y desbloqueas la pregunta 💘
-                </p>
-
-                <div id="quiz"></div>
-
-                <div class="btnRow">
-                  <button class="btn primary" id="submitTest">✅ Ver resultado</button>
-                  <button class="btn" id="resetTest">🧼 Reiniciar</button>
-                </div>
+              <div class="row">
+                <button class="btn" id="replayLetterBtn">✨ Releer con efecto</button>
+                <button class="primary" data-go="test">🧠 Ir al mini test</button>
               </div>
             </div>
           </div>
 
           <!-- PHOTOS -->
           <div class="screen" id="photos">
-            <div class="backRow">
-              <div class="back" data-go="home">← Menú</div>
-              <div class="badge">fotos</div>
-            </div>
-
-            <div class="letterShell">
-              <div class="paper">
-                <p style="font-weight:950; margin:0 0 10px;">Fotos 📸</p>
-                <p style="color:var(--mut); margin:0;">
-                  Aquí vamos a poner un carrusel bonito con tus fotos.  
-                  Cuando me las pases, lo armamos con swipe en celular.
-                </p>
+            <div class="paper">
+              <div class="paperInner">
+                <div class="paperTitle">
+                  <h2>Fotos 📸</h2>
+                  <span>tócalas para verlas</span>
+                </div>
+                <div class="photoGrid" id="photoGrid"></div>
               </div>
             </div>
+            <p class="notice">Las fotos se ajustan solitas (no se estiran). Si alguna no carga, es el nombre/extensión.</p>
           </div>
 
-          <!-- QUESTION -->
-          <div class="screen" id="question">
-            <div class="backRow">
-              <div class="back" data-go="home">← Menú</div>
-              <div class="badge">💘</div>
-            </div>
-
-            <div class="letterShell">
-              <div class="paper" style="text-align:center;">
-                <p style="font-weight:950; font-size:18px; margin:0 0 10px;" id="questionText">
-                  ¿Quieres ser mi San Valentín? 💘
-                </p>
-                <p style="color:var(--mut); margin:0 0 12px;" id="questionSub">
-                  (no hay respuestas incorrectas… solo una correcta 😌)
-                </p>
-
-                <div class="btnRow">
-                  <button class="btn primary" id="yesBtn">✅ Sí</button>
-                  <button class="btn" id="noBtn">🤍 Todavía no</button>
+          <!-- TEST -->
+          <div class="screen" id="test">
+            <div class="letterWrap">
+              <div class="q">
+                <p>1) ¿Qué prefiero hacer?</p>
+                <div class="opts">
+                  <label class="opt"><input type="radio" name="q1" value="gym"> Ir al gym</label>
+                  <label class="opt"><input type="radio" name="q1" value="escuela"> Ir a la escuela</label>
+                  <label class="opt"><input type="radio" name="q1" value="videojuegos"> Jugar videojuegos</label>
                 </div>
               </div>
+
+              <div class="q">
+                <p>2) ¿Qué estilo de moto prefiero?</p>
+                <div class="opts">
+                  <label class="opt"><input type="radio" name="q2" value="naked"> Naked</label>
+                  <label class="opt"><input type="radio" name="q2" value="deportiva"> Deportiva</label>
+                  <label class="opt"><input type="radio" name="q2" value="2t"> Dos tiempos</label>
+                </div>
+              </div>
+
+              <div class="q">
+                <p>3) ¿Me amas?</p>
+                <div class="opts">
+                  <label class="opt"><input type="radio" name="q3" value="si"> Sí</label>
+                  <label class="opt"><input type="radio" name="q3" value="no"> No</label>
+                </div>
+              </div>
+
+              <div class="row">
+                <button class="primary" id="submitTestBtn">Enviar 💌</button>
+                <button class="btn" id="clearTestBtn">Borrar respuestas</button>
+              </div>
+
+              <div class="result" id="testResult"></div>
+              <p class="notice">Cuando lo completes bien, se desbloquea “Pregunta” en el menú.</p>
             </div>
+          </div>
+
+          <!-- ASK -->
+          <div class="screen" id="ask">
+            <div class="paper">
+              <div class="paperInner bigAsk">
+                <p class="askSub">Ok, llegó el momento serio (pero cute) 🫣</p>
+                <h2 class="askTitle" id="askTitle">¿Quieres ser mi San Valentín? 💘</h2>
+                <p class="askSub">Prometo hacerte feliz (y no solo en commits).</p>
+
+                <div class="askBtns">
+                  <button class="primary" id="yesBtn">Sí 💖</button>
+                  <button class="btn" id="noBtn">No 🙃</button>
+                </div>
+
+                <div class="result" id="askResult"></div>
+                <p class="notice">P.D. Si dices que sí, hay confeti. Si dices que no… igual te respeto 😌</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- RIGHT: small info card -->
+      <div class="panel">
+        <div class="panelHeader">
+          <div>
+            <h1>Detalles</h1>
+            <p class="sub">Todo pensado para celular 📱</p>
           </div>
         </div>
-
-        <!-- RIGHT (ahora limpio y romántico) -->
-        <div class="panel">
-          <div class="letterShell">
-            <div class="paper">
-              <p style="font-weight:950; margin:0 0 10px;" id="sideTitle">Detalles</p>
-              <p style="color:var(--mut); margin:0;" id="sideText">
-                • Puedes prender/apagar corazones arriba 💖<br>
-                • La pregunta se desbloquea con el mini test 💘<br>
-                • Todo está hecho para celular ✅
+        <div class="content">
+          <div class="paper">
+            <div class="paperInner">
+              <p style="margin:0;font-weight:950;">Checklist ✅</p>
+              <p class="notice" style="margin:10px 0 0;">
+                • Carta (con efecto) <br>
+                • Fotos (collage) <br>
+                • Mini test (bloqueo real) <br>
+                • Pregunta final <br>
+                • Música ON/OFF <br>
+                • Corazones ON/OFF <br>
+              </p>
+              <p class="notice" style="margin:12px 0 0;">
+                Si quieres, luego metemos: mini juego, timeline, o “álbum” con swipe.
               </p>
             </div>
-          </div>
-
-          <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="btnSmall" id="confettiBtn">🎉 Confeti</button>
-            <button class="btnSmall" id="softResetBtn">🧼 Reset</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-<script>
-(() => {
-  const $ = (id) => document.getElementById(id);
+  <!-- Hearts -->
+  <div class="hearts" id="heartsLayer" aria-hidden="true"></div>
 
-  /* ==========================
-     🔧 EDITA AQUÍ LO IMPORTANTE
-     ========================== */
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
+    <div class="lbBackdrop" id="lbBackdrop"></div>
+    <div class="lbCard" role="dialog" aria-modal="true">
+      <button class="lbClose" id="lbClose" aria-label="Cerrar">✕</button>
+      <img id="lbImg" alt="Foto" />
+      <div class="lbCaption" id="lbCaption"></div>
+    </div>
+  </div>
 
-  const GIRL_NAME = "Saharaim";
-  const YOUR_NAME = "Sergios"; // <- pon aquí tu nombre como firma
+  <!-- Audio (upload your file to assets/music.mp3) -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="assets/music.mp3" type="audio/mpeg">
+  </audio>
 
-  // Carta: aquí me pegarás TU texto después (por ahora placeholder bonito)
-  const LETTER_TEXT = `Saharaim,
+  <script>
+    "use strict";
 
-Quería hacerte algo diferente… algo que se quedara aquí guardado,
-para que lo puedas leer cuando quieras.
+    /* ==========================
+       EDITA AQUÍ (cuando quieras)
+    ========================== */
 
-Me encanta estar contigo, me gusta tu vibra,
-y lo fácil que se siente todo cuando estás conmigo.
+    // 1) Nombre
+    const GIRL_NAME = "Saharaim";
+
+    // 2) Carta (pon aquí TU texto cuando me lo mandes)
+    //    Nota: el efecto SIEMPRE usará este mismo texto (0 random).
+    const LETTER_TEXT =
+`Hola ${GIRL_NAME} 💗
+
+(Aquí va tu carta real. Cuando me la mandes, la pego tal cual.)
+
+Me encantas por mil cosas, pero sobre todo por cómo haces que todo se sienta más bonito cuando estás conmigo.
 
 Gracias por ser tú.
-Con cariño,`;
+`;
 
-  // Mini test (ahorita 3). Cuando me pases tus 5 preguntas lo cambiamos aquí.
-  // Formato: { q: "pregunta", options: ["a","b","c","d"], correctIndex: 0 }
-  const QUIZ = [
-    { q: "¿Cuál es mi comida favorita?", options: ["Tacos", "Sushi", "Pizza", "Pasta"], correctIndex: 1 },
-    { q: "¿Qué me gusta más hacer contigo?", options: ["Ir por comida", "Ver pelis", "Solo estar contigo", "Salir de fiesta"], correctIndex: 2 },
-    { q: "¿Cuál es mi detalle favorito?", options: ["Cartas", "Flores", "Postres", "Regalos"], correctIndex: 0 },
-  ];
+    // 3) Fotos (ya están en assets/photos)
+    const PHOTOS = [
+      { src: "assets/photos/01.jpeg", title: "Recuerdo 1 💘", sub: "Pon aquí tu frase corta." },
+      { src: "assets/photos/02.png",  title: "Recuerdo 2 ✨", sub: "Pon aquí tu frase corta." },
+      { src: "assets/photos/03.jpeg", title: "Recuerdo 3 🫶", sub: "Pon aquí tu frase corta." },
+      { src: "assets/photos/04.jpeg", title: "Recuerdo 4 🌸", sub: "Pon aquí tu frase corta." },
+      { src: "assets/photos/05.png",  title: "Recuerdo 5 🥺", sub: "Pon aquí tu frase corta." },
+    ];
 
-  const PASS_SCORE = 2; // con 2/3 pasa. Cuando sean 5, lo ajustamos (ej: 4).
+    // 4) Pregunta final (puedes cambiar el texto)
+    const ASK_TEXT = "¿Quieres ser mi San Valentín? 💘";
 
-  /* ==========================
-     UI + NAVEGACIÓN
-     ========================== */
+    // 5) Respuestas correctas del mini test
+    const ANSWERS = { q1: "gym", q2: "naked", q3: "si" };
 
-  const screens = ["home","letter","test","photos","question"];
-  function go(name){
-    if(name === "question" && !state.unlocked){
-      toast("🔒 Primero completa el mini test 🧠");
-      return;
-    }
-    screens.forEach(s => $(s).classList.remove("active"));
-    $(name).classList.add("active");
-  }
+    /* ==========================
+       Estado y utilidades
+    ========================== */
 
-  document.addEventListener("click", (e)=>{
-    const to = e.target.closest("[data-go]")?.getAttribute("data-go");
-    if(to) go(to);
-  });
+    const LS = {
+      testPassed: "val_test_passed_v1",
+      heartsOn: "val_hearts_on_v1",
+      musicOn: "val_music_on_v1"
+    };
 
-  function toast(msg){
-    const t = $("toast");
-    t.textContent = msg;
-    t.style.display = "block";
-    clearTimeout(toast._t);
-    toast._t = setTimeout(()=> t.style.display="none", 2200);
-  }
+    const $ = (id) => document.getElementById(id);
 
-  /* ==========================
-     TYPEWRITER FIX (anti bug)
-     ========================== */
-
-  const sleep = (ms)=>new Promise(r=>setTimeout(r, ms));
-  let typeToken = 0;
-
-  async function typeInto(el, text, base=14){
-    const myToken = ++typeToken;
-    el.textContent = "";
-    for(const ch of text){
-      if(myToken !== typeToken) return;
-      el.textContent += ch;
-      await sleep(base + Math.random()*22);
-    }
-  }
-
-  const retypeBtn = $("retypeBtn");
-  async function renderLetter(animated=true){
-    // cancela cualquier tipeo anterior
-    typeToken++;
-
-    if(!animated){
-      $("letterText").textContent = LETTER_TEXT;
-      retypeBtn.disabled = false;
-      return;
+    function safeText(el, text){
+      if(!el) return;
+      el.textContent = text;
     }
 
-    retypeBtn.disabled = true;
-    await typeInto($("letterText"), LETTER_TEXT, 12);
-    retypeBtn.disabled = false;
-  }
-
-  /* ==========================
-     QUIZ (dinámico)
-     ========================== */
-
-  const state = {
-    picks: Array(QUIZ.length).fill(null),
-    unlocked: localStorage.getItem("unlockedQuestion") === "1",
-    heartsOn: true
-  };
-
-  function renderQuiz(){
-    const wrap = $("quiz");
-    wrap.innerHTML = "";
-
-    QUIZ.forEach((item, qi)=>{
-      const block = document.createElement("div");
-      block.style.margin = "12px 0 14px";
-
-      const q = document.createElement("p");
-      q.style.fontWeight = "950";
-      q.style.margin = "0 0 10px";
-      q.textContent = `${qi+1}) ${item.q}`;
-
-      const row = document.createElement("div");
-      row.className = "btnRow";
-
-      item.options.forEach((opt, ai)=>{
-        const b = document.createElement("button");
-        b.className = "btn";
-        b.textContent = opt;
-        b.addEventListener("click", ()=>{
-          state.picks[qi] = ai;
-          // feedback visual
-          [...row.querySelectorAll("button")].forEach(x => x.style.transform = "");
-          b.style.transform = "translateY(-2px) scale(1.03)";
-          toast("✅ Guardado");
-        });
-        row.appendChild(b);
-      });
-
-      block.appendChild(q);
-      block.appendChild(row);
-      wrap.appendChild(block);
-    });
-  }
-
-  function updateLocks(){
-    $("girlNameTop").textContent = GIRL_NAME;
-    $("homeTitle").textContent = `Hey ${GIRL_NAME} 💘`;
-    $("signatureName").textContent = YOUR_NAME;
-
-    const tileQ = $("tileQuestion");
-    if(state.unlocked){
-      tileQ.classList.remove("locked");
-      $("qBadge").textContent = "✅";
-      $("tBadge").textContent = "done";
-      tileQ.querySelector(".desc").textContent = "Ya está desbloqueada 😼";
-    }else{
-      tileQ.classList.add("locked");
-      $("qBadge").textContent = "🔒";
-      $("tBadge").textContent = "start";
-      tileQ.querySelector(".desc").textContent = "Primero completa el mini test 😼";
+    function setTitle(main, sub){
+      safeText($("title"), main);
+      safeText($("subtitle"), sub || "");
     }
-  }
 
-  $("submitTest").addEventListener("click", ()=>{
-    if(state.picks.some(v => v === null)){
-      toast("Te falta contestar una 😼");
-      return;
+    function showBack(show){
+      const b = $("backBtn");
+      if(!b) return;
+      b.style.display = show ? "inline-flex" : "none";
     }
-    let score = 0;
-    for(let i=0;i<QUIZ.length;i++){
-      if(state.picks[i] === QUIZ[i].correctIndex) score++;
+
+    function go(screenId){
+      // hide all
+      document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+      const s = $(screenId);
+      if(s) s.classList.add("active");
+
+      // titles
+      if(screenId === "home"){
+        setTitle("Menú", "Todo está hecho para ti ✨");
+        showBack(false);
+      } else {
+        const map = {
+          letter: ["Carta", "Con calma, como se merece 💌"],
+          photos: ["Fotos", "Nuestros momentos 📸"],
+          test:   ["Mini test", "Desbloquea la sorpresa 🧠"],
+          ask:    ["Pregunta", "Ok… aquí viene lo bueno 💞"]
+        };
+        const t = map[screenId] || ["", ""];
+        setTitle(t[0], t[1]);
+        showBack(true);
+      }
+
+      // when entering photos, ensure rendered
+      if(screenId === "photos") renderPhotos();
+      if(screenId === "letter") renderLetterStatic();
+      if(screenId === "ask") safeText($("askTitle"), ASK_TEXT);
+      if(screenId === "test") updateAskLockUI();
     }
-    if(score >= PASS_SCORE){
-      state.unlocked = true;
-      localStorage.setItem("unlockedQuestion","1");
-      updateLocks();
-      spawnConfetti(220);
-      toast(`PASASTE ✅ (${score}/${QUIZ.length})`);
-    }else{
-      toast(`Casi 😭 (${score}/${QUIZ.length})`);
-    }
-  });
 
-  $("resetTest").addEventListener("click", ()=>{
-    state.picks = Array(QUIZ.length).fill(null);
-    renderQuiz();
-    toast("Reiniciado 🧼");
-  });
-
-  /* ==========================
-     Corazones / Confeti
-     ========================== */
-
-  const canvas = $("fx");
-  const ctx = canvas.getContext("2d");
-  function resize(){
-    const dpr = devicePixelRatio || 1;
-    canvas.width = innerWidth * dpr;
-    canvas.height = innerHeight * dpr;
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-  }
-  addEventListener("resize", resize, {passive:true});
-  resize();
-
-  let particles = [];
-  function spawnConfetti(n=160){
-    for(let i=0;i<n;i++){
-      particles.push({
-        x: innerWidth*(0.2 + Math.random()*0.6),
-        y: innerHeight*0.15 + Math.random()*30,
-        vx: (Math.random()-0.5)*3.0,
-        vy: (1.8 + Math.random()*2.6),
-        s: 3 + Math.random()*6,
-        life: 1,
-        kind: Math.random()<0.55 ? "heart" : "dot",
-        hue: 300 + Math.random()*90
+    function copyLink(){
+      const url = window.location.href;
+      navigator.clipboard?.writeText(url).then(()=>{
+        toast("Link copiado ✅");
+      }).catch(()=>{
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = url; document.body.appendChild(ta);
+        ta.select(); document.execCommand("copy");
+        ta.remove();
+        toast("Link copiado ✅");
       });
     }
-  }
 
-  function drawHeart(x,y,s,hue,alpha){
-    ctx.save();
-    ctx.translate(x,y);
-    ctx.scale(s/18, s/18);
-    ctx.globalAlpha = alpha;
-    ctx.fillStyle = `hsl(${hue} 95% 70%)`;
-    ctx.beginPath();
-    ctx.moveTo(0, 6.2);
-    ctx.bezierCurveTo(0, 0, -9, 0, -9, 6.2);
-    ctx.bezierCurveTo(-9, 12.5, 0, 16.5, 0, 21);
-    ctx.bezierCurveTo(0, 16.5, 9, 12.5, 9, 6.2);
-    ctx.bezierCurveTo(9, 0, 0, 0, 0, 6.2);
-    ctx.closePath();
-    ctx.fill();
-    ctx.restore();
-  }
+    function toast(msg){
+      // simple mini toast
+      const t = document.createElement("div");
+      t.textContent = msg;
+      t.style.position="fixed";
+      t.style.left="50%";
+      t.style.bottom="22px";
+      t.style.transform="translateX(-50%)";
+      t.style.padding="10px 14px";
+      t.style.borderRadius="999px";
+      t.style.background="rgba(255,255,255,.92)";
+      t.style.border="1px solid rgba(0,0,0,.08)";
+      t.style.boxShadow="0 18px 50px rgba(0,0,0,.20)";
+      t.style.fontWeight="950";
+      t.style.zIndex="99999";
+      t.style.backdropFilter="blur(10px)";
+      document.body.appendChild(t);
+      setTimeout(()=>{ t.style.opacity="0"; t.style.transition="opacity .25s"; }, 1200);
+      setTimeout(()=> t.remove(), 1600);
+    }
 
-  function tick(){
-    ctx.clearRect(0,0,innerWidth,innerHeight);
-    particles = particles.filter(p => p.life > 0.03 && p.y < innerHeight + 60);
+    /* ==========================
+       Carta (sin bugs)
+    ========================== */
 
-    for(const p of particles){
-      p.x += p.vx;
-      p.y += p.vy;
-      p.vy += 0.03;
-      p.life *= 0.985;
+    let typingTimer = null;
+    let isTyping = false;
 
-      if(!state.heartsOn && p.kind === "heart") continue;
+    function renderLetterStatic(){
+      // Always set the same text, no randomness
+      const el = $("letterText");
+      if(!el) return;
+      // stop any active typing cleanly
+      if(typingTimer){ clearInterval(typingTimer); typingTimer = null; }
+      isTyping = false;
+      el.textContent = LETTER_TEXT.trim();
+      safeText($("signature"), "Con mucho cariño y amor, tu hombre Sergio.");
+    }
 
-      const alpha = Math.max(0, p.life);
-      if(p.kind === "heart"){
-        drawHeart(p.x, p.y, p.s, p.hue, alpha);
-      }else{
-        ctx.globalAlpha = alpha;
-        ctx.fillStyle = `hsl(${p.hue} 95% 70%)`;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.s*0.5, 0, Math.PI*2);
-        ctx.fill();
+    function typeLetter(){
+      const el = $("letterText");
+      if(!el) return;
+      if(isTyping) return; // prevents spam-click bugs
+
+      // reset and type same LETTER_TEXT always
+      if(typingTimer){ clearInterval(typingTimer); typingTimer = null; }
+      el.textContent = "";
+      isTyping = true;
+
+      const text = LETTER_TEXT.trim();
+      let i = 0;
+
+      typingTimer = setInterval(()=>{
+        // defensive
+        if(!el){ clearInterval(typingTimer); typingTimer=null; isTyping=false; return; }
+
+        el.textContent += text[i] || "";
+        i++;
+
+        // auto-scroll inside paper (nice on mobile)
+        el.parentElement?.scrollIntoView({ block:"nearest" });
+
+        if(i >= text.length){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          isTyping = false;
+          safeText($("signature"), "Con mucho cariño y amor, tu hombre Sergio.");
+        }
+      }, 18);
+    }
+
+    /* ==========================
+       Fotos
+    ========================== */
+
+    function renderPhotos(){
+      const grid = $("photoGrid");
+      if(!grid) return;
+      grid.innerHTML = "";
+
+      const sizes = ["big","med","small","med","big"];
+      const tilts = ["-1.2deg","1deg","-0.6deg","0.8deg","-1deg"];
+
+      PHOTOS.forEach((p, i)=>{
+        const card = document.createElement("div");
+        card.className = `photoCard ${sizes[i] || "med"}`;
+        card.style.setProperty("--tilt", tilts[i] || "0deg");
+
+        card.innerHTML = `
+          <span class="tape"></span>
+          <div class="photoImgWrap">
+            <img class="photoImg" src="${p.src}" alt="Foto ${i+1}" loading="lazy">
+          </div>
+          <div class="photoText">${escapeHtml(p.title)}</div>
+          <div class="photoSub">${escapeHtml(p.sub || "")}</div>
+        `;
+
+        card.addEventListener("click", ()=> openLightbox(p.src, `${p.title}${p.sub ? " — " + p.sub : ""}`));
+        grid.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str){
+      return String(str ?? "")
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    function openLightbox(src, caption){
+      const lb = $("lightbox");
+      const img = $("lbImg");
+      const cap = $("lbCaption");
+      if(!lb || !img || !cap) return;
+      img.src = src;
+      cap.textContent = caption || "";
+      lb.classList.add("show");
+      lb.setAttribute("aria-hidden","false");
+    }
+
+    function closeLightbox(){
+      const lb = $("lightbox");
+      if(!lb) return;
+      lb.classList.remove("show");
+      lb.setAttribute("aria-hidden","true");
+    }
+
+    /* ==========================
+       Mini test + bloqueo real
+    ========================== */
+
+    function getAnswer(name){
+      const el = document.querySelector(`input[name="${name}"]:checked`);
+      return el ? el.value : null;
+    }
+
+    function clearAnswers(){
+      ["q1","q2","q3"].forEach(q=>{
+        document.querySelectorAll(`input[name="${q}"]`).forEach(i => i.checked = false);
+      });
+    }
+
+    function testPassed(){
+      return localStorage.getItem(LS.testPassed) === "true";
+    }
+
+    function setTestPassed(v){
+      localStorage.setItem(LS.testPassed, v ? "true" : "false");
+    }
+
+    function updateAskLockUI(){
+      const locked = !testPassed();
+      const tile = $("askTile");
+      if(tile){
+        tile.classList.toggle("locked", locked);
+      }
+      // subtitle notice
+      const n = $("homeNotice");
+      if(n){
+        n.textContent = locked
+          ? "Completa el mini test para desbloquear la Pregunta 💞"
+          : "Pregunta desbloqueada ✅ (ya puedes entrar)";
       }
     }
-    requestAnimationFrame(tick);
-  }
-  tick();
 
-  $("confettiBtn").addEventListener("click", ()=>{
-    spawnConfetti(200);
-    toast("🎉");
-  });
-
-  $("heartsBtn").addEventListener("click", ()=>{
-    state.heartsOn = !state.heartsOn;
-    $("heartsBtn").textContent = state.heartsOn ? "💖 Corazones: ON" : "🤍 Corazones: OFF";
-    toast(state.heartsOn ? "Corazones ON 💖" : "Corazones OFF 🤍");
-  });
-
-  /* ==========================
-     Copy link + reset
-     ========================== */
-
-  $("copyBtn").addEventListener("click", async ()=>{
-    try{
-      await navigator.clipboard.writeText(location.href);
-      toast("Link copiado 📋");
-    }catch{
-      toast("No pude copiar 😅 (copia manual)");
+    function tryOpenAsk(){
+      if(testPassed()){
+        go("ask");
+      } else {
+        toast("Primero completa el mini test 🧠");
+        go("test");
+      }
     }
-  });
 
-  $("softResetBtn").addEventListener("click", ()=>{
-    localStorage.removeItem("unlockedQuestion");
-    state.unlocked = false;
-    state.picks = Array(QUIZ.length).fill(null);
-    renderQuiz();
-    updateLocks();
-    renderLetter(false);
-    go("home");
-    toast("Reset 🧼");
-  });
+    function submitTest(){
+      const r = $("testResult");
+      const a1 = getAnswer("q1");
+      const a2 = getAnswer("q2");
+      const a3 = getAnswer("q3");
 
-  /* ==========================
-     Pregunta final
-     ========================== */
+      if(!a1 || !a2 || !a3){
+        if(r) r.textContent = "Responde todas las preguntas 😳";
+        return;
+      }
 
-  $("yesBtn").addEventListener("click", ()=>{
-    spawnConfetti(260);
-    toast("💘💘💘");
-  });
+      const ok = (a1 === ANSWERS.q1 && a2 === ANSWERS.q2 && a3 === ANSWERS.q3);
 
-  $("noBtn").addEventListener("click", ()=>{
-    toast("Todo bien 😌");
-  });
+      if(ok){
+        setTestPassed(true);
+        if(r) r.textContent = "Correcto 💖 Se desbloqueó la sección “Pregunta”.";
+        updateAskLockUI();
+        // little celebration
+        burstHearts(18);
+        setTimeout(()=> go("home"), 600);
+      } else {
+        setTestPassed(false); // IMPORTANT: ensure lock stays if wrong
+        updateAskLockUI();
+        if(r) r.textContent = "Mmm… intenta otra vez 👀";
+      }
+    }
 
-  /* Init */
-  renderQuiz();
-  updateLocks();
-  renderLetter(true);
+    /* ==========================
+       Pregunta final (sí / no)
+       (con respeto, sin coerción)
+    ========================== */
 
-})();
-</script>
+    function onYes(){
+      const r = $("askResult");
+      if(r) r.textContent = "AAAAA 😭💘 Sabía que sí. (Confirmado: eres mi persona favorita).";
+      burstHearts(30);
+      toast("Felicidades: aceptaste 💖");
+    }
+
+    function onNo(){
+      const r = $("askResult");
+      if(r) r.textContent = "Ok 😌 Te respeto. Igual gracias por existir en mi vida 💗";
+      toast("Todo bien 🫶");
+    }
+
+    /* ==========================
+       Corazones ON/OFF
+    ========================== */
+
+    function heartsOn(){
+      return localStorage.getItem(LS.heartsOn) !== "false"; // default ON
+    }
+    function setHeartsOn(v){
+      localStorage.setItem(LS.heartsOn, v ? "true" : "false");
+      updateHeartsBtn();
+      if(v) burstHearts(10);
+    }
+
+    function updateHeartsBtn(){
+      const b = $("heartsBtn");
+      if(!b) return;
+      b.textContent = heartsOn() ? "💗 Corazones: ON" : "💗 Corazones: OFF";
+    }
+
+    function burstHearts(count){
+      if(!heartsOn()) return;
+      const layer = $("heartsLayer");
+      if(!layer) return;
+
+      for(let i=0;i<count;i++){
+        const h = document.createElement("div");
+        h.className = "heart";
+        h.textContent = ["💗","💘","💕","💞","🌸","✨"][Math.floor(Math.random()*6)];
+        h.style.left = Math.random()*100 + "vw";
+        h.style.setProperty("--dur", (3.2 + Math.random()*2.0) + "s");
+        h.style.setProperty("--drift", ((Math.random()*140)-70) + "px");
+        h.style.fontSize = (16 + Math.random()*16) + "px";
+        h.style.opacity = (0.65 + Math.random()*0.25).toFixed(2);
+        layer.appendChild(h);
+        setTimeout(()=> h.remove(), 6200);
+      }
+    }
+
+    /* ==========================
+       Música ON/OFF (assets/music.mp3)
+    ========================== */
+
+    function musicOn(){
+      return localStorage.getItem(LS.musicOn) === "true";
+    }
+    function setMusicOn(v){
+      localStorage.setItem(LS.musicOn, v ? "true" : "false");
+      updateMusicBtn();
+      toggleMusic(v);
+    }
+
+    function updateMusicBtn(){
+      const b = $("musicBtn");
+      if(!b) return;
+      b.textContent = musicOn() ? "🎵 Música: ON" : "🎵 Música: OFF";
+    }
+
+    async function toggleMusic(on){
+      const audio = $("bgMusic");
+      if(!audio) return;
+
+      if(!on){
+        try{ audio.pause(); }catch(_){}
+        return;
+      }
+
+      // Browsers require user interaction to play audio.
+      try{
+        await audio.play();
+      } catch(err){
+        // If blocked, show a helpful toast (no scary errors)
+        toast("Toca otra vez “Música” para activar 🎵");
+        setMusicOn(false);
+      }
+    }
+
+    /* ==========================
+       Reset total (para pruebas)
+    ========================== */
+
+    function hardReset(){
+      localStorage.removeItem(LS.testPassed);
+      localStorage.removeItem(LS.heartsOn);
+      localStorage.removeItem(LS.musicOn);
+      // stop music
+      const audio = $("bgMusic");
+      if(audio) { try{ audio.pause(); audio.currentTime = 0; }catch(_){ } }
+      clearAnswers();
+      const tr = $("testResult"); if(tr) tr.textContent = "";
+      const ar = $("askResult"); if(ar) ar.textContent = "";
+      updateAskLockUI();
+      updateHeartsBtn();
+      updateMusicBtn();
+      renderLetterStatic();
+      go("home");
+      toast("Reset listo ♻️");
+    }
+
+    /* ==========================
+       Wiring (event listeners)
+    ========================== */
+
+    function wire(){
+      // menu tiles
+      document.querySelectorAll("[data-go]").forEach(el=>{
+        el.addEventListener("click", ()=>{
+          const target = el.getAttribute("data-go");
+          if(target === "ask") { tryOpenAsk(); return; }
+          go(target);
+        });
+      });
+
+      // back
+      const back = $("backBtn");
+      if(back) back.addEventListener("click", ()=> go("home"));
+
+      // top buttons
+      $("copyBtn")?.addEventListener("click", copyLink);
+      $("resetBtn")?.addEventListener("click", hardReset);
+
+      // letter
+      $("replayLetterBtn")?.addEventListener("click", ()=> typeLetter());
+
+      // test
+      $("submitTestBtn")?.addEventListener("click", submitTest);
+      $("clearTestBtn")?.addEventListener("click", ()=>{
+        clearAnswers();
+        const tr = $("testResult"); if(tr) tr.textContent = "";
+        toast("Listo 😼");
+      });
+
+      // ask
+      $("yesBtn")?.addEventListener("click", onYes);
+      $("noBtn")?.addEventListener("click", onNo);
+
+      // hearts toggle
+      $("heartsBtn")?.addEventListener("click", ()=>{
+        setHeartsOn(!heartsOn());
+      });
+
+      // music toggle
+      $("musicBtn")?.addEventListener("click", ()=>{
+        setMusicOn(!musicOn());
+      });
+
+      // lightbox close
+      $("lbBackdrop")?.addEventListener("click", closeLightbox);
+      $("lbClose")?.addEventListener("click", closeLightbox);
+      document.addEventListener("keydown", (e)=>{ if(e.key === "Escape") closeLightbox(); });
+    }
+
+    /* ==========================
+       Init
+    ========================== */
+
+    function init(){
+      safeText($("whoName"), GIRL_NAME);
+      safeText($("askTitle"), ASK_TEXT);
+
+      // initial state
+      updateAskLockUI();
+      updateHeartsBtn();
+      updateMusicBtn();
+
+      // letter must be stable always
+      renderLetterStatic();
+
+      // render photos once (and again when entering)
+      renderPhotos();
+
+      // If test was previously passed, keep it unlocked
+      updateAskLockUI();
+
+      wire();
+
+      // optional: soft hearts on load
+      setTimeout(()=> burstHearts(8), 450);
+
+      // If music saved ON, try play only after user click (browser rule)
+      // We'll keep button state; user can tap once.
+    }
+
+    init();
+  </script>
 </body>
 </html>
