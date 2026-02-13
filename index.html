@@ -8,7 +8,6 @@
 
   <style>
     :root{
-      /* Pastel palette */
       --bg1:#fff1f7;
       --bg2:#f3f0ff;
       --bg3:#eafffb;
@@ -44,7 +43,6 @@
       overflow-x:hidden;
     }
 
-    /* Optional blurred photo background */
     body::before{
       content:"";
       position:fixed; inset:0;
@@ -128,7 +126,7 @@
       cursor:pointer;
       box-shadow: var(--shadow2);
       font-weight: 800;
-      transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease);
+      transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease), opacity .15s var(--ease);
       user-select:none;
       touch-action: manipulation;
       position:relative;
@@ -136,6 +134,7 @@
     }
     .iconbtn:hover{ transform: translateY(-1px) scale(1.02); }
     .iconbtn:active{ transform: translateY(0px) scale(.98); }
+    .iconbtn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
 
     .main{
       display:grid;
@@ -324,6 +323,7 @@
       background: linear-gradient(180deg, rgba(255,111,174,.22), rgba(255,255,255,.78));
       border-color: rgba(255,111,174,.35);
     }
+    .btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
 
     .term{
       background: rgba(255,255,255,.72);
@@ -538,7 +538,7 @@
             </div>
           </div>
 
-          <!-- PHOTOS (placeholder) -->
+          <!-- PHOTOS -->
           <div class="screen" id="screen-photos">
             <div class="backRow">
               <div class="back" data-go="home">← Menú</div>
@@ -586,7 +586,7 @@
           </div>
         </div>
 
-        <!-- RIGHT: status + buttons -->
+        <!-- RIGHT -->
         <div class="panel">
           <div class="term">
             <div><span class="prompt">system@pastel</span>:~$ <span id="sysCmd"></span><span class="cursor"></span></div>
@@ -600,7 +600,7 @@
 
           <div style="margin-top:12px; color:var(--mut); font-weight:700; line-height:1.5; font-size:13.5px;">
             • “Pregunta” se desbloquea con el mini test.<br/>
-            • Se guarda en el cel (localStorage).<br/>
+            • Se guarda el progreso (localStorage).<br/>
             • Luego metemos fotos con swipe y captions.
           </div>
         </div>
@@ -614,7 +614,6 @@
 (() => {
   const $ = (id) => document.getElementById(id);
 
-  // ---------- Toast / Vibe ----------
   function showToast(msg){
     const t = $("toast");
     t.textContent = msg;
@@ -654,18 +653,30 @@
     addRipple(target, e.clientX - rect.left, e.clientY - rect.top);
   }, {passive:true});
 
-  // ---------- Typewriter ----------
+  // ---------- Typewriter (FIXED: cancel previous runs) ----------
   const sleep = (ms)=>new Promise(r=>setTimeout(r, ms));
+
+  // Token that invalidates previous typing loops
+  let typeToken = 0;
+
   async function typeInto(el, text, base=18){
+    const myToken = ++typeToken;       // new run id
     el.textContent = "";
+
     for(const ch of text){
+      // if another typeInto started, stop this one
+      if(myToken !== typeToken) return;
+
       el.textContent += ch;
       await sleep(base + Math.random()*22);
     }
   }
+
   async function typePre(el, lines, base=90){
+    const myToken = ++typeToken;
     el.textContent = "";
     for(const line of lines){
+      if(myToken !== typeToken) return;
       el.textContent += line + "\n";
       await sleep(base + Math.random()*90);
     }
@@ -687,23 +698,44 @@ Me encantas.
 
 Con cariño,`;
 
+  const retypeBtn = $("retypeBtn");
+  let typingLetter = false;
+
   async function renderLetter(animated=true){
     const el = $("letterText");
-    if(!animated){ el.textContent = LETTER; return; }
+
+    // Cancel any typing currently happening (important)
+    typeToken++;
+
+    if(!animated){
+      el.textContent = LETTER;
+      typingLetter = false;
+      if(retypeBtn) retypeBtn.disabled = false;
+      return;
+    }
+
+    // prevent spam-click weirdness
+    typingLetter = true;
+    if(retypeBtn) retypeBtn.disabled = true;
+
     await typeInto(el, LETTER, 14);
+
+    // if got canceled, don't re-enable too early
+    if(!typingLetter) return;
+
+    typingLetter = false;
+    if(retypeBtn) retypeBtn.disabled = false;
   }
 
-  $("retypeBtn").addEventListener("click", ()=>{
+  retypeBtn.addEventListener("click", ()=>{
     vibrate([30,20,30]);
-    renderLetter(true);
     showToast("Ok… otra vez 💌");
+    renderLetter(true);
   });
 
-  // ---------- Lock system (Mini test unlocks Question) ----------
+  // ---------- Lock system ----------
   let unlockedQuestion = localStorage.getItem("unlockedQuestion") === "1";
   const picks = [null, null, null];
-
-  // Correct answers by option index (0/1/2) — AJUSTA si cambias opciones:
   const ANSWERS = [1, 2, 0]; // Q1=Sushi, Q2=Solo estar contigo, Q3=Cartas
 
   function updateLocks(){
@@ -720,7 +752,6 @@ Con cariño,`;
     }
   }
 
-  // Intercept nav
   function go(name){
     if(name === "question" && !unlockedQuestion){
       showToast("🔒 Primero completa el mini test 🧠");
@@ -737,7 +768,7 @@ Con cariño,`;
 
   updateLocks();
 
-  // Pick answers
+  // ---------- Test picks ----------
   document.addEventListener("click", (e)=>{
     const btn = e.target.closest("button[data-q][data-a]");
     if(!btn) return;
@@ -766,9 +797,7 @@ Con cariño,`;
 
     await typeInto($("testCmd"), "node miniTest.js --run", 12);
 
-    const lines = [
-      `→ score: ${score}/3`,
-    ];
+    const lines = [`→ score: ${score}/3`];
 
     if(score >= 2){
       unlockedQuestion = true;
@@ -900,6 +929,8 @@ Con cariño,`;
       p.life *= 0.985;
 
       const alpha = Math.max(0, p.life);
+      if(!heartsOn && p.kind === "heart") continue;
+
       if(p.kind === "heart"){
         drawHeart(p.x, p.y, p.s, p.hue, alpha);
       }else{
@@ -914,7 +945,7 @@ Con cariño,`;
   }
   tick();
 
-  // ---------- Music toggle (simple WebAudio) ----------
+  // ---------- Music toggle ----------
   let audioCtx = null;
   let musicOn = false;
   let nodes = [];
@@ -1021,7 +1052,7 @@ Con cariño,`;
 
   // ---------- Init ----------
   (async function init(){
-    renderLetter(true);
+    await renderLetter(true);
     bootTerminals();
   })();
 })();
