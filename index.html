@@ -463,12 +463,16 @@
     .photo img{
       width:100%;
       height:100%;
-      object-fit: cover;
+      object-fit: contain;           /* ✅ NO recorta */
+      object-position: center;
       display:block;
-      transform: scale(1.02);
+      background: rgba(255,255,255,.20);
+      padding: 10px;
+      transform: scale(1.0);
       transition: transform .22s ease;
     }
-    .photo:hover img{ transform: scale(1.05); }
+    .photo:hover img{ transform: scale(1.02); }
+
     .cap{
       position:absolute;
       left: 10px;
@@ -697,7 +701,6 @@
 
     /* ===== Fullscreen mode ===== */
     .fullscreen .controls-panel{ display:none; }
-    .controls-panel{ }
     .fullscreen .wrap{ grid-template-columns: 1fr; }
     .fullscreen .topbar{ max-width: 980px; }
     .fullscreen .card{ box-shadow: 0 18px 60px rgba(30,18,44,.14); }
@@ -748,12 +751,10 @@
   </div>
 
   <div class="wrap" id="app">
-    <!-- Left main -->
     <div class="card" id="mainCard">
       <div id="view"></div>
     </div>
 
-    <!-- Right controls -->
     <div class="card controls-panel" id="controlsPanel">
       <h2>Controles</h2>
       <p class="sub">Todo pensado para celular 📱</p>
@@ -799,7 +800,6 @@
     </div>
   </div>
 
-  <!-- Audio -->
   <audio id="audio" preload="auto" loop>
     <source src="assets/photos/music.mp3" type="audio/mpeg">
   </audio>
@@ -812,7 +812,7 @@
     const defaultState = {
       visited: { home:true, letter:false, photos:false, quiz:false, ask:false },
       quizPassed: false,
-      askUnlocked: false,  // unlocked by quiz
+      askUnlocked: false,
       heartsOn: true,
       musicOn: false,
       fullscreen: false
@@ -861,7 +861,6 @@
     }
 
     function emojiForCaption(i){
-      // sutil y cute, no saturar
       const list = ["💞","😹","🏍️","🤍","🧸","✨","😽","💗","📸","🥺"];
       return list[i % list.length];
     }
@@ -897,7 +896,6 @@
       heart.style.animationDuration = dur + "s";
       heart.style.animationDelay = (Math.random()*0.2) + "s";
       heartsLayer.appendChild(heart);
-      requestAnimationFrame(()=>{ /* let animation start */ });
       setTimeout(()=> heart.remove(), (dur+1)*1000);
     }
 
@@ -905,7 +903,6 @@
       Confetti (mini)
     ============================== */
     function confettiBurst(){
-      // mini confetti, ligero
       const colors = ["#ff7ac3","#b89bff","#ffd1ea","#9be9c3","#ffe08a"];
       for(let i=0;i<40;i++){
         const p = document.createElement("div");
@@ -942,7 +939,7 @@
       state.musicOn = true;
       saveState();
       audio.volume = 0.9;
-      audio.play().catch(()=>{/* iOS can block until user gesture, but our toggle is a gesture */});
+      audio.play().catch(()=>{});
     }
     function pauseMusic(){
       state.musicOn = false;
@@ -966,13 +963,12 @@
       Progress
     ============================== */
     function computeProgress(){
-      // 4 steps: visited letter/photos + quizPassed + askUnlocked (or visited ask?) + accepted?
       let done = 0;
       const steps = {
         letter: !!state.visited.letter,
         photos: !!state.visited.photos,
         quiz: !!state.quizPassed,
-        ask: !!state.askUnlocked // unlocked means ready; visiting ask will also mark
+        ask: !!state.askUnlocked
       };
       done += steps.letter ? 1 : 0;
       done += steps.photos ? 1 : 0;
@@ -995,7 +991,7 @@
     }
 
     /* =============================
-      Menu tiles + routing
+      Routing
     ============================== */
     function render(route){
       safeScrollTop();
@@ -1064,7 +1060,7 @@
     }
 
     /* =============================
-      Letter (typing effect)
+      Letter
     ============================== */
     const LETTER_TEXT = `Holi mi amor, mi princesa, mi niña hermosa, mi todo; te dedico esta pequeña cartita con todo mi corazón.  
 
@@ -1132,10 +1128,21 @@ tu hombre que te ama, Sergio 💗
         if(i >= full.length){
           clearInterval(typingTimer);
           typingTimer = null;
-          // sign appears strictly at end (fixes the “appears early” bug)
+
           signEl.textContent = LETTER_SIGN;
-          // reveal surprise
           surpriseEl.style.display = "block";
+
+          // ✅ handlers SOLO cuando ya existe y está visible
+          $("btnSurprise").onclick = ()=>{
+            $("noteBox").style.display = "block";
+            $("surpriseText").textContent = "Ok… ahora sí: esto es para ti 😽💗";
+            confettiBurst();
+          };
+
+          $("btnTeAmo").onclick = ()=>{
+            confettiBurst();
+          };
+
           state.visited.letter = true;
           saveState();
         }
@@ -1161,9 +1168,14 @@ tu hombre que te ama, Sergio 💗
 
           <div class="surprise" id="surpriseBox">
             <div class="s-title">🥺💗 Una cosita más…</div>
-            <div class="s-text">Tócame, porfa. Prometo que es bonito 😽✨</div>
+            <div class="s-text" id="surpriseText">Tócame, porfa. Prometo que es bonito 😽✨</div>
             <div style="margin-top:10px;">
               <div class="mini-btn" id="btnSurprise">🎉 Tocar aquí</div>
+            </div>
+
+            <div id="noteBox" style="display:none; margin-top:12px; padding:12px; border-radius:16px; border:1px solid rgba(140,120,160,.16); background: rgba(255,255,255,.78); box-shadow: 0 10px 22px rgba(30,18,44,.10); text-align:center; font-weight:900;">
+              <div style="font-size:18px; letter-spacing:1px; margin-bottom:10px;">TE AMO</div>
+              <div class="mini-btn" id="btnTeAmo">TE AMO 💗</div>
             </div>
           </div>
         </div>
@@ -1177,15 +1189,7 @@ tu hombre que te ama, Sergio 💗
       $("backHome").onclick = ()=> render("home");
       $("btnReread").onclick = ()=> typeLetter();
       $("btnGoQuiz").onclick = ()=> render("quiz");
-      $("btnSurprise").onclick = ()=>{
-        confettiBurst();
-        // mini extra message
-        const s = $("surpriseBox");
-        const t = s.querySelector(".s-text");
-        t.textContent = "Te amo muchísimo. Gracias por existir en mi vida 💗😽";
-      };
 
-      // auto start typing once entering
       typeLetter();
     }
 
@@ -1215,7 +1219,6 @@ tu hombre que te ama, Sergio 💗
       state.visited.photos = true;
       saveState();
 
-      // layout: left big, then smaller right column, then bottom wide
       view.innerHTML = `
         <div class="section-head">
           <div class="crumb">
@@ -1254,11 +1257,9 @@ tu hombre que te ama, Sergio 💗
 
       $("backHome").onclick = ()=> render("home");
 
-      // tap = heart + subtle zoom
       view.querySelectorAll("[data-photo]").forEach(card=>{
         const img = card.querySelector("img");
         const pop = ()=>{
-          // small zoom pop
           img.animate([
             { transform:"scale(1.02)" },
             { transform:"scale(1.06)" },
@@ -1279,21 +1280,9 @@ tu hombre que te ama, Sergio 💗
       Quiz
     ============================== */
     const quiz = [
-      {
-        title: "1) ¿Qué prefiero hacer? 😼",
-        options: ["Ir al gym 💪", "Ir a la escuela 📚", "Jugar videojuegos 🎮"],
-        correct: 0
-      },
-      {
-        title: "2) ¿Qué estilo de moto prefiero? 🏍️",
-        options: ["Naked 😈", "Deportiva 🏁", "2 tiempos 💨"],
-        correct: 0
-      },
-      {
-        title: "3) ¿Me amas? 🥺💗",
-        options: ["Sí 💞", "No 🙄"],
-        correct: 0
-      }
+      { title: "1) ¿Qué prefiero hacer? 😼", options: ["Ir al gym 💪", "Ir a la escuela 📚", "Jugar videojuegos 🎮"], correct: 0 },
+      { title: "2) ¿Qué estilo de moto prefiero? 🏍️", options: ["Naked 😈", "Deportiva 🏁", "2 tiempos 💨"], correct: 0 },
+      { title: "3) ¿Me amas? 🥺💗", options: ["Sí 💞", "No 🙄"], correct: 0 }
     ];
 
     function renderQuiz(){
@@ -1344,8 +1333,7 @@ tu hombre que te ama, Sergio 💗
           const oi = Number(opt.getAttribute("data-o"));
           selected[qi] = oi;
 
-          // mark selected on that question
-          box.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(x=>x.classList.remove("selected"));
+          box.querySelectorAll(\`.opt[data-q="\${qi}"]\`).forEach(x=>x.classList.remove("selected"));
           opt.classList.add("selected");
         }, { passive:true });
       });
@@ -1357,7 +1345,6 @@ tu hombre que te ama, Sergio 💗
       };
 
       $("btnSend").onclick = ()=>{
-        // validate all answered
         for(let i=0;i<selected.length;i++){
           if(selected[i] === null){
             showToast("Te falta una 😼 (responde todas)", "bad");
@@ -1365,7 +1352,6 @@ tu hombre que te ama, Sergio 💗
           }
         }
 
-        // check
         for(let i=0;i<quiz.length;i++){
           if(selected[i] !== quiz[i].correct){
             showToast("Uy no 😹 Intenta otra vez, mi amor 💗", "bad");
@@ -1378,8 +1364,6 @@ tu hombre que te ama, Sergio 💗
         saveState();
         confettiBurst();
         showToast("Perfecto ✅ Ya se desbloqueó la Pregunta 💘", "good");
-
-        // go to menu after a sec
         setTimeout(()=> render("home"), 900);
       };
 
@@ -1437,12 +1421,9 @@ tu hombre que te ama, Sergio 💗
       let dodgeCount = 0;
 
       function dodge(){
-        // works on mouse + touch:
-        // move button around randomly within the .final box
         const box = view.querySelector(".final");
         const rect = box.getBoundingClientRect();
 
-        // keep inside with padding
         const pad = 14;
         const maxX = rect.width - 90;
         const maxY = rect.height - 80;
@@ -1456,11 +1437,9 @@ tu hombre que te ama, Sergio 💗
         box.style.position = "relative";
 
         dodgeCount++;
-        // make it slightly smaller each dodge (but not too aggressive)
         const scale = Math.max(0.72, 1 - dodgeCount*0.06);
         btnNo.style.transform = `scale(${scale})`;
 
-        // after a few dodges, it becomes "Sí" (cute prank)
         if(dodgeCount >= 6){
           btnNo.textContent = "Sí 💞";
           btnNo.classList.remove("no");
@@ -1472,16 +1451,13 @@ tu hombre que te ama, Sergio 💗
       function acceptYes(){
         confettiBurst();
         $("finalMsg").style.display = "block";
-        // mark ask as done for progress
         state.visited.ask = true;
         saveState();
       }
 
       btnYes.onclick = acceptYes;
 
-      // Desktop hover
       btnNo.addEventListener("mouseenter", dodge);
-      // Mobile tap
       btnNo.addEventListener("touchstart", (e)=>{
         e.preventDefault();
         dodge();
@@ -1493,11 +1469,9 @@ tu hombre que te ama, Sergio 💗
       UI Bits + Events
     ============================== */
     function updateUIBits(){
-      // toggles
       $("toggleMusic").classList.toggle("on", state.musicOn);
       $("toggleHearts").classList.toggle("on", state.heartsOn);
 
-      // top buttons
       $("btnMusic").classList.toggle("off", !state.musicOn);
       $("musicState").textContent = state.musicOn ? "ON" : "OFF";
 
@@ -1507,20 +1481,16 @@ tu hombre que te ama, Sergio 💗
       $("fsState").textContent = state.fullscreen ? "CINE" : "FULL";
       document.body.classList.toggle("fullscreen", state.fullscreen);
 
-      // status pill
       const pill = $("statusPill");
       const unlocked = !!state.askUnlocked;
       pill.textContent = unlocked ? "Pregunta: desbloqueada ✅" : "Pregunta: bloqueada";
       pill.classList.toggle("good", unlocked);
       pill.classList.toggle("bad", !unlocked);
 
-      // hearts
       if(state.heartsOn) startHearts();
       else stopHearts();
 
-      // music
       if(state.musicOn){
-        // try play if user has toggled
         audio.play().catch(()=>{});
       }else{
         audio.pause();
@@ -1529,7 +1499,6 @@ tu hombre que te ama, Sergio 💗
       updateProgressUI();
     }
 
-    // top buttons
     $("btnMusic").onclick = toggleMusic;
     $("toggleMusic").onclick = toggleMusic;
 
@@ -1548,11 +1517,9 @@ tu hombre que te ama, Sergio 💗
       const url = location.href;
       try{
         await navigator.clipboard.writeText(url);
-        // tiny feedback
         $("btnCopy").textContent = "✅ Copiado";
         setTimeout(()=> $("btnCopy").textContent = "🔗 Copiar link", 900);
       }catch{
-        // fallback prompt
         prompt("Copia este link:", url);
       }
     };
@@ -1563,11 +1530,9 @@ tu hombre que te ama, Sergio 💗
       }
     };
 
-    // if first load, apply toggles
     if(state.heartsOn) startHearts();
     updateUIBits();
 
-    // Initial route
     render("home");
   </script>
 </body>
