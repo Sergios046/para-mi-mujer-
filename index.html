@@ -4,29 +4,22 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
   <meta name="theme-color" content="#ffeaf3" />
-  <title>Saharaim 💘</title>
+  <title>Para Saharaim 💘</title>
 
   <style>
     :root{
-      --bg1:#fff1f7;
-      --bg2:#f3f0ff;
-      --bg3:#eafffb;
       --ink:#2b2b35;
       --mut:#5c5c6a;
-      --card:#ffffffcc;
+      --card:rgba(255,255,255,.74);
       --shadow: 0 18px 50px rgba(41, 16, 36, .12);
       --shadow2: 0 8px 24px rgba(41, 16, 36, .10);
-      --pink:#ff6fae;
-      --violet:#a78bfa;
-      --mint:#4fd1c5;
-      --sun:#ffcc7a;
       --radius:22px;
       --ease: cubic-bezier(.2,.9,.2,1);
-      --glass: blur(12px);
+      --glass: blur(14px);
       --font: ui-rounded, system-ui, -apple-system, "SF Pro Rounded", "Segoe UI", Roboto, Arial, sans-serif;
 
-      /* ✅ OPCIONAL: fondo con foto (sube assets/bg.jpg) */
-      --bgimg: none; /* url("./assets/bg.jpg") */
+      /* ✅ TU FOTO DE FONDO (sube assets/fondo.jpg) */
+      --bgimg: url("./assets/fondo.jpg");
     }
 
     *{box-sizing:border-box}
@@ -35,29 +28,30 @@
       margin:0;
       font-family: var(--font);
       color:var(--ink);
-      background:
-        radial-gradient(1100px 700px at 12% 10%, var(--bg2) 0%, transparent 60%),
-        radial-gradient(1000px 650px at 88% 15%, var(--bg1) 0%, transparent 55%),
-        radial-gradient(1200px 750px at 50% 95%, var(--bg3) 0%, transparent 55%),
-        linear-gradient(180deg, #fff, #fff7fb 35%, #f7f4ff 70%, #f2fffd);
+      background: #fff;
       overflow-x:hidden;
     }
 
+    /* Fondo con foto SIN estirar, sin pixelote (cover) */
     body::before{
       content:"";
       position:fixed; inset:0;
       background-image: var(--bgimg);
       background-size: cover;
       background-position:center;
-      filter: blur(8px) brightness(.78) saturate(1.05);
-      opacity:.35;
+      background-repeat:no-repeat;
+      transform: scale(1.06);
+      filter: blur(10px) brightness(.88) saturate(1.05);
+      opacity:.75;
       pointer-events:none;
       z-index:-2;
     }
+    /* Capa suave para legibilidad */
     body::after{
       content:"";
       position:fixed; inset:0;
-      background: linear-gradient(180deg, rgba(255,255,255,.75), rgba(255,255,255,.85));
+      background: radial-gradient(1000px 600px at 20% 20%, rgba(255,255,255,.75), rgba(255,255,255,.50)),
+                  linear-gradient(180deg, rgba(255,255,255,.55), rgba(255,255,255,.65));
       pointer-events:none;
       z-index:-1;
     }
@@ -77,9 +71,6 @@
       backdrop-filter: var(--glass);
       -webkit-backdrop-filter: var(--glass);
       overflow:hidden;
-      position:relative;
-      transform-style:preserve-3d;
-      transition: transform .18s var(--ease);
     }
 
     .topbar{
@@ -94,22 +85,22 @@
 
     .brand{
       display:flex; align-items:center; gap:10px;
-      font-weight:900;
-      letter-spacing:.2px;
+      font-weight:900; letter-spacing:.2px;
       flex-wrap:wrap;
     }
+
     .pill{
       display:inline-flex; align-items:center; gap:8px;
       padding: 8px 12px;
       border-radius: 999px;
-      background: rgba(255,255,255,.7);
+      background: rgba(255,255,255,.74);
       box-shadow: var(--shadow2);
-      border: 1px solid rgba(255,255,255,.9);
+      border: 1px solid rgba(255,255,255,.92);
       white-space:nowrap;
     }
     .dot{
       width:10px;height:10px;border-radius:50%;
-      background: conic-gradient(from 0deg, var(--pink), var(--violet), var(--mint), var(--pink));
+      background: conic-gradient(from 0deg, #ff6fae, #a78bfa, #4fd1c5, #ff6fae);
       box-shadow: 0 0 18px rgba(255,111,174,.35);
       animation: pulse 1.8s var(--ease) infinite;
     }
@@ -118,23 +109,21 @@
     .actions{
       display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;
     }
-    .iconbtn{
-      border: 1px solid rgba(255,255,255,.9);
-      background: rgba(255,255,255,.7);
+
+    .btnSmall{
+      border: 1px solid rgba(255,255,255,.92);
+      background: rgba(255,255,255,.74);
       padding: 10px 12px;
       border-radius: 14px;
       cursor:pointer;
       box-shadow: var(--shadow2);
-      font-weight: 800;
-      transition: transform .15s var(--ease), box-shadow .15s var(--ease), background .15s var(--ease), opacity .15s var(--ease);
+      font-weight: 850;
+      transition: transform .15s var(--ease), opacity .15s var(--ease);
       user-select:none;
       touch-action: manipulation;
-      position:relative;
-      overflow:hidden;
     }
-    .iconbtn:hover{ transform: translateY(-1px) scale(1.02); }
-    .iconbtn:active{ transform: translateY(0px) scale(.98); }
-    .iconbtn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
+    .btnSmall:hover{ transform: translateY(-1px) scale(1.02); }
+    .btnSmall:active{ transform: translateY(0px) scale(.98); }
 
     .main{
       display:grid;
@@ -156,15 +145,19 @@
       overflow:hidden;
     }
 
+    .screen{ display:none; animation: in .28s var(--ease); }
+    .screen.active{ display:block; }
+    @keyframes in { from{opacity:0; transform: translateY(10px) scale(.99);} to{opacity:1; transform: translateY(0) scale(1);} }
+
     .hero h1{
-      margin: 6px 0 6px;
+      margin: 6px 0 8px;
       font-size: clamp(22px, 3.6vw, 40px);
       line-height: 1.1;
     }
     .hero p{
-      margin:0 0 12px;
+      margin:0 0 14px;
       color:var(--mut);
-      line-height:1.5;
+      line-height:1.55;
       font-weight: 650;
     }
 
@@ -180,54 +173,40 @@
 
     .tile{
       border: 1px solid rgba(255,255,255,.9);
-      background: rgba(255,255,255,.72);
+      background: rgba(255,255,255,.76);
       border-radius: 18px;
       padding: 14px;
       cursor:pointer;
       box-shadow: var(--shadow2);
-      transition: transform .18s var(--ease), box-shadow .18s var(--ease), background .18s var(--ease);
+      transition: transform .18s var(--ease), background .18s var(--ease);
       position:relative;
       overflow:hidden;
       user-select:none;
       touch-action: manipulation;
     }
-    .tile:hover{ transform: translateY(-2px) scale(1.01); }
+    .tile:hover{ transform: translateY(-2px) scale(1.01); background: rgba(255,255,255,.86); }
     .tile:active{ transform: translateY(0px) scale(.98); }
+
     .tile .t-top{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
-    .tile .emoji{ font-size: 22px; }
     .tile .name{ font-weight: 950; letter-spacing:.2px; }
     .tile .desc{ margin-top:6px; color:var(--mut); font-weight:650; line-height:1.4; font-size: 13.5px; }
-    .tile .spark{
-      position:absolute; inset:-2px;
-      background:
-        radial-gradient(280px 120px at 12% 22%, rgba(255,111,174,.22), transparent 60%),
-        radial-gradient(280px 120px at 88% 78%, rgba(79,209,197,.16), transparent 65%),
-        radial-gradient(300px 120px at 75% 20%, rgba(167,139,250,.14), transparent 60%);
-      opacity:.85;
-      pointer-events:none;
-      transition: opacity .18s var(--ease);
-    }
-    .tile:hover .spark{ opacity: 1; }
     .badge{
       font-size: 12px;
       font-weight: 950;
       padding: 6px 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,.75);
-      border: 1px solid rgba(255,255,255,.9);
+      background: rgba(255,255,255,.78);
+      border: 1px solid rgba(255,255,255,.92);
       box-shadow: var(--shadow2);
       white-space:nowrap;
     }
-
-    .screen{ display:none; animation: in .28s var(--ease); }
-    .screen.active{ display:block; }
-    @keyframes in { from{opacity:0; transform: translateY(10px) scale(.99);} to{opacity:1; transform: translateY(0) scale(1);} }
+    .locked{ opacity:.62; }
 
     .backRow{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom: 10px; }
     .back{
       display:inline-flex; align-items:center; gap:8px;
-      border: 1px solid rgba(255,255,255,.9);
-      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(255,255,255,.92);
+      background: rgba(255,255,255,.76);
       padding: 10px 12px;
       border-radius: 14px;
       cursor:pointer;
@@ -236,74 +215,74 @@
       transition: transform .15s var(--ease);
       user-select:none;
       touch-action: manipulation;
-      position:relative;
-      overflow:hidden;
     }
     .back:hover{ transform: translateY(-1px); }
     .back:active{ transform: translateY(0) scale(.98); }
 
-    .letter{
-      background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.68));
-      border: 1px solid rgba(255,255,255,.92);
-      border-radius: 18px;
+    /* Carta más “papel real” */
+    .letterShell{
+      border-radius: 20px;
       padding: 16px;
+      border: 1px solid rgba(255,255,255,.92);
+      background: rgba(255,255,255,.64);
       box-shadow: var(--shadow2);
       position:relative;
       overflow:hidden;
     }
-    .letter::before{
+    .letterShell::before{
       content:"";
-      position:absolute; inset:-6px;
+      position:absolute; inset:-8px;
       background:
-        repeating-linear-gradient(90deg, rgba(255,111,174,.08) 0 1px, transparent 1px 24px),
-        radial-gradient(420px 140px at 20% 10%, rgba(255,204,122,.18), transparent 60%),
-        radial-gradient(420px 140px at 80% 90%, rgba(167,139,250,.16), transparent 60%);
-      opacity:.6;
+        repeating-linear-gradient(0deg, rgba(0,0,0,.02) 0 1px, transparent 1px 22px),
+        radial-gradient(520px 190px at 20% 10%, rgba(255,204,122,.22), transparent 60%),
+        radial-gradient(520px 190px at 90% 90%, rgba(255,111,174,.18), transparent 60%);
+      opacity:.7;
       pointer-events:none;
-    }
-    .letter h2{
-      margin: 0 0 10px;
-      font-size: 20px;
-      letter-spacing:.2px;
     }
     .paper{
       position:relative;
-      background: rgba(255,255,255,.88);
-      border: 1px solid rgba(255,255,255,.95);
-      border-radius: 16px;
-      padding: 14px 14px 12px;
+      background: rgba(255,255,255,.92);
+      border: 1px solid rgba(0,0,0,.04);
+      border-radius: 18px;
+      padding: 16px 16px 14px;
       box-shadow: 0 10px 30px rgba(41,16,36,.08);
+    }
+    .paper::after{
+      content:"";
+      position:absolute;
+      right: 14px; top: 14px;
+      width: 14px; height:14px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,111,174,.9), rgba(255,111,174,.35));
+      box-shadow: 0 0 0 6px rgba(255,111,174,.10);
+      opacity:.9;
     }
     .paper p{
       margin:0;
-      color:#2c2c36;
-      line-height:1.7;
+      line-height:1.75;
       font-weight: 650;
       font-size: 15px;
       white-space:pre-wrap;
+      padding-right: 18px;
     }
-    .sig{
-      margin-top: 10px;
+    .signature{
+      margin-top: 14px;
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-end;
+      gap:10px;
+      flex-wrap:wrap;
       color: var(--mut);
       font-weight: 800;
-      font-size: 13px;
+      font-size: 13.5px;
+    }
+    .signName{
+      font-weight: 950;
+      color: #2b2b35;
     }
 
-    .qbox{
-      background: rgba(255,255,255,.76);
-      border: 1px solid rgba(255,255,255,.92);
-      border-radius: 18px;
-      padding: 16px;
-      box-shadow: var(--shadow2);
-    }
-    .qbox h2{ margin:0 0 8px; font-size: 20px; }
-    .qbox p{ margin:0 0 12px; color:var(--mut); font-weight: 700; line-height:1.5; }
-    .btnRow{
-      display:flex; gap:12px; flex-wrap:wrap; justify-content:center;
-      margin-top: 10px;
-    }
+    .btnRow{ display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-top: 12px; }
     .btn{
-      position:relative;
       border: 1px solid rgba(255,255,255,.92);
       background: rgba(255,255,255,.78);
       padding: 12px 14px;
@@ -312,10 +291,9 @@
       font-weight: 950;
       min-width: 150px;
       box-shadow: var(--shadow2);
-      transition: transform .16s var(--ease), box-shadow .16s var(--ease);
+      transition: transform .16s var(--ease);
       user-select:none;
       touch-action: manipulation;
-      overflow:hidden;
     }
     .btn:hover{ transform: translateY(-2px) scale(1.02); }
     .btn:active{ transform: translateY(0) scale(.98); }
@@ -325,52 +303,13 @@
     }
     .btn[disabled]{ opacity:.55; cursor:not-allowed; transform:none; }
 
-    .term{
-      background: rgba(255,255,255,.72);
-      border: 1px solid rgba(255,255,255,.92);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow2);
-      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-      color:#2e2e3a;
-      overflow:hidden;
-      position:relative;
-    }
-    .term .prompt{ font-weight:900; color:#5b5bd6; }
-    .term pre{
-      margin: 10px 0 0;
-      white-space:pre-wrap;
-      line-height:1.55;
-      font-size: 13.8px;
-    }
-    .cursor{
-      display:inline-block;
-      width:10px;
-      border-bottom:2px solid rgba(43,43,53,.7);
-      animation: blink .9s steps(1) infinite;
-      margin-left:2px;
-    }
-    @keyframes blink{ 50%{ opacity:0; } }
-
-    .ripple{
-      position:absolute; border-radius:50%;
-      transform: translate(-50%,-50%);
-      pointer-events:none;
-      width: 10px; height: 10px;
-      opacity:.4;
-      background: radial-gradient(circle, rgba(255,111,174,.55), transparent 60%);
-      animation: rip 650ms var(--ease) forwards;
-    }
-    @keyframes rip{
-      to{ width: 540px; height: 540px; opacity:0; }
-    }
-
+    #fx{ position:fixed; inset:0; pointer-events:none; z-index: 999; }
     .toast{
       position: fixed;
       left: 50%;
       bottom: 18px;
       transform: translateX(-50%);
-      background: rgba(255,255,255,.86);
+      background: rgba(255,255,255,.88);
       border: 1px solid rgba(255,255,255,.95);
       box-shadow: var(--shadow2);
       padding: 10px 14px;
@@ -379,13 +318,7 @@
       display:none;
       max-width: calc(100vw - 24px);
       text-align:center;
-      z-index: 9999;
-    }
-
-    #fx{
-      position: fixed; inset:0;
-      pointer-events:none;
-      z-index: 9998;
+      z-index: 1000;
     }
 
     @media (prefers-reduced-motion: reduce){
@@ -396,482 +329,368 @@
 
 <body>
   <canvas id="fx"></canvas>
+  <div class="toast" id="toast"></div>
 
   <div class="wrap">
-    <div class="app" id="app">
+    <div class="app">
       <div class="topbar">
         <div class="brand">
-          <span class="pill"><span class="dot"></span> valentine.app</span>
-          <span class="pill">para <b>Saharaim</b> 💘</span>
+          <span class="pill"><span class="dot"></span> sorpresa</span>
+          <span class="pill">para <b id="girlNameTop">Saharaim</b> 💘</span>
         </div>
 
         <div class="actions">
-          <button class="iconbtn" id="musicBtn">🎵 Música: OFF</button>
-          <button class="iconbtn" id="heartsBtn">💖 Corazones: ON</button>
-          <button class="iconbtn" id="copyBtn">📋 Copiar link</button>
+          <button class="btnSmall" id="heartsBtn">💖 Corazones: ON</button>
+          <button class="btnSmall" id="copyBtn">📋 Copiar link</button>
         </div>
       </div>
 
       <div class="main">
-        <!-- LEFT: screens -->
+        <!-- LEFT -->
         <div class="panel">
           <!-- HOME -->
-          <div class="screen active hero" id="screen-home">
-            <h1>Hey Saharaim 💘</h1>
-            <p>
-              Hice esto para ti en versión pastel + romántico + dev.
-              Explóralo con calma. Aquí todo tiene acción (y mucho cariño).
+          <div class="screen active hero" id="home">
+            <h1 id="homeTitle">Hey Saharaim 💘</h1>
+            <p id="homeSubtitle">
+              Te hice algo chiquito pero con mucho cariño. Explóralo con calma.
             </p>
 
             <div class="grid">
               <div class="tile" data-go="letter">
-                <div class="spark"></div>
                 <div class="t-top">
-                  <div class="name"><span class="emoji">💌</span> Carta</div>
+                  <div class="name">💌 Carta</div>
                   <div class="badge">leer</div>
                 </div>
-                <div class="desc">Una cartita corta, sincera, y bien tú y yo.</div>
+                <div class="desc">Una carta para ti, sin prisa.</div>
               </div>
 
               <div class="tile" data-go="test" id="tileTest">
-                <div class="spark"></div>
                 <div class="t-top">
-                  <div class="name"><span class="emoji">🧠</span> Mini test</div>
+                  <div class="name">🧠 Mini test</div>
                   <div class="badge" id="tBadge">start</div>
                 </div>
-                <div class="desc">3 preguntas rápidas. Si ganas, desbloqueas la pregunta 💘</div>
+                <div class="desc">Responde y desbloqueas la pregunta 💘</div>
               </div>
 
-              <div class="tile" data-go="question" id="tileQuestion">
-                <div class="spark"></div>
+              <div class="tile locked" data-go="question" id="tileQuestion">
                 <div class="t-top">
-                  <div class="name"><span class="emoji">💘</span> Pregunta</div>
-                  <div class="badge" id="qBadge">🔒 locked</div>
+                  <div class="name">💘 Pregunta</div>
+                  <div class="badge" id="qBadge">🔒</div>
                 </div>
-                <div class="desc">Se desbloquea cuando termines el mini test 😼</div>
+                <div class="desc">Primero completa el mini test 😼</div>
               </div>
 
               <div class="tile" data-go="photos">
-                <div class="spark"></div>
                 <div class="t-top">
-                  <div class="name"><span class="emoji">📸</span> Fotos</div>
-                  <div class="badge">beta</div>
+                  <div class="name">📸 Fotos</div>
+                  <div class="badge">pronto</div>
                 </div>
-                <div class="desc">Luego metemos recuerdos (swipe y captions).</div>
+                <div class="desc">Aquí metemos fotos cuando me las pases.</div>
               </div>
             </div>
           </div>
 
           <!-- LETTER -->
-          <div class="screen" id="screen-letter">
+          <div class="screen" id="letter">
             <div class="backRow">
               <div class="back" data-go="home">← Menú</div>
               <div class="badge">carta</div>
             </div>
 
-            <div class="letter">
-              <h2>Una carta para ti 💌</h2>
+            <div class="letterShell">
               <div class="paper">
                 <p id="letterText"></p>
-                <div class="sig">— (firma aquí con tu nombre)</div>
+
+                <div class="signature">
+                  <span>Con cariño,</span>
+                  <span class="signName" id="signatureName"></span>
+                </div>
               </div>
+
               <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                <button class="iconbtn" id="retypeBtn">✨ Releer con efecto</button>
-                <button class="iconbtn" data-go="test">🧠 Ir al mini test</button>
+                <button class="btnSmall" id="retypeBtn">✨ Releer con efecto</button>
+                <button class="btnSmall" data-go="test">🧠 Ir al mini test</button>
               </div>
             </div>
           </div>
 
-          <!-- TEST -->
-          <div class="screen" id="screen-test">
+          <!-- TEST (por ahora 3, luego lo subimos a 5 con tus preguntas) -->
+          <div class="screen" id="test">
             <div class="backRow">
               <div class="back" data-go="home">← Menú</div>
-              <div class="badge" id="testStatus">test</div>
+              <div class="badge" id="testBadge">test</div>
             </div>
 
-            <div class="qbox">
-              <h2>Mini test 🧠</h2>
-              <p id="testHint">Contesta 3. Si sacas 2/3, se desbloquea la sección 💘</p>
+            <div class="letterShell">
+              <div class="paper">
+                <p style="font-weight:950; margin:0 0 10px;">Mini test 🧠</p>
+                <p style="color:var(--mut); margin:0 0 12px;">
+                  Contesta y desbloqueas la pregunta 💘
+                </p>
 
-              <div class="letter" style="margin-top:12px;">
-                <div class="paper">
-                  <p style="font-weight:950; margin-bottom:10px;">1) ¿Cuál es mi comida favorita?</p>
-                  <div class="btnRow">
-                    <button class="btn" data-a="0" data-q="0">Tacos</button>
-                    <button class="btn" data-a="1" data-q="0">Sushi</button>
-                    <button class="btn" data-a="2" data-q="0">Pizza</button>
-                  </div>
+                <div id="quiz"></div>
+
+                <div class="btnRow">
+                  <button class="btn primary" id="submitTest">✅ Ver resultado</button>
+                  <button class="btn" id="resetTest">🧼 Reiniciar</button>
                 </div>
-              </div>
-
-              <div class="letter" style="margin-top:12px;">
-                <div class="paper">
-                  <p style="font-weight:950; margin-bottom:10px;">2) ¿Qué me gusta más hacer contigo?</p>
-                  <div class="btnRow">
-                    <button class="btn" data-a="0" data-q="1">Ir por comida</button>
-                    <button class="btn" data-a="1" data-q="1">Ver pelis</button>
-                    <button class="btn" data-a="2" data-q="1">Solo estar contigo</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="letter" style="margin-top:12px;">
-                <div class="paper">
-                  <p style="font-weight:950; margin-bottom:10px;">3) ¿Cuál es mi “detalle” favorito?</p>
-                  <div class="btnRow">
-                    <button class="btn" data-a="0" data-q="2">Cartas</button>
-                    <button class="btn" data-a="1" data-q="2">Flores</button>
-                    <button class="btn" data-a="2" data-q="2">Postres</button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="btnRow" style="margin-top:14px;">
-                <button class="btn primary" id="submitTest">✅ Ver resultado</button>
-                <button class="btn" id="resetTest">🧼 Reiniciar</button>
-              </div>
-
-              <div class="term" style="margin-top:12px;">
-                <div><span class="prompt">test@love</span>:~$ <span id="testCmd"></span><span class="cursor"></span></div>
-                <pre id="testOut"></pre>
               </div>
             </div>
           </div>
 
           <!-- PHOTOS -->
-          <div class="screen" id="screen-photos">
+          <div class="screen" id="photos">
             <div class="backRow">
               <div class="back" data-go="home">← Menú</div>
-              <div class="badge">beta</div>
+              <div class="badge">fotos</div>
             </div>
 
-            <div class="qbox">
-              <h2>Fotos 📸</h2>
-              <p>
-                Esta sección la dejamos lista para después.
-                Cuando quieras, metemos swipe + captions tipo “aquí fue cuando…”.
-              </p>
-              <div class="term">
-                <div><span class="prompt">dev@love</span>:~$ <span id="phCmd"></span><span class="cursor"></span></div>
-                <pre id="phOut"></pre>
-              </div>
-              <div class="btnRow">
-                <button class="btn" data-go="home">Volver</button>
-                <button class="btn primary" data-go="letter">Leer carta</button>
+            <div class="letterShell">
+              <div class="paper">
+                <p style="font-weight:950; margin:0 0 10px;">Fotos 📸</p>
+                <p style="color:var(--mut); margin:0;">
+                  Aquí vamos a poner un carrusel bonito con tus fotos.  
+                  Cuando me las pases, lo armamos con swipe en celular.
+                </p>
               </div>
             </div>
           </div>
 
           <!-- QUESTION -->
-          <div class="screen" id="screen-question">
+          <div class="screen" id="question">
             <div class="backRow">
               <div class="back" data-go="home">← Menú</div>
-              <div class="badge">momento</div>
+              <div class="badge">💘</div>
             </div>
 
-            <div class="qbox">
-              <h2>Tengo una pregunta… 💘</h2>
-              <p>Ok… ahora sí. Gracias por jugar bonito 😌</p>
+            <div class="letterShell">
+              <div class="paper" style="text-align:center;">
+                <p style="font-weight:950; font-size:18px; margin:0 0 10px;" id="questionText">
+                  ¿Quieres ser mi San Valentín? 💘
+                </p>
+                <p style="color:var(--mut); margin:0 0 12px;" id="questionSub">
+                  (no hay respuestas incorrectas… solo una correcta 😌)
+                </p>
 
-              <div class="term" style="margin-top:12px;">
-                <div><span class="prompt">patrón@love</span>:~$ <span id="qCmd"></span><span class="cursor"></span></div>
-                <pre id="qOut"></pre>
-              </div>
-
-              <div class="btnRow" style="margin-top:12px;">
-                <button class="btn primary" id="yesBtn">✅ Sí</button>
-                <button class="btn" id="noBtn">🤍 Todavía no</button>
+                <div class="btnRow">
+                  <button class="btn primary" id="yesBtn">✅ Sí</button>
+                  <button class="btn" id="noBtn">🤍 Todavía no</button>
+                </div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- RIGHT -->
+        <!-- RIGHT (ahora limpio y romántico) -->
         <div class="panel">
-          <div class="term">
-            <div><span class="prompt">system@pastel</span>:~$ <span id="sysCmd"></span><span class="cursor"></span></div>
-            <pre id="sysOut"></pre>
+          <div class="letterShell">
+            <div class="paper">
+              <p style="font-weight:950; margin:0 0 10px;" id="sideTitle">Detalles</p>
+              <p style="color:var(--mut); margin:0;" id="sideText">
+                • Puedes prender/apagar corazones arriba 💖<br>
+                • La pregunta se desbloquea con el mini test 💘<br>
+                • Todo está hecho para celular ✅
+              </p>
+            </div>
           </div>
 
           <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="iconbtn" id="confettiBtn">🎉 Confeti</button>
-            <button class="iconbtn" id="softResetBtn">🧼 Reset</button>
-          </div>
-
-          <div style="margin-top:12px; color:var(--mut); font-weight:700; line-height:1.5; font-size:13.5px;">
-            • “Pregunta” se desbloquea con el mini test.<br/>
-            • Se guarda el progreso (localStorage).<br/>
-            • Luego metemos fotos con swipe y captions.
+            <button class="btnSmall" id="confettiBtn">🎉 Confeti</button>
+            <button class="btnSmall" id="softResetBtn">🧼 Reset</button>
           </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="toast" id="toast"></div>
-
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
 
-  function showToast(msg){
+  /* ==========================
+     🔧 EDITA AQUÍ LO IMPORTANTE
+     ========================== */
+
+  const GIRL_NAME = "Saharaim";
+  const YOUR_NAME = "Sergios"; // <- pon aquí tu nombre como firma
+
+  // Carta: aquí me pegarás TU texto después (por ahora placeholder bonito)
+  const LETTER_TEXT = `Saharaim,
+
+Quería hacerte algo diferente… algo que se quedara aquí guardado,
+para que lo puedas leer cuando quieras.
+
+Me encanta estar contigo, me gusta tu vibra,
+y lo fácil que se siente todo cuando estás conmigo.
+
+Gracias por ser tú.
+Con cariño,`;
+
+  // Mini test (ahorita 3). Cuando me pases tus 5 preguntas lo cambiamos aquí.
+  // Formato: { q: "pregunta", options: ["a","b","c","d"], correctIndex: 0 }
+  const QUIZ = [
+    { q: "¿Cuál es mi comida favorita?", options: ["Tacos", "Sushi", "Pizza", "Pasta"], correctIndex: 1 },
+    { q: "¿Qué me gusta más hacer contigo?", options: ["Ir por comida", "Ver pelis", "Solo estar contigo", "Salir de fiesta"], correctIndex: 2 },
+    { q: "¿Cuál es mi detalle favorito?", options: ["Cartas", "Flores", "Postres", "Regalos"], correctIndex: 0 },
+  ];
+
+  const PASS_SCORE = 2; // con 2/3 pasa. Cuando sean 5, lo ajustamos (ej: 4).
+
+  /* ==========================
+     UI + NAVEGACIÓN
+     ========================== */
+
+  const screens = ["home","letter","test","photos","question"];
+  function go(name){
+    if(name === "question" && !state.unlocked){
+      toast("🔒 Primero completa el mini test 🧠");
+      return;
+    }
+    screens.forEach(s => $(s).classList.remove("active"));
+    $(name).classList.add("active");
+  }
+
+  document.addEventListener("click", (e)=>{
+    const to = e.target.closest("[data-go]")?.getAttribute("data-go");
+    if(to) go(to);
+  });
+
+  function toast(msg){
     const t = $("toast");
     t.textContent = msg;
     t.style.display = "block";
-    clearTimeout(showToast._t);
-    showToast._t = setTimeout(()=> t.style.display="none", 2200);
-  }
-  function vibrate(pattern){ try{ if(navigator.vibrate) navigator.vibrate(pattern); }catch{} }
-
-  // ---------- Screen system ----------
-  const screens = {
-    home: $("screen-home"),
-    letter: $("screen-letter"),
-    test: $("screen-test"),
-    photos: $("screen-photos"),
-    question: $("screen-question"),
-  };
-  function _go(name){
-    Object.values(screens).forEach(s => s.classList.remove("active"));
-    screens[name].classList.add("active");
-    vibrate([18]);
+    clearTimeout(toast._t);
+    toast._t = setTimeout(()=> t.style.display="none", 2200);
   }
 
-  // ---------- Ripple ----------
-  function addRipple(el, x, y){
-    const r = document.createElement("span");
-    r.className = "ripple";
-    r.style.left = x + "px";
-    r.style.top = y + "px";
-    el.appendChild(r);
-    setTimeout(()=> r.remove(), 700);
-  }
-  document.addEventListener("pointerdown", (e)=>{
-    const target = e.target.closest(".btn, .iconbtn, .tile, .back");
-    if(!target) return;
-    const rect = target.getBoundingClientRect();
-    addRipple(target, e.clientX - rect.left, e.clientY - rect.top);
-  }, {passive:true});
+  /* ==========================
+     TYPEWRITER FIX (anti bug)
+     ========================== */
 
-  // ---------- Typewriter (FIXED: cancel previous runs) ----------
   const sleep = (ms)=>new Promise(r=>setTimeout(r, ms));
-
-  // Token that invalidates previous typing loops
   let typeToken = 0;
 
-  async function typeInto(el, text, base=18){
-    const myToken = ++typeToken;       // new run id
+  async function typeInto(el, text, base=14){
+    const myToken = ++typeToken;
     el.textContent = "";
-
     for(const ch of text){
-      // if another typeInto started, stop this one
       if(myToken !== typeToken) return;
-
       el.textContent += ch;
       await sleep(base + Math.random()*22);
     }
   }
 
-  async function typePre(el, lines, base=90){
-    const myToken = ++typeToken;
-    el.textContent = "";
-    for(const line of lines){
-      if(myToken !== typeToken) return;
-      el.textContent += line + "\n";
-      await sleep(base + Math.random()*90);
-    }
-  }
-
-  // ---------- Letter content (EDITA AQUÍ) ----------
-  const LETTER = `Saharaim,
-
-No hice esto porque no sepa decirte las cosas en persona,
-sino porque quería dejarlas aquí, bonitas, y a tu ritmo.
-
-Me gusta todo de ti… pero sobre todo lo real:
-cómo eres cuando estás tranquila,
-cómo te ríes,
-y cómo haces que lo simple se sienta especial.
-
-Gracias por ser mi lugar bonito.
-Me encantas.
-
-Con cariño,`;
-
   const retypeBtn = $("retypeBtn");
-  let typingLetter = false;
-
   async function renderLetter(animated=true){
-    const el = $("letterText");
-
-    // Cancel any typing currently happening (important)
+    // cancela cualquier tipeo anterior
     typeToken++;
 
     if(!animated){
-      el.textContent = LETTER;
-      typingLetter = false;
-      if(retypeBtn) retypeBtn.disabled = false;
+      $("letterText").textContent = LETTER_TEXT;
+      retypeBtn.disabled = false;
       return;
     }
 
-    // prevent spam-click weirdness
-    typingLetter = true;
-    if(retypeBtn) retypeBtn.disabled = true;
-
-    await typeInto(el, LETTER, 14);
-
-    // if got canceled, don't re-enable too early
-    if(!typingLetter) return;
-
-    typingLetter = false;
-    if(retypeBtn) retypeBtn.disabled = false;
+    retypeBtn.disabled = true;
+    await typeInto($("letterText"), LETTER_TEXT, 12);
+    retypeBtn.disabled = false;
   }
 
-  retypeBtn.addEventListener("click", ()=>{
-    vibrate([30,20,30]);
-    showToast("Ok… otra vez 💌");
-    renderLetter(true);
-  });
+  /* ==========================
+     QUIZ (dinámico)
+     ========================== */
 
-  // ---------- Lock system ----------
-  let unlockedQuestion = localStorage.getItem("unlockedQuestion") === "1";
-  const picks = [null, null, null];
-  const ANSWERS = [1, 2, 0]; // Q1=Sushi, Q2=Solo estar contigo, Q3=Cartas
+  const state = {
+    picks: Array(QUIZ.length).fill(null),
+    unlocked: localStorage.getItem("unlockedQuestion") === "1",
+    heartsOn: true
+  };
+
+  function renderQuiz(){
+    const wrap = $("quiz");
+    wrap.innerHTML = "";
+
+    QUIZ.forEach((item, qi)=>{
+      const block = document.createElement("div");
+      block.style.margin = "12px 0 14px";
+
+      const q = document.createElement("p");
+      q.style.fontWeight = "950";
+      q.style.margin = "0 0 10px";
+      q.textContent = `${qi+1}) ${item.q}`;
+
+      const row = document.createElement("div");
+      row.className = "btnRow";
+
+      item.options.forEach((opt, ai)=>{
+        const b = document.createElement("button");
+        b.className = "btn";
+        b.textContent = opt;
+        b.addEventListener("click", ()=>{
+          state.picks[qi] = ai;
+          // feedback visual
+          [...row.querySelectorAll("button")].forEach(x => x.style.transform = "");
+          b.style.transform = "translateY(-2px) scale(1.03)";
+          toast("✅ Guardado");
+        });
+        row.appendChild(b);
+      });
+
+      block.appendChild(q);
+      block.appendChild(row);
+      wrap.appendChild(block);
+    });
+  }
 
   function updateLocks(){
-    const qBadge = $("qBadge");
-    const tBadge = $("tBadge");
-    if(unlockedQuestion){
-      qBadge.textContent = "✅ unlocked";
-      tBadge.textContent = "done";
-      $("tileQuestion").querySelector(".desc").textContent = "Ya está desbloqueada 😼";
+    $("girlNameTop").textContent = GIRL_NAME;
+    $("homeTitle").textContent = `Hey ${GIRL_NAME} 💘`;
+    $("signatureName").textContent = YOUR_NAME;
+
+    const tileQ = $("tileQuestion");
+    if(state.unlocked){
+      tileQ.classList.remove("locked");
+      $("qBadge").textContent = "✅";
+      $("tBadge").textContent = "done";
+      tileQ.querySelector(".desc").textContent = "Ya está desbloqueada 😼";
     }else{
-      qBadge.textContent = "🔒 locked";
-      tBadge.textContent = "start";
-      $("tileQuestion").querySelector(".desc").textContent = "Se desbloquea cuando termines el mini test 😼";
+      tileQ.classList.add("locked");
+      $("qBadge").textContent = "🔒";
+      $("tBadge").textContent = "start";
+      tileQ.querySelector(".desc").textContent = "Primero completa el mini test 😼";
     }
   }
 
-  function go(name){
-    if(name === "question" && !unlockedQuestion){
-      showToast("🔒 Primero completa el mini test 🧠");
-      vibrate([25,25,25]);
+  $("submitTest").addEventListener("click", ()=>{
+    if(state.picks.some(v => v === null)){
+      toast("Te falta contestar una 😼");
       return;
     }
-    _go(name);
-  }
-
-  document.addEventListener("click", (e)=>{
-    const goTo = e.target.closest("[data-go]")?.getAttribute("data-go");
-    if(goTo) go(goTo);
-  });
-
-  updateLocks();
-
-  // ---------- Test picks ----------
-  document.addEventListener("click", (e)=>{
-    const btn = e.target.closest("button[data-q][data-a]");
-    if(!btn) return;
-
-    const q = Number(btn.getAttribute("data-q"));
-    const a = Number(btn.getAttribute("data-a"));
-    picks[q] = a;
-
-    const parent = btn.parentElement;
-    [...parent.querySelectorAll("button")].forEach(b => b.style.transform = "");
-    btn.style.transform = "translateY(-2px) scale(1.03)";
-
-    showToast("Respuesta guardada ✅");
-    vibrate([18]);
-  });
-
-  $("submitTest").addEventListener("click", async ()=>{
-    if(picks.some(v => v === null)){
-      showToast("Te falta contestar una 😼");
-      vibrate([30,30]);
-      return;
-    }
-
     let score = 0;
-    for(let i=0;i<3;i++) if(picks[i] === ANSWERS[i]) score++;
-
-    await typeInto($("testCmd"), "node miniTest.js --run", 12);
-
-    const lines = [`→ score: ${score}/3`];
-
-    if(score >= 2){
-      unlockedQuestion = true;
+    for(let i=0;i<QUIZ.length;i++){
+      if(state.picks[i] === QUIZ[i].correctIndex) score++;
+    }
+    if(score >= PASS_SCORE){
+      state.unlocked = true;
       localStorage.setItem("unlockedQuestion","1");
       updateLocks();
       spawnConfetti(220);
-      vibrate([120,60,120]);
-      lines.push("→ status: PASASTE ✅");
-      lines.push("→ desbloqueado: sección Pregunta 💘");
-      showToast("✅ Desbloqueado 💘");
+      toast(`PASASTE ✅ (${score}/${QUIZ.length})`);
     }else{
-      vibrate([40,20,40]);
-      lines.push("→ status: casi 😭 intenta otra vez");
-      showToast("Intenta otra vez 😼");
+      toast(`Casi 😭 (${score}/${QUIZ.length})`);
     }
-
-    await typePre($("testOut"), lines, 70);
   });
 
   $("resetTest").addEventListener("click", ()=>{
-    for(let i=0;i<picks.length;i++) picks[i] = null;
-    document.querySelectorAll("button[data-q][data-a]").forEach(b => b.style.transform = "");
-    $("testOut").textContent = "";
-    $("testCmd").textContent = "";
-    showToast("Reiniciado 🧼");
-    vibrate([18]);
+    state.picks = Array(QUIZ.length).fill(null);
+    renderQuiz();
+    toast("Reiniciado 🧼");
   });
 
-  // ---------- Question actions ----------
-  $("yesBtn").addEventListener("click", async ()=>{
-    spawnConfetti(260);
-    vibrate([120,60,120]);
-    showToast("AAAAA 💘");
+  /* ==========================
+     Corazones / Confeti
+     ========================== */
 
-    await typeInto($("qCmd"), "git merge love/valentine --no-ff", 10);
-    await typePre($("qOut"), [
-      "→ Respuesta: SÍ 💘",
-      "→ Deploy: aprobado ✅",
-      "→ Nota: eres mi persona favorita.",
-      "→ Fin del commit 😌"
-    ], 70);
-  });
-
-  $("noBtn").addEventListener("click", async ()=>{
-    vibrate([40,30,40]);
-    showToast("Todo bien 😌");
-
-    await typeInto($("qCmd"), "setTimeout(() => askAgain(), 86400000)", 10);
-    await typePre($("qOut"), [
-      "→ Ok, sin presión.",
-      "→ Modo paciencia activado 🧘‍♂️",
-      "→ (Cuando quieras, aquí estoy) 💗"
-    ], 70);
-  });
-
-  // ---------- Photos placeholder terminal ----------
-  async function bootTerminals(){
-    await typeInto($("sysCmd"), "boot --pastel --romantic --mobile", 12);
-    await typePre($("sysOut"), [
-      "→ UI: pastel glass ✅",
-      "→ locks: enabled ✅",
-      "→ test: required ✅",
-      "→ status: ready for Saharaim 💘"
-    ], 70);
-
-    await typeInto($("phCmd"), "photos.init --mode=swipe", 12);
-    await typePre($("phOut"), [
-      "→ assets: pending upload",
-      "→ todo: add captions + swipe gestures",
-      "→ status: waiting ✨"
-    ], 70);
-  }
-
-  // ---------- Confetti / hearts ----------
   const canvas = $("fx");
   const ctx = canvas.getContext("2d");
   function resize(){
@@ -884,8 +703,6 @@ Con cariño,`;
   resize();
 
   let particles = [];
-  let heartsOn = true;
-
   function spawnConfetti(n=160){
     for(let i=0;i<n;i++){
       particles.push({
@@ -895,7 +712,7 @@ Con cariño,`;
         vy: (1.8 + Math.random()*2.6),
         s: 3 + Math.random()*6,
         life: 1,
-        kind: Math.random()<0.35 ? "heart" : "dot",
+        kind: Math.random()<0.55 ? "heart" : "dot",
         hue: 300 + Math.random()*90
       });
     }
@@ -928,9 +745,9 @@ Con cariño,`;
       p.vy += 0.03;
       p.life *= 0.985;
 
-      const alpha = Math.max(0, p.life);
-      if(!heartsOn && p.kind === "heart") continue;
+      if(!state.heartsOn && p.kind === "heart") continue;
 
+      const alpha = Math.max(0, p.life);
       if(p.kind === "heart"){
         drawHeart(p.x, p.y, p.s, p.hue, alpha);
       }else{
@@ -945,116 +762,59 @@ Con cariño,`;
   }
   tick();
 
-  // ---------- Music toggle ----------
-  let audioCtx = null;
-  let musicOn = false;
-  let nodes = [];
-
-  function stopMusic(){
-    nodes.forEach(n => { try{ n.stop?.(); n.disconnect?.(); }catch{} });
-    nodes = [];
-    musicOn = false;
-    $("musicBtn").textContent = "🎵 Música: OFF";
-  }
-
-  function startMusic(){
-    if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const ctxA = audioCtx;
-
-    const base = 220;
-    const freqs = [base, base*1.25, base*1.5];
-
-    const master = ctxA.createGain();
-    master.gain.value = 0.035;
-    master.connect(ctxA.destination);
-
-    const filter = ctxA.createBiquadFilter();
-    filter.type = "lowpass";
-    filter.frequency.value = 900;
-    filter.connect(master);
-
-    freqs.forEach((f)=>{
-      const o = ctxA.createOscillator();
-      const g = ctxA.createGain();
-      o.type = "sine";
-      o.frequency.value = f;
-      g.gain.value = 0.6 / freqs.length;
-      o.connect(g); g.connect(filter);
-      o.start();
-      nodes.push(o, g);
-    });
-
-    const lfo = ctxA.createOscillator();
-    const lfoGain = ctxA.createGain();
-    lfo.type = "sine";
-    lfo.frequency.value = 0.18;
-    lfoGain.gain.value = 60;
-    lfo.connect(lfoGain);
-    lfoGain.connect(filter.frequency);
-    lfo.start();
-    nodes.push(lfo, lfoGain);
-
-    musicOn = true;
-    $("musicBtn").textContent = "🎵 Música: ON";
-  }
-
-  $("musicBtn").addEventListener("click", async ()=>{
-    try{
-      if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      await audioCtx.resume();
-    }catch{}
-    if(musicOn){ stopMusic(); showToast("Música off 🤫"); }
-    else{ startMusic(); showToast("Música on 🎶"); vibrate([20]); }
+  $("confettiBtn").addEventListener("click", ()=>{
+    spawnConfetti(200);
+    toast("🎉");
   });
 
   $("heartsBtn").addEventListener("click", ()=>{
-    heartsOn = !heartsOn;
-    $("heartsBtn").textContent = heartsOn ? "💖 Corazones: ON" : "🤍 Corazones: OFF";
-    showToast(heartsOn ? "Corazones ON 💖" : "Corazones OFF 🤍");
-    vibrate([18]);
+    state.heartsOn = !state.heartsOn;
+    $("heartsBtn").textContent = state.heartsOn ? "💖 Corazones: ON" : "🤍 Corazones: OFF";
+    toast(state.heartsOn ? "Corazones ON 💖" : "Corazones OFF 🤍");
   });
+
+  /* ==========================
+     Copy link + reset
+     ========================== */
 
   $("copyBtn").addEventListener("click", async ()=>{
     try{
       await navigator.clipboard.writeText(location.href);
-      showToast("Link copiado 📋");
-      vibrate([20,30,20]);
+      toast("Link copiado 📋");
     }catch{
-      showToast("No pude copiar 😅 (copia manual)");
+      toast("No pude copiar 😅 (copia manual)");
     }
   });
 
-  $("confettiBtn").addEventListener("click", ()=>{
-    spawnConfetti(190);
-    showToast("Confeti 🎉");
-    vibrate([60,40,60]);
-  });
-
   $("softResetBtn").addEventListener("click", ()=>{
-    stopMusic();
-    heartsOn = true;
-    $("heartsBtn").textContent = "💖 Corazones: ON";
     localStorage.removeItem("unlockedQuestion");
-    unlockedQuestion = false;
+    state.unlocked = false;
+    state.picks = Array(QUIZ.length).fill(null);
+    renderQuiz();
     updateLocks();
-    for(let i=0;i<picks.length;i++) picks[i] = null;
-    document.querySelectorAll("button[data-q][data-a]").forEach(b => b.style.transform = "");
-    $("testOut").textContent = "";
-    $("testCmd").textContent = "";
-    $("qOut").textContent = "";
-    $("qCmd").textContent = "";
-    _go("home");
     renderLetter(false);
-    bootTerminals();
-    showToast("Reset completo 🧼");
-    vibrate([18,18,18]);
+    go("home");
+    toast("Reset 🧼");
   });
 
-  // ---------- Init ----------
-  (async function init(){
-    await renderLetter(true);
-    bootTerminals();
-  })();
+  /* ==========================
+     Pregunta final
+     ========================== */
+
+  $("yesBtn").addEventListener("click", ()=>{
+    spawnConfetti(260);
+    toast("💘💘💘");
+  });
+
+  $("noBtn").addEventListener("click", ()=>{
+    toast("Todo bien 😌");
+  });
+
+  /* Init */
+  renderQuiz();
+  updateLocks();
+  renderLetter(true);
+
 })();
 </script>
 </body>
