@@ -35,19 +35,18 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
     }
 
-    /* ✅ Fondo con foto: ahora se aprecia MÁS */
+    /* ✅ Fondo con foto: sin “estiradito raro” */
     .bgPhoto{
       position:fixed; inset:0;
       background: url("assets/photos/bg.jpeg");
-      background-size:cover;
-      background-position:center;
-      background-repeat:no-repeat;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
       z-index:-3;
-      /* más visible sin verse “cruda” */
-      filter: saturate(1.15) contrast(1.05) brightness(1.06);
-      transform: scale(1.03);
+      filter: saturate(1.12) contrast(1.03) brightness(1.05);
+      transform: none; /* <-- antes era scale(...) y se veía raro */
+      will-change: auto;
     }
-    /* overlay más ligero (antes la tapaba mucho) + blur suave */
     .bgOverlay{
       position:fixed; inset:0;
       background:
@@ -80,6 +79,29 @@
       0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:.0;}
       10%{ opacity:.92;}
       100%{ transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)); opacity:0;}
+    }
+
+    /* Confeti layer */
+    .confettiLayer{
+      position:fixed; inset:0;
+      pointer-events:none;
+      z-index:50;
+      overflow:hidden;
+    }
+    .confetti{
+      position:absolute;
+      top:-30px;
+      font-size:18px;
+      opacity:.95;
+      filter: drop-shadow(0 8px 16px rgba(0,0,0,.14));
+      animation: confettiFall linear forwards;
+      will-change: transform, opacity;
+      user-select:none;
+    }
+    @keyframes confettiFall{
+      0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:0; }
+      10%{ opacity:.95; }
+      100%{ transform: translateY(120vh) translateX(var(--drift)) rotate(var(--rot)); opacity:0; }
     }
 
     .wrap{
@@ -323,7 +345,7 @@
       backdrop-filter: blur(10px);
     }
 
-    /* ✅ Swipe album (solo móvil) */
+    /* Swipe album (solo móvil) */
     .swipeWrap{
       display:none;
       border:1px solid rgba(120,120,150,.16);
@@ -514,6 +536,7 @@
   <div class="bgPhoto"></div>
   <div class="bgOverlay"></div>
   <div class="heartsLayer" id="heartsLayer" aria-hidden="true"></div>
+  <div class="confettiLayer" id="confettiLayer" aria-hidden="true"></div>
 
   <div class="wrap">
     <div class="topbar">
@@ -525,6 +548,7 @@
       <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
         <div class="pill" id="musicToggle" title="Prende / apaga música">🎵 <span id="musicLabel">Música: OFF</span></div>
         <div class="pill" id="heartsToggle" title="Prende / apaga corazones">💞 <span id="heartsLabel">Corazones: ON</span></div>
+        <div class="pill" id="confettiBtn" title="Confeti">🎉 Confeti</div>
         <div class="pill" id="copyLink" title="Copiar link">🔗 Copiar link</div>
         <div class="pill" id="resetBtn" title="Borrar progreso">🧼 Reset</div>
       </div>
@@ -557,9 +581,9 @@
             </div>
 
             <div class="cardBtn locked" id="goAsk" aria-disabled="true">
-              <div class="lockBadge">🔒 Bloqueado</div>
+              <div class="lockBadge" id="askBadge">🔒 Bloqueado</div>
               <div class="cardTitle">💘 Pregunta</div>
-              <div class="cardDesc">Se desbloquea con el mini test.</div>
+              <div class="cardDesc" id="askDesc">Se desbloquea con el mini test.</div>
             </div>
           </div>
 
@@ -596,7 +620,7 @@
             <h3 style="margin:0 0 6px; font-size:18px;">Nuestros momentos 📸</h3>
             <p style="margin:0 0 12px; color:var(--muted); font-size:13px;">Un collage… pero con estilito, obvio 😌✨</p>
 
-            <!-- ✅ Swipe (móvil) -->
+            <!-- Swipe (móvil) -->
             <div class="swipeWrap" id="swipeWrap" aria-label="Álbum deslizable">
               <img class="swipeImg" id="swipeImg" alt="foto" />
               <div class="swipeCap" id="swipeCap"></div>
@@ -666,6 +690,10 @@
               <div class="tag good" id="heartsStateTag">ON</div>
             </div>
             <div class="kvRow">
+              <div>🎉 Confeti</div>
+              <div class="tag">1 toque</div>
+            </div>
+            <div class="kvRow">
               <div>🔗 Copiar link</div>
               <div class="tag">1 toque</div>
             </div>
@@ -698,13 +726,27 @@
      * CONFIG
      ***********************/
     const STORAGE = {
-      quizPassed: "val_quiz_passed_v1",
-      musicOn: "val_music_on_v1",
-      heartsOn: "val_hearts_on_v1",
-      asked: "val_asked_v1",
+      quizPassed: "val_quiz_passed_v2",
+      musicOn: "val_music_on_v2",
+      heartsOn: "val_hearts_on_v2",
+      asked: "val_asked_v2",
     };
 
-    const LETTER_TEXT = `Holi mi amor, mi princesa, mi niña hermosa, mi todo; te dedico esta pequeña cartita con todo mi corazon, quiero que sepas que haces mis dias mejores, tambien quiero decirte que me haces muy feliz, me gusta lo que hacemos juntos, lo que estamos logrando juntos, las visiones que tenemos juntos y tambien hasta por las veces que no estamos de acuerdo... Soy muy feliz a tu lado la verdad nunca quiero irme de eso estoy muy seguro; quiero que sepas que tienes mi lealtad y mi fidelidad hacia ti. Me encanta tu sonrisa, tus ojos, la manera en que me ves, incluso cuando estas enojada o de mal humor hshs; muchas cosas pudiera decirte pero no lo quiero hacer muy largo... solo espero que te guste <3 quiero que sepas tambien que eres el amor de mi vida y te amo mucho como no tienes idea mi amor, siempre quiero estar junto a ti aun cuando no nos entendamos, aun en nuestros malos ratos y claro aun mas en nuestros mejores momentos. De verdad contigo estoy muy seguro de todo y de las cosas que quiero hacer junto a ti. Con mucho amor te hago esta carta. No solo de labios, sino, de corazon y con mucho amor solo para ti mi vida. Quería hacerte algo diferente… algo muy “yo”, pero totalmente “tú”.
+    // ✅ Carta revisada (misma vibra, nomás más limpia)
+    const LETTER_TEXT = `Holi mi amor, mi princesa, mi niña hermosa, mi todo; te dedico esta pequeña cartita con todo mi corazón.
+
+Quiero que sepas que haces mis días mejores. También quiero decirte que me haces muy feliz. Me gusta lo que hacemos juntos, lo que estamos logrando juntos, las visiones que tenemos juntos… y hasta las veces que no estamos de acuerdo.
+
+Soy muy feliz a tu lado. La verdad, nunca quiero irme de esto; estoy muy seguro. Quiero que sepas que tienes mi lealtad y mi fidelidad.
+
+Me encanta tu sonrisa, tus ojos, la manera en que me ves… incluso cuando estás enojada o de mal humor jajs. Muchas cosas podría decirte, pero no lo quiero hacer muy largo; solo espero que te guste. <3
+
+Quiero que sepas también que eres el amor de mi vida y te amo mucho, como no tienes idea, mi amor. Siempre quiero estar junto a ti: aun cuando no nos entendamos, aun en nuestros malos ratos, y claro… aún más en nuestros mejores momentos.
+
+De verdad, contigo estoy muy seguro de todo y de las cosas que quiero hacer a tu lado. Con mucho amor te hago esta carta: no solo de labios, sino de corazón, y con muchísimo amor, solo para ti, mi vida.
+
+Quería hacerte algo diferente… algo muy “yo”, pero totalmente “tú”.
+
 Gracias por estar conmigo, por quererme como soy, y por hacer mis días más bonitos.
 
 Me encantas. Me inspiras. Y me haces sentir en casa.`;
@@ -712,12 +754,12 @@ Me encantas. Me inspiras. Y me haces sentir en casa.`;
     const LETTER_SIGNATURE = `Con mucho cariño y amor,
 tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
 
-    // ✅ Tus frases + emojitos
+    // ✅ Textos de fotos (emojis “seguros” para que se vean bien)
     const PHOTOS = [
       { src: "assets/photos/01.jpeg", caption: "😂💗 Los mejores momentos son cuando nos reímos juntos" },
       { src: "assets/photos/02.png",  caption: "🏍️🔥 La mejor biker" },
       { src: "assets/photos/03.jpeg", caption: "🫂💞 Me gusta cuando me abrazas" },
-      { src: "assets/photos/04.jpeg", caption: "👩‍❤️‍👨✨ Mi copilota <3" },
+      { src: "assets/photos/04.jpeg", caption: "💗✨ Mi copilota <3" }, /* quitamos emoji raro para que SIEMPRE se vea */
       { src: "assets/photos/05.png",  caption: "🧥💘 Bonitos outfits" },
       { src: "assets/photos/06.jpeg", caption: "😍🌸 Enamorado de tu hermosa carita!" , optional:true },
       { src: "assets/photos/07.jpeg", caption: "✨💖 Me cautiva tu belleza" , optional:true },
@@ -767,33 +809,50 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
     }
 
     /***********************
-     * Carta: typing
+     * Carta: typing (FIX firma “antes de tiempo”)
      ***********************/
+    let typingToken = 0;
     let typingTimer = null;
 
-    function typeText(el, text, ms=10){
+    function typeText(el, text, ms=10, token){
       if(typingTimer) clearInterval(typingTimer);
       el.textContent = "";
       let i=0;
+
       typingTimer = setInterval(() => {
+        // si alguien volvió a presionar “releer”, este token queda viejo y se corta
+        if(token !== typingToken){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          return;
+        }
         el.textContent += text[i] || "";
         i++;
         if(i >= text.length){
           clearInterval(typingTimer);
           typingTimer = null;
+          // ✅ firma SOLO al finalizar (y solo si el token sigue siendo el mismo)
+          if(token === typingToken){
+            $("letterSignature").textContent = LETTER_SIGNATURE;
+          }
         }
       }, ms);
     }
 
     function renderLetter(withEffect=true){
+      // nueva “sesión”
+      typingToken++;
+      const token = typingToken;
+
       const el = $("typedLetter");
       const sig = $("letterSignature");
       sig.textContent = "";
+
       if(withEffect){
-        typeText(el, LETTER_TEXT, 10);
-        const totalMs = Math.min(LETTER_TEXT.length * 10, 9000) + 300;
-        setTimeout(() => { sig.textContent = LETTER_SIGNATURE; }, totalMs);
+        typeText(el, LETTER_TEXT, 10, token);
       }else{
+        if(typingTimer) clearInterval(typingTimer);
+        typingTimer = null;
         el.textContent = LETTER_TEXT;
         sig.textContent = LETTER_SIGNATURE;
       }
@@ -803,11 +862,8 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
      * Fotos
      ***********************/
     function renderPhotos(){
-      // masonry (desktop)
       const wrap = $("masonry");
       wrap.innerHTML = "";
-
-      // swipe (mobile)
       initSwipeAlbum();
 
       PHOTOS.forEach(p => {
@@ -834,7 +890,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
     }
 
     function availablePhotos(){
-      // Solo usamos las que sí existan (optional se omite sin drama)
       return PHOTOS.slice();
     }
 
@@ -869,15 +924,11 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         }, 140);
       }
 
-      // primera
       img.src = list[0].src;
       cap.textContent = list[0].caption;
       renderDots();
 
-      // swipe detection
-      let startX = 0;
-      let startY = 0;
-      let moved = false;
+      let startX = 0, startY = 0, moved = false;
 
       swipeWrap.ontouchstart = (e) => {
         const t = e.touches[0];
@@ -898,21 +949,15 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         const t = e.changedTouches[0];
         const dx = t.clientX - startX;
         const dy = t.clientY - startY;
-        // evitar conflicto con scroll: swipe horizontal dominante
         if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 35){
           if(dx < 0) setSlide(idx+1, 1);
           else setSlide(idx-1, -1);
         }
       };
 
-      // tap para avanzar (cute)
       swipeWrap.onclick = () => setSlide(idx+1, 1);
 
-      // arreglar optional que no existe: si falla una imagen, saltamos
-      img.onerror = () => {
-        // si falla la actual, brinca a la siguiente
-        setSlide(idx+1, 1);
-      };
+      img.onerror = () => setSlide(idx+1, 1);
     }
 
     /***********************
@@ -951,24 +996,32 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       });
     }
 
+    function checkQuizPassed(){
+      return !!load(STORAGE.quizPassed, false);
+    }
+
+    // ✅ FIX: ahora también cambia visualmente en el menú (no solo “Controles”)
     function setAskLocked(isLocked){
       const askCard = $("goAsk");
       const lockTag = $("lockTag");
+      const badge = $("askBadge");
+      const desc = $("askDesc");
+
       if(isLocked){
         askCard.classList.add("locked");
         askCard.setAttribute("aria-disabled","true");
+        badge.style.display = "flex";
+        desc.textContent = "Se desbloquea con el mini test.";
         lockTag.textContent = "Pregunta: bloqueada";
         lockTag.className = "tag lock";
       }else{
         askCard.classList.remove("locked");
         askCard.removeAttribute("aria-disabled");
+        badge.style.display = "none";
+        desc.textContent = "Ya está lista 💗";
         lockTag.textContent = "Pregunta: desbloqueada";
         lockTag.className = "tag good";
       }
-    }
-
-    function checkQuizPassed(){
-      return !!load(STORAGE.quizPassed, false);
     }
 
     /***********************
@@ -1007,6 +1060,33 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       if(on){
         for(let i=0;i<10;i++) setTimeout(spawnHeart, i*80);
         heartsTimer = setInterval(spawnHeart, 420);
+      }
+    }
+
+    /***********************
+     * Confeti
+     ***********************/
+    function popConfetti(){
+      const layer = $("confettiLayer");
+      const emojis = ["🎉","✨","💖","💗","💞","🌸","💘"];
+      const burst = 32;
+
+      for(let i=0;i<burst;i++){
+        const c = document.createElement("div");
+        c.className = "confetti";
+        c.textContent = emojis[Math.floor(Math.random()*emojis.length)];
+        const left = Math.random()*100;
+        const size = 14 + Math.random()*16;
+        const dur = 2.8 + Math.random()*2.2;
+        const drift = (Math.random()*260 - 130).toFixed(0) + "px";
+        const rot = (Math.random()*220 - 110).toFixed(0) + "deg";
+        c.style.left = left + "vw";
+        c.style.fontSize = size + "px";
+        c.style.animationDuration = dur + "s";
+        c.style.setProperty("--drift", drift);
+        c.style.setProperty("--rot", rot);
+        layer.appendChild(c);
+        setTimeout(()=>c.remove(), dur*1000 + 600);
       }
     }
 
@@ -1063,13 +1143,11 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         noBtn.style.top = y + "px";
       }
 
-      // PC: al pasar mouse
       noBtn.onmouseenter = () => {
         dodges++;
         if(dodges <= 6) dodge();
       };
 
-      // ✅ Cel: al tocar “No” también se mueve
       noBtn.ontouchstart = (e) => {
         e.preventDefault();
         dodges++;
@@ -1085,6 +1163,7 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         save(STORAGE.asked, true);
         res.style.display = "";
         res.innerHTML = "💘 SÍ A TODO. Ya sabía 😌💗✨";
+        popConfetti();
         for(let i=0;i<18;i++) setTimeout(spawnHeart, i*70);
       };
     }
@@ -1103,6 +1182,12 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       }
     }
 
+    function quizResultHide(){
+      const box = $("quizResult");
+      box.style.display = "none";
+      box.textContent = "";
+    }
+
     function hardReset(){
       Object.values(STORAGE).forEach(k => localStorage.removeItem(k));
       quizResultHide();
@@ -1114,12 +1199,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       renderPhotos();
       renderQuiz();
       initAsk();
-    }
-
-    function quizResultHide(){
-      const box = $("quizResult");
-      box.style.display = "none";
-      box.textContent = "";
     }
 
     /***********************
@@ -1167,6 +1246,7 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         setAskLocked(false);
         box.style.display = "";
         box.innerHTML = "✅ Perfecto, mi amor 💗 Ya desbloqueaste la Pregunta 💘";
+        popConfetti();
         for(let i=0;i<14;i++) setTimeout(spawnHeart, i*80);
       }else{
         box.style.display = "";
@@ -1190,6 +1270,8 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       const now = !!load(STORAGE.heartsOn, true);
       setHearts(!now);
     };
+
+    $("confettiBtn").onclick = popConfetti;
 
     $("copyLink").onclick = copyLink;
     $("resetBtn").onclick = hardReset;
