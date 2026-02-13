@@ -15,13 +15,10 @@
       --shadow: 0 18px 45px rgba(25, 20, 40, .12);
       --shadow2: 0 10px 24px rgba(25, 20, 40, .10);
       --r: 22px;
-      --r2: 18px;
-      --btn:#ffffff;
       --btnInk:#2b2b33;
       --accent:#ff5da2;
       --accent2:#7c5cff;
       --good:#17b26a;
-      --bad:#ff3b6a;
       --warn:#ffb020;
     }
 
@@ -38,25 +35,26 @@
         linear-gradient(180deg, var(--bg1), var(--bg2));
     }
 
-    /* Fondo con foto (sin estirar feo) */
+    /* ✅ Fondo con foto: ahora se aprecia MÁS */
     .bgPhoto{
       position:fixed; inset:0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.70), rgba(255,255,255,.78)),
-        url("assets/photos/bg.jpeg");
+      background: url("assets/photos/bg.jpeg");
       background-size:cover;
       background-position:center;
       background-repeat:no-repeat;
-      filter:saturate(1.05);
       z-index:-3;
+      /* más visible sin verse “cruda” */
+      filter: saturate(1.15) contrast(1.05) brightness(1.06);
+      transform: scale(1.03);
     }
-    /* Overlay suave pa que se lea todo */
+    /* overlay más ligero (antes la tapaba mucho) + blur suave */
     .bgOverlay{
       position:fixed; inset:0;
       background:
-        radial-gradient(900px 500px at 15% 5%, rgba(255,93,162,.16), transparent 60%),
-        radial-gradient(900px 500px at 85% 15%, rgba(124,92,255,.14), transparent 55%),
-        linear-gradient(180deg, rgba(255,247,251,.72), rgba(245,240,255,.72));
+        radial-gradient(900px 500px at 15% 5%, rgba(255,93,162,.12), transparent 60%),
+        radial-gradient(900px 500px at 85% 15%, rgba(124,92,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,247,251,.50), rgba(245,240,255,.52));
+      backdrop-filter: blur(6px);
       z-index:-2;
       pointer-events:none;
     }
@@ -72,7 +70,7 @@
       position:absolute;
       bottom:-40px;
       font-size:18px;
-      opacity:.85;
+      opacity:.90;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
       animation: floatUp linear forwards;
       will-change: transform, opacity;
@@ -80,7 +78,7 @@
     }
     @keyframes floatUp{
       0%{ transform: translateY(0) translateX(0) rotate(0deg); opacity:.0;}
-      10%{ opacity:.88;}
+      10%{ opacity:.92;}
       100%{ transform: translateY(-120vh) translateX(var(--drift)) rotate(var(--rot)); opacity:0;}
     }
 
@@ -120,7 +118,7 @@
       box-shadow: 0 8px 18px rgba(25,20,40,.08);
       cursor:pointer;
       user-select:none;
-      transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+      transition: transform .12s ease, box-shadow .12s ease;
     }
     .pill:hover{ transform: translateY(-1px); box-shadow: 0 12px 22px rgba(25,20,40,.10); }
     .pill:active{ transform: translateY(0px); }
@@ -207,9 +205,7 @@
       display:flex; align-items:center; gap:6px;
     }
 
-    .content{
-      padding: 0 18px 18px;
-    }
+    .content{ padding: 0 18px 18px; }
 
     .toolbar{
       display:flex;
@@ -230,6 +226,7 @@
       align-items:center;
       gap:8px;
       user-select:none;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn:hover{ transform: translateY(-1px); box-shadow: 0 14px 26px rgba(25,20,40,.10); }
     .btn:active{ transform: translateY(0px); }
@@ -282,6 +279,7 @@
       margin-top: 12px;
       font-weight: 800;
       color: rgba(43,43,51,.88);
+      white-space:pre-wrap;
     }
 
     /* Fotos */
@@ -298,12 +296,18 @@
       background: rgba(255,255,255,.76);
       box-shadow: 0 18px 40px rgba(25,20,40,.10);
       position:relative;
+      transform: translateZ(0);
     }
     .photoCard img{
       width:100%;
       height:auto;
       display:block;
+      transition: transform .45s ease;
+      transform-origin: center;
     }
+    .photoCard:hover img{ transform: scale(1.03); }
+    .photoCard:active img{ transform: scale(1.02); }
+
     .caption{
       position:absolute;
       left: 10px;
@@ -319,11 +323,59 @@
       backdrop-filter: blur(10px);
     }
 
-    /* Test */
-    .quiz{
-      display:grid;
-      gap: 12px;
+    /* ✅ Swipe album (solo móvil) */
+    .swipeWrap{
+      display:none;
+      border:1px solid rgba(120,120,150,.16);
+      background: rgba(255,255,255,.76);
+      border-radius: 18px;
+      box-shadow: 0 18px 40px rgba(25,20,40,.10);
+      overflow:hidden;
+      position:relative;
+      margin-bottom: 12px;
     }
+    .swipeImg{
+      width:100%;
+      height:auto;
+      display:block;
+      transition: transform .35s ease, opacity .35s ease;
+    }
+    .swipeCap{
+      position:absolute;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,.88);
+      border:1px solid rgba(120,120,150,.18);
+      box-shadow: 0 10px 20px rgba(25,20,40,.10);
+      font-size: 13px;
+      backdrop-filter: blur(10px);
+    }
+    .swipeDots{
+      position:absolute;
+      top:10px; right:10px;
+      display:flex; gap:6px;
+      background: rgba(255,255,255,.70);
+      border:1px solid rgba(120,120,150,.18);
+      padding: 6px 8px;
+      border-radius: 999px;
+      backdrop-filter: blur(10px);
+    }
+    .dot{
+      width:7px; height:7px; border-radius:50%;
+      background: rgba(120,120,150,.35);
+    }
+    .dot.active{ background: rgba(255,93,162,.80); }
+
+    @media (max-width: 720px){
+      .swipeWrap{ display:block; }
+      .masonry{ display:none; }
+    }
+
+    /* Test */
+    .quiz{ display:grid; gap: 12px; }
     .q{
       border:1px solid rgba(120,120,150,.16);
       background: rgba(255,255,255,.76);
@@ -336,11 +388,7 @@
       margin: 0 0 8px;
       font-size: 14px;
     }
-    .opt{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-    }
+    .opt{ display:flex; gap:10px; flex-wrap:wrap; }
     .chip{
       padding: 10px 12px;
       border-radius: 999px;
@@ -350,12 +398,14 @@
       user-select:none;
       transition: transform .12s ease, background .12s ease;
       font-size: 13px;
+      -webkit-tap-highlight-color: transparent;
     }
     .chip:hover{ transform: translateY(-1px); }
     .chip.active{
       border-color: rgba(255,93,162,.35);
       background: rgba(255,93,162,.12);
     }
+
     .notice{
       margin-top: 12px;
       padding: 12px;
@@ -401,9 +451,8 @@
       border-color: rgba(255,93,162,.25);
       font-weight: 900;
     }
-    .noBtn{
-      position:relative;
-    }
+    .noBtn{ position:relative; }
+
     .result{
       margin-top: 12px;
       padding: 12px;
@@ -415,16 +464,10 @@
     }
 
     /* Panel derecho */
-    .side{
-      padding: 16px 16px 18px;
-    }
+    .side{ padding: 16px 16px 18px; }
     .side h3{ margin:0; font-size: 16px; }
     .side p{ margin:6px 0 0; color: var(--muted); font-size: 13px; }
-    .kv{
-      margin-top: 10px;
-      display:grid;
-      gap: 10px;
-    }
+    .kv{ margin-top: 10px; display:grid; gap: 10px; }
     .kvRow{
       display:flex;
       gap:10px;
@@ -464,8 +507,6 @@
       margin-top: 10px;
       line-height:1.4;
     }
-
-    a{ color: inherit; text-decoration: none; }
   </style>
 </head>
 
@@ -553,8 +594,16 @@
           </div>
           <div class="content">
             <h3 style="margin:0 0 6px; font-size:18px;">Nuestros momentos 📸</h3>
-            <p style="margin:0 0 12px; color:var(--muted); font-size:13px;">Un collage… pero con estilito, obvio 😌</p>
+            <p style="margin:0 0 12px; color:var(--muted); font-size:13px;">Un collage… pero con estilito, obvio 😌✨</p>
 
+            <!-- ✅ Swipe (móvil) -->
+            <div class="swipeWrap" id="swipeWrap" aria-label="Álbum deslizable">
+              <img class="swipeImg" id="swipeImg" alt="foto" />
+              <div class="swipeCap" id="swipeCap"></div>
+              <div class="swipeDots" id="swipeDots"></div>
+            </div>
+
+            <!-- Desktop masonry -->
             <div class="masonry" id="masonry"></div>
           </div>
         </div>
@@ -566,7 +615,7 @@
           </div>
 
           <div class="content">
-            <h3 style="margin:0 0 10px; font-size:18px;">Mini test 🧠</h3>
+            <h3 style="margin:0 0 10px; font-size:18px;">Mini test 🧠💞</h3>
 
             <div class="quiz" id="quizWrap"></div>
 
@@ -587,8 +636,8 @@
 
           <div class="content">
             <div class="askBox">
-              <h3 class="askTitle">¿Quieres ser mi San Valentín? 💘</h3>
-              <p class="askSub">Prometo que es la mejor decisión del día (sin presión… bueno tantito 😌).</p>
+              <h3 class="askTitle">¿Quieres ser mi San Valentín? 💘🥺</h3>
+              <p class="askSub">Prometo cuidarte bonito… y darte besitos extra cuando estés enojada 😌💗</p>
 
               <div class="askBtns" id="askBtns">
                 <div class="btn yesBtn" id="yesBtn">💗 Sí</div>
@@ -631,8 +680,8 @@
           </div>
 
           <div class="small">
-            * Si algo se siente raro, prueba “Reset” y listo.  
-            (pero debería estar fino 😌)
+            * Si algo se siente raro, prueba “Reset” 😌  
+            (pero debería estar bien fino 💗)
           </div>
         </div>
       </div>
@@ -641,13 +690,12 @@
   </div>
 
   <audio id="bgMusic" preload="auto" loop>
-    <!-- Tu música está aquí según tu repo -->
     <source src="assets/photos/music.mp3" type="audio/mpeg" />
   </audio>
 
   <script>
     /***********************
-     * CONFIG (edita aquí)
+     * CONFIG
      ***********************/
     const STORAGE = {
       quizPassed: "val_quiz_passed_v1",
@@ -656,7 +704,6 @@
       asked: "val_asked_v1",
     };
 
-    // Carta (TU TEXTO)
     const LETTER_TEXT = `Holi mi amor, mi princesa, mi niña hermosa, mi todo; te dedico esta pequeña cartita con todo mi corazon, quiero que sepas que haces mis dias mejores, tambien quiero decirte que me haces muy feliz, me gusta lo que hacemos juntos, lo que estamos logrando juntos, las visiones que tenemos juntos y tambien hasta por las veces que no estamos de acuerdo... Soy muy feliz a tu lado la verdad nunca quiero irme de eso estoy muy seguro; quiero que sepas que tienes mi lealtad y mi fidelidad hacia ti. Me encanta tu sonrisa, tus ojos, la manera en que me ves, incluso cuando estas enojada o de mal humor hshs; muchas cosas pudiera decirte pero no lo quiero hacer muy largo... solo espero que te guste <3 quiero que sepas tambien que eres el amor de mi vida y te amo mucho como no tienes idea mi amor, siempre quiero estar junto a ti aun cuando no nos entendamos, aun en nuestros malos ratos y claro aun mas en nuestros mejores momentos. De verdad contigo estoy muy seguro de todo y de las cosas que quiero hacer junto a ti. Con mucho amor te hago esta carta. No solo de labios, sino, de corazon y con mucho amor solo para ti mi vida. Quería hacerte algo diferente… algo muy “yo”, pero totalmente “tú”.
 Gracias por estar conmigo, por quererme como soy, y por hacer mis días más bonitos.
 
@@ -665,37 +712,21 @@ Me encantas. Me inspiras. Y me haces sentir en casa.`;
     const LETTER_SIGNATURE = `Con mucho cariño y amor,
 tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
 
-    // Fotos (usa exactamente los nombres que ya subiste)
-    // Puedes cambiar captions cuando me digas las frases finales.
+    // ✅ Tus frases + emojitos
     const PHOTOS = [
-      { src: "assets/photos/01.jpeg", caption: "Esta foto me hace pensar: qué suerte la mía 💗" },
-      { src: "assets/photos/02.png",  caption: "Un recuerdo que guardo con el corazón 💌" },
-      { src: "assets/photos/03.jpeg", caption: "Tu sonrisa = mi lugar seguro 🫶✨" },
-      { src: "assets/photos/04.jpeg", caption: "Contigo todo se siente más bonito." },
-      { src: "assets/photos/05.png",  caption: "Y lo mejor… es que esto apenas empieza 😼" },
-
-      // Opcionales (si ya subiste 06/07)
-      { src: "assets/photos/06.jpeg", caption: "Otro momentito que me encanta 💞", optional:true },
-      { src: "assets/photos/07.jpeg", caption: "Así de simple: tú y yo.", optional:true },
+      { src: "assets/photos/01.jpeg", caption: "😂💗 Los mejores momentos son cuando nos reímos juntos" },
+      { src: "assets/photos/02.png",  caption: "🏍️🔥 La mejor biker" },
+      { src: "assets/photos/03.jpeg", caption: "🫂💞 Me gusta cuando me abrazas" },
+      { src: "assets/photos/04.jpeg", caption: "👩‍❤️‍👨✨ Mi copilota <3" },
+      { src: "assets/photos/05.png",  caption: "🧥💘 Bonitos outfits" },
+      { src: "assets/photos/06.jpeg", caption: "😍🌸 Enamorado de tu hermosa carita!" , optional:true },
+      { src: "assets/photos/07.jpeg", caption: "✨💖 Me cautiva tu belleza" , optional:true },
     ];
 
-    // Mini test (tus respuestas correctas)
     const QUIZ = [
-      {
-        q: "¿Qué prefiero hacer?",
-        options: ["Ir al gym", "Ir a la escuela", "Jugar videojuegos"],
-        correct: "Ir al gym"
-      },
-      {
-        q: "¿Qué estilo de moto prefiero?",
-        options: ["Naked", "Deportiva", "Dos tiempos"],
-        correct: "Naked"
-      },
-      {
-        q: "¿Me amas?",
-        options: ["Sí", "No"],
-        correct: "Sí"
-      }
+      { q: "¿Qué prefiero hacer?", options: ["Ir al gym", "Ir a la escuela", "Jugar videojuegos"], correct: "Ir al gym" },
+      { q: "¿Qué estilo de moto prefiero?", options: ["Naked", "Deportiva", "Dos tiempos"], correct: "Naked" },
+      { q: "¿Me amas?", options: ["Sí", "No"], correct: "Sí" }
     ];
 
     /***********************
@@ -713,7 +744,7 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
     function show(view){
       const views = ["menuView","letterView","photosView","quizView","askView"];
       views.forEach(v => $(v).style.display = (v===view ? "" : "none"));
-      // crumbs
+
       const map = {
         menuView: "🏠 inicio",
         letterView: "💌 carta",
@@ -722,13 +753,13 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         askView: "💘 pregunta",
       };
       $("crumb").textContent = map[view] || "🏠 inicio";
-      // Title/sub
+
       const titleMap = {
         menuView: ["Menú","Todo está hecho para ti ✨"],
         letterView: ["Carta","Una cartita escrita con todo el corazón 💗"],
         photosView: ["Fotos","Un collage con nuestros momentos."],
-        quizView: ["Mini test","Completa esto y desbloqueas la sorpresa final."],
-        askView: ["Pregunta","Ok… ahora sí viene lo importante 😌"],
+        quizView: ["Mini test","Completa esto y desbloqueas la sorpresa final 💘"],
+        askView: ["Pregunta","Ok… ahora sí viene lo importante 😌💗"],
       };
       const [t,s] = titleMap[view] || ["Menú","Todo está hecho para ti ✨"];
       $("panelTitle").textContent = t;
@@ -736,7 +767,7 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
     }
 
     /***********************
-     * Carta: typing effect
+     * Carta: typing
      ***********************/
     let typingTimer = null;
 
@@ -757,10 +788,9 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
     function renderLetter(withEffect=true){
       const el = $("typedLetter");
       const sig = $("letterSignature");
-      sig.textContent = ""; // se pone al final
+      sig.textContent = "";
       if(withEffect){
         typeText(el, LETTER_TEXT, 10);
-        // firma aparece al final con delay aproximado
         const totalMs = Math.min(LETTER_TEXT.length * 10, 9000) + 300;
         setTimeout(() => { sig.textContent = LETTER_SIGNATURE; }, totalMs);
       }else{
@@ -773,31 +803,116 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
      * Fotos
      ***********************/
     function renderPhotos(){
+      // masonry (desktop)
       const wrap = $("masonry");
       wrap.innerHTML = "";
+
+      // swipe (mobile)
+      initSwipeAlbum();
+
       PHOTOS.forEach(p => {
         const card = document.createElement("div");
         card.className = "photoCard";
+
         const img = document.createElement("img");
         img.src = p.src;
         img.alt = "foto";
         img.loading = "lazy";
         img.onerror = () => {
-          // Si es optional, lo escondemos sin decir nada al usuario.
-          if(p.optional){
-            card.remove();
-          }else{
-            // si no es optional, al menos no rompe, solo oculta la card
-            card.remove();
-          }
+          if(p.optional){ card.remove(); }
+          else { card.remove(); }
         };
+
         const cap = document.createElement("div");
         cap.className = "caption";
         cap.textContent = p.caption;
+
         card.appendChild(img);
         card.appendChild(cap);
         wrap.appendChild(card);
       });
+    }
+
+    function availablePhotos(){
+      // Solo usamos las que sí existan (optional se omite sin drama)
+      return PHOTOS.slice();
+    }
+
+    function initSwipeAlbum(){
+      const list = availablePhotos();
+      const swipeWrap = $("swipeWrap");
+      const img = $("swipeImg");
+      const cap = $("swipeCap");
+      const dots = $("swipeDots");
+
+      let idx = 0;
+
+      function renderDots(){
+        dots.innerHTML = "";
+        list.forEach((_, i) => {
+          const d = document.createElement("div");
+          d.className = "dot" + (i===idx ? " active" : "");
+          dots.appendChild(d);
+        });
+      }
+
+      function setSlide(nextIdx, dir=1){
+        idx = (nextIdx + list.length) % list.length;
+        img.style.opacity = "0";
+        img.style.transform = `translateX(${dir*14}px) scale(1.01)`;
+        setTimeout(() => {
+          img.src = list[idx].src;
+          cap.textContent = list[idx].caption;
+          renderDots();
+          img.style.opacity = "1";
+          img.style.transform = "translateX(0px) scale(1.00)";
+        }, 140);
+      }
+
+      // primera
+      img.src = list[0].src;
+      cap.textContent = list[0].caption;
+      renderDots();
+
+      // swipe detection
+      let startX = 0;
+      let startY = 0;
+      let moved = false;
+
+      swipeWrap.ontouchstart = (e) => {
+        const t = e.touches[0];
+        startX = t.clientX;
+        startY = t.clientY;
+        moved = false;
+      };
+
+      swipeWrap.ontouchmove = (e) => {
+        const t = e.touches[0];
+        const dx = t.clientX - startX;
+        const dy = t.clientY - startY;
+        if(Math.abs(dx) > 10 || Math.abs(dy) > 10) moved = true;
+      };
+
+      swipeWrap.ontouchend = (e) => {
+        if(!moved) return;
+        const t = e.changedTouches[0];
+        const dx = t.clientX - startX;
+        const dy = t.clientY - startY;
+        // evitar conflicto con scroll: swipe horizontal dominante
+        if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 35){
+          if(dx < 0) setSlide(idx+1, 1);
+          else setSlide(idx-1, -1);
+        }
+      };
+
+      // tap para avanzar (cute)
+      swipeWrap.onclick = () => setSlide(idx+1, 1);
+
+      // arreglar optional que no existe: si falla una imagen, saltamos
+      img.onerror = () => {
+        // si falla la actual, brinca a la siguiente
+        setSlide(idx+1, 1);
+      };
     }
 
     /***********************
@@ -810,9 +925,11 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       QUIZ.forEach((item, idx) => {
         const box = document.createElement("div");
         box.className = "q";
+
         const t = document.createElement("div");
         t.className = "qTitle";
         t.textContent = `${idx+1}. ${item.q}`;
+
         const opt = document.createElement("div");
         opt.className = "opt";
 
@@ -822,7 +939,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
           chip.textContent = o;
           chip.onclick = () => {
             quizAnswers[idx] = o;
-            // refresh active states inside this question
             [...opt.children].forEach(c => c.classList.remove("active"));
             chip.classList.add("active");
           };
@@ -864,7 +980,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       const layer = $("heartsLayer");
       const h = document.createElement("div");
       h.className = "heart";
-      // variedad
       const hearts = ["💗","💞","💖","💘","💓","💝"];
       h.textContent = hearts[Math.floor(Math.random()*hearts.length)];
       const left = Math.random()*100;
@@ -890,7 +1005,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       layer.style.display = on ? "block" : "none";
       if(heartsTimer) { clearInterval(heartsTimer); heartsTimer=null; }
       if(on){
-        // arranque con un mini burst
         for(let i=0;i<10;i++) setTimeout(spawnHeart, i*80);
         heartsTimer = setInterval(spawnHeart, 420);
       }
@@ -912,8 +1026,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
           audio.pause();
         }
       }catch(e){
-        // iOS/Chrome a veces bloquea autoplay; por eso se prende solo cuando el usuario toca
-        // aquí no mostramos error para el usuario, solo lo dejamos en OFF si falla
         save(STORAGE.musicOn, false);
         $("musicLabel").textContent = "Música: OFF";
         $("musicStateTag").textContent = "OFF";
@@ -923,14 +1035,13 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
 
     /***********************
      * Pregunta (Sí/No)
-     * Nota: dejamos "No" como opción real, pero lo hacemos juguetón.
      ***********************/
     function initAsk(){
       const asked = load(STORAGE.asked, false);
       const res = $("askResult");
       if(asked){
         res.style.display = "";
-        res.innerHTML = "💗 Ya quedó registrado en el corazón (y en el navegador 😌).";
+        res.innerHTML = "💗 Ya quedó guardado… en el corazón (y en el navegador 😌).";
       }else{
         res.style.display = "none";
       }
@@ -939,8 +1050,8 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       const askBtns = $("askBtns");
 
       let dodges = 0;
+
       function dodge(){
-        // se mueve dentro del contenedor sin salirse
         const box = askBtns.getBoundingClientRect();
         const b = noBtn.getBoundingClientRect();
         const maxX = Math.max(0, box.width - b.width - 6);
@@ -952,10 +1063,17 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         noBtn.style.top = y + "px";
       }
 
+      // PC: al pasar mouse
       noBtn.onmouseenter = () => {
-        // juguetón pero no imposible
         dodges++;
-        if(dodges <= 4) dodge();
+        if(dodges <= 6) dodge();
+      };
+
+      // ✅ Cel: al tocar “No” también se mueve
+      noBtn.ontouchstart = (e) => {
+        e.preventDefault();
+        dodges++;
+        dodge();
       };
 
       noBtn.onclick = () => {
@@ -966,8 +1084,7 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       $("yesBtn").onclick = () => {
         save(STORAGE.asked, true);
         res.style.display = "";
-        res.innerHTML = "💘 SÍ A TODO. Ya sabía 😌💗";
-        // pequeño confeti de corazones
+        res.innerHTML = "💘 SÍ A TODO. Ya sabía 😌💗✨";
         for(let i=0;i<18;i++) setTimeout(spawnHeart, i*70);
       };
     }
@@ -982,21 +1099,17 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         $("copyLink").textContent = "✅ Copiado";
         setTimeout(()=> $("copyLink").textContent = "🔗 Copiar link", 1100);
       }catch{
-        // fallback
         prompt("Copia este link:", url);
       }
     }
 
     function hardReset(){
       Object.values(STORAGE).forEach(k => localStorage.removeItem(k));
-      // reset UI state
       quizResultHide();
       setAskLocked(true);
       show("menuView");
-      // set toggles default
       setHearts(true);
       setMusic(false);
-      // re-render
       renderLetter(false);
       renderPhotos();
       renderQuiz();
@@ -1010,7 +1123,7 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
     }
 
     /***********************
-     * Wiring UI
+     * UI wiring
      ***********************/
     $("goLetter").onclick = () => { show("letterView"); renderLetter(true); };
     $("goPhotos").onclick = () => { show("photosView"); };
@@ -1019,7 +1132,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       if(checkQuizPassed()){
         show("askView"); initAsk();
       }else{
-        // no mostramos “dev msg”, solo lo llevamos al quiz
         show("quizView");
         const box = $("quizResult");
         box.style.display = "";
@@ -1037,16 +1149,14 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
 
     $("submitQuiz").onclick = () => {
       const box = $("quizResult");
-      // validar contestadas
       for(let i=0;i<QUIZ.length;i++){
         if(!quizAnswers[i]){
           box.style.display = "";
-          box.innerHTML = "Te faltó contestar algo 😌 (elige una opción en cada pregunta).";
+          box.innerHTML = "Te faltó contestar algo 😌✨ (elige una opción en cada pregunta).";
           return;
         }
       }
 
-      // check correct
       let ok = 0;
       for(let i=0;i<QUIZ.length;i++){
         if(quizAnswers[i] === QUIZ[i].correct) ok++;
@@ -1056,12 +1166,11 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
         save(STORAGE.quizPassed, true);
         setAskLocked(false);
         box.style.display = "";
-        box.innerHTML = "✅ Perfecto. Ya desbloqueaste la Pregunta 💘";
-        // mini celebración
+        box.innerHTML = "✅ Perfecto, mi amor 💗 Ya desbloqueaste la Pregunta 💘";
         for(let i=0;i<14;i++) setTimeout(spawnHeart, i*80);
       }else{
         box.style.display = "";
-        box.innerHTML = `Casi 😼  (${ok}/${QUIZ.length} correctas). Intenta otra vez.`;
+        box.innerHTML = `Casi 😼💞 (${ok}/${QUIZ.length} correctas). Intenta otra vez.`;
         save(STORAGE.quizPassed, false);
         setAskLocked(true);
       }
@@ -1077,7 +1186,6 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
       const now = !!load(STORAGE.musicOn, false);
       await setMusic(!now);
     };
-
     $("heartsToggle").onclick = () => {
       const now = !!load(STORAGE.heartsOn, true);
       setHearts(!now);
@@ -1090,26 +1198,13 @@ tu hombre que te ama, Sergio 💗 (si no eres tú, entonces, no lo daré todo)`;
      * Boot
      ***********************/
     (function boot(){
-      // default UI
       show("menuView");
-
-      // letter initial (sin efecto para no spamear al cargar)
       renderLetter(false);
-
-      // photos
       renderPhotos();
-
-      // quiz
       renderQuiz();
-
-      // lock state
       setAskLocked(!checkQuizPassed());
-
-      // toggles from storage (default: hearts ON, music OFF)
       setHearts(load(STORAGE.heartsOn, true));
       setMusic(load(STORAGE.musicOn, false));
-
-      // if question already answered, keep it
       initAsk();
     })();
   </script>
