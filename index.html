@@ -9,12 +9,14 @@
       --bg1:#fff7fb;
       --bg2:#f3edff;
       --card: rgba(255,255,255,.72);
+      --card2: rgba(255,255,255,.85);
       --stroke: rgba(140,120,160,.20);
       --text:#2b2433;
       --muted: rgba(43,36,51,.65);
       --shadow: 0 14px 50px rgba(30,18,44,.12);
       --shadow2: 0 10px 30px rgba(30,18,44,.10);
       --r: 22px;
+      --r2: 18px;
       --pad: 18px;
     }
 
@@ -31,7 +33,7 @@
       overflow-x:hidden;
     }
 
-    /* Background photo */
+    /* ===== Background photo ===== */
     .bg-photo{
       position:fixed; inset:0;
       z-index:-3;
@@ -42,7 +44,6 @@
       filter: blur(6px) saturate(1.05) contrast(1.03);
       opacity: .35;
       transform: scale(1.03);
-      pointer-events:none;
     }
     .bg-overlay{
       position:fixed; inset:0; z-index:-2;
@@ -50,7 +51,7 @@
       pointer-events:none;
     }
 
-    /* Hearts */
+    /* ===== Floating hearts ===== */
     .hearts-layer{
       position:fixed; inset:0; z-index:-1;
       pointer-events:none;
@@ -59,7 +60,7 @@
     .heart{
       position:absolute;
       font-size: 18px;
-      opacity:0;
+      opacity:.0;
       transform: translateY(30px) scale(1);
       animation: floatUp linear forwards;
       filter: drop-shadow(0 6px 10px rgba(0,0,0,.10));
@@ -70,7 +71,7 @@
       100%{ opacity:0; transform: translateY(-110vh) scale(1.1); }
     }
 
-    /* Top bar */
+    /* ===== Top bar ===== */
     .topbar{
       max-width: 1100px;
       margin: 18px auto 0;
@@ -120,10 +121,9 @@
       background: rgba(255,255,255,.78);
       box-shadow: var(--shadow2);
       backdrop-filter: blur(10px);
-      font-weight: 700;
+      font-weight: 600;
       color: rgba(43,36,51,.82);
-      transition: transform .15s ease, box-shadow .15s ease;
-      -webkit-tap-highlight-color: transparent;
+      transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
     }
     .btn:hover{ transform: translateY(-1px); box-shadow: 0 12px 26px rgba(30,18,44,.14); }
     .btn:active{ transform: translateY(0px) scale(.98); }
@@ -141,7 +141,7 @@
       color: rgba(160,60,110,.95);
     }
 
-    /* Layout */
+    /* ===== Layout ===== */
     .wrap{
       max-width:1100px;
       margin: 14px auto 36px;
@@ -163,10 +163,97 @@
       backdrop-filter: blur(12px);
       padding: var(--pad);
     }
-    .card h2{ margin: 0 0 2px 0; font-size: 18px; letter-spacing: .2px; }
-    .sub{ margin: 0 0 14px 0; color: var(--muted); font-size: 13px; }
+    .card h2{
+      margin: 0 0 2px 0;
+      font-size: 18px;
+      letter-spacing: .2px;
+    }
+    .sub{
+      margin: 0 0 14px 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
 
-    /* Menu */
+    /* ===== Progress ===== */
+    .progress-wrap{
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.62);
+      border: 1px solid rgba(140,120,160,.14);
+    }
+    .progress-top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .prog-title{
+      font-weight: 800;
+      letter-spacing:.2px;
+      font-size: 13px;
+      color: rgba(43,36,51,.82);
+    }
+    .prog-percent{
+      font-size: 12px;
+      color: rgba(43,36,51,.62);
+      font-weight: 700;
+    }
+    .bar{
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(140,120,160,.14);
+      overflow:hidden;
+      border: 1px solid rgba(140,120,160,.10);
+    }
+    .bar > div{
+      height:100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(255,120,190,.55), rgba(155,125,255,.55));
+      transition: width .35s ease;
+    }
+    .steps{
+      margin-top: 10px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 520px){
+      .steps{ grid-template-columns: 1fr 1fr; }
+    }
+    .step{
+      display:flex;
+      align-items:center;
+      gap: 8px;
+      padding: 10px;
+      border-radius: 14px;
+      border: 1px solid rgba(140,120,160,.14);
+      background: rgba(255,255,255,.55);
+      font-size: 12.5px;
+      color: rgba(43,36,51,.70);
+      font-weight: 700;
+    }
+    .dot{
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: rgba(140,120,160,.25);
+      border: 1px solid rgba(140,120,160,.15);
+      flex: 0 0 auto;
+    }
+    .step.done{
+      background: rgba(90,200,140,.10);
+      border-color: rgba(90,200,140,.20);
+      color: rgba(35,120,75,.88);
+    }
+    .step.done .dot{
+      background: rgba(90,200,140,.65);
+      border-color: rgba(90,200,140,.25);
+    }
+
+    /* ===== Menu cards ===== */
     .menu-grid{
       display:grid;
       grid-template-columns: repeat(4, 1fr);
@@ -184,24 +271,35 @@
       background: rgba(255,255,255,.64);
       box-shadow: 0 10px 24px rgba(30,18,44,.08);
       cursor:pointer;
-      transition: transform .16s ease, box-shadow .16s ease;
+      transition: transform .16s ease, box-shadow .16s ease, background .16s ease;
       min-height: 86px;
       overflow:hidden;
-      -webkit-tap-highlight-color: transparent;
     }
     .tile:hover{ transform: translateY(-1px); box-shadow: 0 14px 28px rgba(30,18,44,.10); }
     .tile:active{ transform: translateY(0px) scale(.99); }
-    .tile .t-title{ display:flex; gap:8px; align-items:center; font-weight: 950; margin-bottom: 6px; }
-    .tile .t-desc{ font-size: 12px; color: rgba(43,36,51,.62); font-weight: 650; line-height: 1.25; }
-
-    .tile.locked{ opacity: .62; cursor:not-allowed; }
+    .tile .t-title{
+      display:flex; gap:8px; align-items:center;
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .tile .t-desc{
+      font-size: 12px;
+      color: rgba(43,36,51,.62);
+      font-weight: 600;
+      line-height: 1.25;
+    }
+    .tile.locked{
+      opacity: .62;
+      cursor:not-allowed;
+      filter: grayscale(.08);
+    }
     .tile.locked::after{
       content:"🔒 Bloqueado";
       position:absolute;
       top: 10px;
       right: 10px;
       font-size: 11px;
-      font-weight: 900;
+      font-weight: 800;
       padding: 6px 10px;
       border-radius: 999px;
       background: rgba(255,255,255,.70);
@@ -209,7 +307,7 @@
       color: rgba(160,60,110,.78);
     }
 
-    /* Section header */
+    /* ===== Section header ===== */
     .section-head{
       display:flex;
       align-items:center;
@@ -218,18 +316,23 @@
       flex-wrap:wrap;
       margin-bottom: 8px;
     }
-    .crumb{ display:flex; gap:10px; align-items:center; font-weight: 950; font-size: 15px; }
+    .crumb{
+      display:flex; gap:10px; align-items:center;
+      font-weight: 900;
+      font-size: 15px;
+    }
     .back{
-      display:inline-flex; align-items:center; gap: 8px;
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
       padding: 9px 12px;
       border-radius: 999px;
       border: 1px solid rgba(140,120,160,.16);
       background: rgba(255,255,255,.62);
       cursor:pointer;
-      font-weight: 900;
+      font-weight: 800;
       font-size: 13px;
       transition: transform .15s ease;
-      -webkit-tap-highlight-color: transparent;
     }
     .back:hover{ transform: translateY(-1px); }
     .hint-badge{
@@ -239,20 +342,19 @@
       border: 1px dashed rgba(155,125,255,.35);
       background: rgba(155,125,255,.10);
       color: rgba(80,60,140,.88);
-      font-weight: 900;
+      font-weight: 800;
     }
 
-    /* Paper */
+    /* ===== Letter card ===== */
     .paper{
       background: rgba(255,255,255,.78);
       border: 1px solid rgba(140,120,160,.16);
       border-radius: 20px;
-      padding: 16px;
+      padding: 16px 16px 14px 16px;
       box-shadow: 0 10px 24px rgba(30,18,44,.08);
       position:relative;
       overflow:hidden;
     }
-    .paper::before, .paper::after{ pointer-events:none; }
     .paper::before{
       content:"";
       position:absolute; inset:-2px;
@@ -278,7 +380,8 @@
       mix-blend-mode:multiply;
     }
     .paper-inner{
-      position:relative; z-index:1;
+      position:relative;
+      z-index:1;
       white-space:pre-wrap;
       line-height: 1.45;
       font-size: 14px;
@@ -286,9 +389,8 @@
       font-weight: 650;
     }
     .paper-sign{
-      position:relative; z-index:1;
       margin-top: 10px;
-      font-weight: 950;
+      font-weight: 900;
       color: rgba(43,36,51,.82);
     }
     .letter-actions{
@@ -296,8 +398,6 @@
       display:flex;
       gap: 10px;
       flex-wrap:wrap;
-      position:relative;
-      z-index:2;
     }
     .mini-btn{
       cursor:pointer;
@@ -308,45 +408,35 @@
       border-radius: 999px;
       border: 1px solid rgba(140,120,160,.16);
       background: rgba(255,255,255,.74);
-      font-weight: 950;
+      font-weight: 900;
       font-size: 13px;
       transition: transform .15s ease;
-      -webkit-tap-highlight-color: transparent;
     }
     .mini-btn:hover{ transform: translateY(-1px); }
+    .mini-btn:active{ transform: translateY(0px) scale(.99); }
 
+    /* Surprise button at end */
     .surprise{
       display:none;
       margin-top: 12px;
-      padding: 12px;
+      padding: 12px 12px;
       border-radius: 18px;
       border: 1px solid rgba(255,120,190,.25);
       background: rgba(255,255,255,.70);
       box-shadow: 0 10px 24px rgba(30,18,44,.08);
-      position:relative;
-      z-index:2;
     }
-    .surprise .s-title{ font-weight: 1000; margin-bottom: 6px; }
-    .surprise .s-text{ color: rgba(43,36,51,.70); font-weight: 750; font-size: 13px; }
-
-    .note{
-      display:none;
-      margin-top: 10px;
-      padding: 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(140,120,160,.16);
-      background: rgba(255,255,255,.78);
-      box-shadow: 0 10px 22px rgba(30,18,44,.10);
+    .surprise .s-title{
       font-weight: 1000;
-      text-align:center;
+      margin-bottom: 6px;
     }
-    .note .big{
-      font-size: 18px;
-      letter-spacing: 1px;
-      margin-bottom: 10px;
+    .surprise .s-text{
+      color: rgba(43,36,51,.70);
+      font-weight: 700;
+      font-size: 13px;
+      line-height: 1.3;
     }
 
-    /* Photos */
+    /* ===== Photos collage ===== */
     .collage{
       display:grid;
       grid-template-columns: 1.25fr 1fr;
@@ -356,7 +446,11 @@
     @media (max-width: 680px){
       .collage{ grid-template-columns: 1fr; }
     }
-    .col{ display:flex; flex-direction:column; gap: 12px; }
+    .col{
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
     .photo{
       position:relative;
       border-radius: 22px;
@@ -365,25 +459,21 @@
       background: rgba(255,255,255,.55);
       box-shadow: 0 12px 28px rgba(30,18,44,.10);
       transform: translateZ(0);
-      -webkit-tap-highlight-color: transparent;
     }
-    /* IMPORTANT: siempre completa */
     .photo img{
       width:100%;
       height:100%;
-      object-fit: contain;
-      object-position: center;
+      object-fit: cover;
       display:block;
-      background: rgba(255,255,255,.22);
+      transform: scale(1.02);
       transition: transform .22s ease;
-      transform: scale(1);
-      padding: 10px;
     }
-    .photo:hover img{ transform: scale(1.02); }
-
+    .photo:hover img{ transform: scale(1.05); }
     .cap{
       position:absolute;
-      left: 10px; right: 10px; bottom: 10px;
+      left: 10px;
+      right: 10px;
+      bottom: 10px;
       padding: 10px 12px;
       border-radius: 16px;
       background: rgba(255,255,255,.78);
@@ -399,8 +489,10 @@
       font-size: 12px;
       color: rgba(43,36,51,.55);
       margin-top: 12px;
-      font-weight: 750;
+      font-weight: 700;
     }
+
+    /* Heart pop on photo tap */
     .pop-heart{
       position:absolute;
       left: 50%;
@@ -411,7 +503,6 @@
       pointer-events:none;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
       animation: popHeart .65s ease forwards;
-      z-index: 3;
     }
     @keyframes popHeart{
       0%{ opacity:0; transform: translate(-50%,-50%) scale(.5); }
@@ -419,8 +510,13 @@
       100%{ opacity:0; transform: translate(-50%,-80%) scale(1.2); }
     }
 
-    /* Quiz */
-    .quiz{ margin-top: 10px; display:flex; flex-direction:column; gap: 12px; }
+    /* ===== Mini test ===== */
+    .quiz{
+      margin-top: 10px;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+    }
     .q{
       border-radius: 18px;
       border: 1px solid rgba(140,120,160,.16);
@@ -428,8 +524,17 @@
       padding: 12px;
       box-shadow: 0 10px 22px rgba(30,18,44,.08);
     }
-    .q h3{ margin: 0 0 10px 0; font-size: 14px; font-weight: 950; }
-    .opts{ display:flex; gap: 8px; flex-wrap:wrap; }
+    .q h3{
+      margin: 0 0 10px 0;
+      font-size: 14px;
+      font-weight: 950;
+      color: rgba(43,36,51,.86);
+    }
+    .opts{
+      display:flex;
+      gap: 8px;
+      flex-wrap:wrap;
+    }
     .opt{
       cursor:pointer;
       border-radius: 999px;
@@ -439,7 +544,6 @@
       font-weight: 900;
       font-size: 13px;
       transition: transform .12s ease;
-      -webkit-tap-highlight-color: transparent;
     }
     .opt:hover{ transform: translateY(-1px); }
     .opt.selected{
@@ -447,10 +551,15 @@
       background: rgba(155,125,255,.10);
       color: rgba(80,60,140,.92);
     }
-    .quiz-actions{ display:flex; gap: 10px; flex-wrap:wrap; margin-top: 4px; }
+    .quiz-actions{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+      margin-top: 4px;
+    }
     .toast{
       margin-top: 10px;
-      padding: 12px;
+      padding: 12px 12px;
       border-radius: 16px;
       border: 1px solid rgba(140,120,160,.16);
       background: rgba(255,255,255,.68);
@@ -469,7 +578,7 @@
       color: rgba(160,60,110,.90);
     }
 
-    /* Final ask */
+    /* ===== Final question ===== */
     .final{
       margin-top: 10px;
       padding: 14px;
@@ -477,12 +586,23 @@
       border: 1px solid rgba(140,120,160,.16);
       background: rgba(255,255,255,.68);
       box-shadow: 0 12px 28px rgba(30,18,44,.10);
-      position: relative;
-      overflow: hidden;
     }
-    .final h3{ margin: 0 0 6px 0; font-size: 16px; font-weight: 1000; }
-    .final p{ margin: 0 0 14px 0; color: rgba(43,36,51,.65); font-weight: 650; font-size: 13px; }
-    .yn{ display:flex; gap: 10px; flex-wrap:wrap; }
+    .final h3{
+      margin: 0 0 6px 0;
+      font-size: 16px;
+      font-weight: 1000;
+    }
+    .final p{
+      margin: 0 0 14px 0;
+      color: rgba(43,36,51,.65);
+      font-weight: 650;
+      font-size: 13px;
+    }
+    .yn{
+      display:flex;
+      gap: 10px;
+      flex-wrap:wrap;
+    }
     .yes, .no{
       cursor:pointer;
       border-radius: 999px;
@@ -493,10 +613,9 @@
       font-size: 14px;
       transition: transform .15s ease;
       position:relative;
-      z-index: 2;
-      -webkit-tap-highlight-color: transparent;
     }
-    .yes:hover, .no:hover{ transform: translateY(-1px); }
+    .yes:hover{ transform: translateY(-1px); }
+    .no:hover{ transform: translateY(-1px); }
     .final-msg{
       margin-top: 12px;
       font-weight: 1000;
@@ -508,21 +627,26 @@
       color: rgba(35,120,75,.88);
     }
 
-    /* Controls panel */
-    .controls-panel .row{
+    /* ===== Right controls panel ===== */
+    .controls .row{
       display:flex;
       justify-content:space-between;
       align-items:center;
       gap: 10px;
-      padding: 12px;
+      padding: 12px 12px;
       border-radius: 18px;
       border: 1px solid rgba(140,120,160,.14);
       background: rgba(255,255,255,.62);
       margin-top: 10px;
     }
-    .controls-panel .label{ display:flex; align-items:center; gap:10px; font-weight: 950; color: rgba(43,36,51,.82); }
+    .controls .label{
+      display:flex; align-items:center; gap:10px;
+      font-weight: 950;
+      color: rgba(43,36,51,.82);
+    }
     .toggle{
-      width: 54px; height: 30px;
+      width: 54px;
+      height: 30px;
       border-radius: 999px;
       background: rgba(140,120,160,.16);
       border: 1px solid rgba(140,120,160,.12);
@@ -530,7 +654,6 @@
       cursor:pointer;
       flex: 0 0 auto;
       transition: background .2s ease;
-      -webkit-tap-highlight-color: transparent;
     }
     .knob{
       width: 26px; height: 26px;
@@ -542,7 +665,10 @@
       transition: left .2s ease;
       box-shadow: 0 10px 20px rgba(30,18,44,.10);
     }
-    .toggle.on{ background: rgba(90,200,140,.28); border-color: rgba(90,200,140,.22); }
+    .toggle.on{
+      background: rgba(90,200,140,.28);
+      border-color: rgba(90,200,140,.22);
+    }
     .toggle.on .knob{ left: 27px; }
 
     .status-pill{
@@ -569,74 +695,25 @@
       color: rgba(160,60,110,.90);
     }
 
-    /* Progress */
-    .progress-wrap{
-      margin-top: 12px;
-      padding: 12px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.62);
-      border: 1px solid rgba(140,120,160,.14);
-    }
-    .progress-top{
-      display:flex; align-items:center; justify-content:space-between;
-      gap: 10px; flex-wrap:wrap; margin-bottom:10px;
-    }
-    .prog-title{ font-weight: 1000; font-size: 13px; color: rgba(43,36,51,.82); }
-    .prog-percent{ font-size: 12px; color: rgba(43,36,51,.62); font-weight: 900; }
-    .bar{
-      height: 10px; border-radius: 999px;
-      background: rgba(140,120,160,.14);
-      overflow:hidden;
-      border: 1px solid rgba(140,120,160,.10);
-    }
-    .bar > div{
-      height:100%; width: 0%;
-      border-radius: 999px;
-      background: linear-gradient(90deg, rgba(255,120,190,.55), rgba(155,125,255,.55));
-      transition: width .35s ease;
-    }
-    .steps{
-      margin-top: 10px;
-      display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 8px;
-    }
-    @media (max-width: 520px){ .steps{ grid-template-columns: 1fr 1fr; } }
-    .step{
-      display:flex; align-items:center; gap: 8px;
-      padding: 10px;
-      border-radius: 14px;
-      border: 1px solid rgba(140,120,160,.14);
-      background: rgba(255,255,255,.55);
-      font-size: 12.5px;
-      color: rgba(43,36,51,.70);
-      font-weight: 800;
-    }
-    .dot{
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: rgba(140,120,160,.25);
-      border: 1px solid rgba(140,120,160,.15);
-      flex: 0 0 auto;
-    }
-    .step.done{
-      background: rgba(90,200,140,.10);
-      border-color: rgba(90,200,140,.20);
-      color: rgba(35,120,75,.88);
-    }
-    .step.done .dot{
-      background: rgba(90,200,140,.65);
-      border-color: rgba(90,200,140,.25);
-    }
-
-    /* Fullscreen (UI mode) */
+    /* ===== Fullscreen mode ===== */
     .fullscreen .controls-panel{ display:none; }
+    .controls-panel{ }
     .fullscreen .wrap{ grid-template-columns: 1fr; }
+    .fullscreen .topbar{ max-width: 980px; }
+    .fullscreen .card{ box-shadow: 0 18px 60px rgba(30,18,44,.14); }
 
-    .fade-in{ animation: fadeIn .25s ease both; }
+    /* small animation */
+    .fade-in{
+      animation: fadeIn .25s ease both;
+    }
     @keyframes fadeIn{
       from{ opacity:0; transform: translateY(6px); }
       to{ opacity:1; transform: translateY(0); }
+    }
+
+    /* reduce motion */
+    @media (prefers-reduced-motion: reduce){
+      *{ animation: none !important; transition: none !important; }
     }
   </style>
 </head>
@@ -652,20 +729,31 @@
     </div>
 
     <div class="top-actions">
-      <div class="btn" id="btnMusic">🎵 Música <span class="state" id="musicState">OFF</span></div>
-      <div class="btn" id="btnHearts">💞 Corazones <span class="state" id="heartsState">ON</span></div>
-      <div class="btn" id="btnConfetti">🎉 Confetti <span class="state" id="confettiState">GO</span></div>
-      <div class="btn" id="btnFullscreen">📱 Pantalla <span class="state" id="fsState">FULL</span></div>
-      <div class="btn" id="btnCopy">🔗 Copiar link</div>
-      <div class="btn off" id="btnReset">🧼 Reset</div>
+      <div class="btn" id="btnMusic" title="Música">
+        🎵 Música <span class="state" id="musicState">OFF</span>
+      </div>
+      <div class="btn" id="btnHearts" title="Corazones">
+        💞 Corazones <span class="state" id="heartsState">ON</span>
+      </div>
+      <div class="btn" id="btnFullscreen" title="Pantalla completa">
+        📱 Pantalla <span class="state" id="fsState">FULL</span>
+      </div>
+      <div class="btn" id="btnCopy" title="Copiar link">
+        🔗 Copiar link
+      </div>
+      <div class="btn off" id="btnReset" title="Reset">
+        🧼 Reset
+      </div>
     </div>
   </div>
 
   <div class="wrap" id="app">
+    <!-- Left main -->
     <div class="card" id="mainCard">
       <div id="view"></div>
     </div>
 
+    <!-- Right controls -->
     <div class="card controls-panel" id="controlsPanel">
       <h2>Controles</h2>
       <p class="sub">Todo pensado para celular 📱</p>
@@ -678,11 +766,6 @@
       <div class="row">
         <div class="label">💞 Corazones</div>
         <div class="toggle on" id="toggleHearts"><div class="knob"></div></div>
-      </div>
-
-      <div class="row">
-        <div class="label">🎉 Confetti</div>
-        <div class="mini-btn" id="ctrlConfetti">Lanzar</div>
       </div>
 
       <div class="row">
@@ -700,7 +783,7 @@
         <div id="statusPill" class="status-pill bad">Pregunta: bloqueada</div>
       </div>
 
-      <div class="progress-wrap">
+      <div class="progress-wrap" style="margin-top:12px;">
         <div class="progress-top">
           <div class="prog-title">Progreso 💗</div>
           <div class="prog-percent" id="progPercent">0%</div>
@@ -716,19 +799,20 @@
     </div>
   </div>
 
+  <!-- Audio -->
   <audio id="audio" preload="auto" loop>
     <source src="assets/photos/music.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    // ✅ Polyfill clone (no structuredClone)
-    function clone(obj){ return JSON.parse(JSON.stringify(obj)); }
-
-    const LS_KEY = "valentine_state_v5";
+    /* =============================
+      State (localStorage)
+    ============================== */
+    const LS_KEY = "valentine_state_v3";
     const defaultState = {
       visited: { home:true, letter:false, photos:false, quiz:false, ask:false },
       quizPassed: false,
-      askUnlocked: false,
+      askUnlocked: false,  // unlocked by quiz
       heartsOn: true,
       musicOn: false,
       fullscreen: false
@@ -737,667 +821,754 @@
     function loadState(){
       try{
         const raw = localStorage.getItem(LS_KEY);
-        if(!raw) return clone(defaultState);
+        if(!raw) return structuredClone(defaultState);
         const s = JSON.parse(raw);
-        const base = clone(defaultState);
-        base.visited = Object.assign({}, base.visited, (s.visited||{}));
-        return Object.assign(base, s);
+        return {
+          ...structuredClone(defaultState),
+          ...s,
+          visited: { ...structuredClone(defaultState.visited), ...(s.visited||{}) }
+        };
       }catch{
-        return clone(defaultState);
+        return structuredClone(defaultState);
       }
+    }
+    function saveState(){
+      localStorage.setItem(LS_KEY, JSON.stringify(state));
+      updateUIBits();
+    }
+    function hardReset(){
+      localStorage.removeItem(LS_KEY);
+      state = structuredClone(defaultState);
+      stopTyping(true);
+      stopHearts();
+      startHearts();
+      pauseMusic();
+      render("home");
+      updateUIBits();
     }
 
     let state = loadState();
 
+    /* =============================
+      Utilities
+    ============================== */
     const $ = (id)=>document.getElementById(id);
+    const view = $("view");
+    const audio = $("audio");
 
-    document.addEventListener("DOMContentLoaded", ()=>{
-      const view = $("view");
-      const audio = $("audio");
-      const heartsLayer = $("heartsLayer");
+    function safeScrollTop(){
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
 
-      /* Hearts */
-      let heartsTimer = null;
+    function emojiForCaption(i){
+      // sutil y cute, no saturar
+      const list = ["💞","😹","🏍️","🤍","🧸","✨","😽","💗","📸","🥺"];
+      return list[i % list.length];
+    }
 
-      function clearHearts(){ heartsLayer.innerHTML = ""; }
+    /* =============================
+      Hearts
+    ============================== */
+    const heartsLayer = $("heartsLayer");
+    let heartsTimer = null;
 
-      function spawnHeart(){
-        if(!state.heartsOn) return;
-        const heart = document.createElement("div");
-        heart.className = "heart";
-        const hearts = ["💗","💞","💖","💘","❤️","💓"];
-        heart.textContent = hearts[Math.floor(Math.random()*hearts.length)];
-        const size = 14 + Math.random()*16;
-        heart.style.fontSize = size + "px";
-        heart.style.left = (Math.random()*100) + "vw";
-        heart.style.bottom = (-20 - Math.random()*30) + "px";
-        const dur = 6 + Math.random()*5;
-        heart.style.animationDuration = dur + "s";
-        heartsLayer.appendChild(heart);
-        setTimeout(()=> heart.remove(), (dur+1)*1000);
+    function startHearts(){
+      if(!state.heartsOn) return;
+      if(heartsTimer) return;
+      heartsTimer = setInterval(spawnHeart, 450);
+    }
+    function stopHearts(){
+      if(heartsTimer){
+        clearInterval(heartsTimer);
+        heartsTimer = null;
       }
+    }
+    function spawnHeart(){
+      if(!state.heartsOn) return;
+      const heart = document.createElement("div");
+      heart.className = "heart";
+      const hearts = ["💗","💞","💖","💘","❤️","💓"];
+      heart.textContent = hearts[Math.floor(Math.random()*hearts.length)];
+      const size = 14 + Math.random()*16;
+      heart.style.fontSize = size + "px";
+      heart.style.left = (Math.random()*100) + "vw";
+      heart.style.bottom = (-20 - Math.random()*30) + "px";
+      const dur = 6 + Math.random()*5;
+      heart.style.animationDuration = dur + "s";
+      heart.style.animationDelay = (Math.random()*0.2) + "s";
+      heartsLayer.appendChild(heart);
+      requestAnimationFrame(()=>{ /* let animation start */ });
+      setTimeout(()=> heart.remove(), (dur+1)*1000);
+    }
 
-      function startHearts(){
-        if(!state.heartsOn) return;
-        if(heartsTimer) return;
-        heartsTimer = setInterval(spawnHeart, 450);
+    /* =============================
+      Confetti (mini)
+    ============================== */
+    function confettiBurst(){
+      // mini confetti, ligero
+      const colors = ["#ff7ac3","#b89bff","#ffd1ea","#9be9c3","#ffe08a"];
+      for(let i=0;i<40;i++){
+        const p = document.createElement("div");
+        p.style.position = "fixed";
+        p.style.left = (50 + (Math.random()*30-15)) + "vw";
+        p.style.top = (40 + (Math.random()*10-5)) + "vh";
+        p.style.width = (6 + Math.random()*6) + "px";
+        p.style.height = (6 + Math.random()*10) + "px";
+        p.style.background = colors[Math.floor(Math.random()*colors.length)];
+        p.style.borderRadius = "3px";
+        p.style.opacity = ".95";
+        p.style.zIndex = 50;
+        p.style.transform = "translate(-50%,-50%) rotate("+(Math.random()*180)+"deg)";
+        document.body.appendChild(p);
+
+        const dx = (Math.random()*2-1) * 180;
+        const dy = 220 + Math.random()*180;
+        const rot = (Math.random()*2-1) * 260;
+        const dur = 600 + Math.random()*500;
+
+        p.animate([
+          { transform:`translate(-50%,-50%) translate(0,0) rotate(0deg)`, opacity:.95 },
+          { transform:`translate(-50%,-50%) translate(${dx}px,${dy}px) rotate(${rot}deg)`, opacity:0 }
+        ], { duration: dur, easing:"cubic-bezier(.2,.8,.2,1)" });
+
+        setTimeout(()=>p.remove(), dur+50);
       }
+    }
 
-      function stopHearts(){
-        if(heartsTimer){
-          clearInterval(heartsTimer);
-          heartsTimer = null;
-        }
-      }
+    /* =============================
+      Music
+    ============================== */
+    function playMusic(){
+      state.musicOn = true;
+      saveState();
+      audio.volume = 0.9;
+      audio.play().catch(()=>{/* iOS can block until user gesture, but our toggle is a gesture */});
+    }
+    function pauseMusic(){
+      state.musicOn = false;
+      saveState();
+      audio.pause();
+    }
+    function toggleMusic(){
+      if(state.musicOn) pauseMusic();
+      else playMusic();
+    }
 
-      function heartBurst(){
-        if(!state.heartsOn) return;
-        for(let i=0;i<10;i++) setTimeout(spawnHeart, i*70);
-      }
+    /* =============================
+      Fullscreen Mode (UI)
+    ============================== */
+    function toggleFullscreenUI(){
+      state.fullscreen = !state.fullscreen;
+      saveState();
+    }
 
-      /* Confetti */
-      function confettiBurst(){
-        const colors = ["#ff7ac3","#b89bff","#ffd1ea","#9be9c3","#ffe08a"];
-        for(let i=0;i<44;i++){
-          const p = document.createElement("div");
-          p.style.position = "fixed";
-          p.style.left = (50 + (Math.random()*30-15)) + "vw";
-          p.style.top = (40 + (Math.random()*10-5)) + "vh";
-          p.style.width = (6 + Math.random()*6) + "px";
-          p.style.height = (6 + Math.random()*10) + "px";
-          p.style.background = colors[Math.floor(Math.random()*colors.length)];
-          p.style.borderRadius = "3px";
-          p.style.opacity = ".95";
-          p.style.zIndex = 80;
-          p.style.transform = "translate(-50%,-50%) rotate("+(Math.random()*180)+"deg)";
-          document.body.appendChild(p);
+    /* =============================
+      Progress
+    ============================== */
+    function computeProgress(){
+      // 4 steps: visited letter/photos + quizPassed + askUnlocked (or visited ask?) + accepted?
+      let done = 0;
+      const steps = {
+        letter: !!state.visited.letter,
+        photos: !!state.visited.photos,
+        quiz: !!state.quizPassed,
+        ask: !!state.askUnlocked // unlocked means ready; visiting ask will also mark
+      };
+      done += steps.letter ? 1 : 0;
+      done += steps.photos ? 1 : 0;
+      done += steps.quiz ? 1 : 0;
+      done += steps.ask ? 1 : 0;
 
-          const dx = (Math.random()*2-1) * 180;
-          const dy = 220 + Math.random()*180;
-          const rot = (Math.random()*2-1) * 260;
-          const dur = 650 + Math.random()*550;
+      const percent = Math.round((done/4)*100);
+      return { steps, done, percent };
+    }
 
-          p.animate([
-            { transform:`translate(-50%,-50%) translate(0,0) rotate(0deg)`, opacity:.95 },
-            { transform:`translate(-50%,-50%) translate(${dx}px,${dy}px) rotate(${rot}deg)`, opacity:0 }
-          ], { duration: dur, easing:"cubic-bezier(.2,.8,.2,1)" });
+    function updateProgressUI(){
+      const { steps, percent } = computeProgress();
+      $("progBar").style.width = percent + "%";
+      $("progPercent").textContent = percent + "%";
 
-          setTimeout(()=>p.remove(), dur+60);
-        }
-      }
+      $("sLetter").classList.toggle("done", steps.letter);
+      $("sPhotos").classList.toggle("done", steps.photos);
+      $("sQuiz").classList.toggle("done", steps.quiz);
+      $("sAsk").classList.toggle("done", steps.ask);
+    }
 
-      function celebrate(){
-        confettiBurst();
-        heartBurst();
-      }
+    /* =============================
+      Menu tiles + routing
+    ============================== */
+    function render(route){
+      safeScrollTop();
+      view.innerHTML = "";
+      view.classList.remove("fade-in");
+      void view.offsetWidth;
+      view.classList.add("fade-in");
 
-      /* Save / UI */
-      function saveState(){
-        localStorage.setItem(LS_KEY, JSON.stringify(state));
-        updateUIBits();
-      }
+      if(route === "home") renderHome();
+      if(route === "letter") renderLetter();
+      if(route === "photos") renderPhotos();
+      if(route === "quiz") renderQuiz();
+      if(route === "ask") renderAsk();
 
-      function computeProgress(){
-        let done = 0;
-        const steps = {
-          letter: !!state.visited.letter,
-          photos: !!state.visited.photos,
-          quiz: !!state.quizPassed,
-          ask: !!state.askUnlocked
-        };
-        done += steps.letter ? 1 : 0;
-        done += steps.photos ? 1 : 0;
-        done += steps.quiz ? 1 : 0;
-        done += steps.ask ? 1 : 0;
-        const percent = Math.round((done/4)*100);
-        return { steps, percent };
-      }
+      updateUIBits();
+    }
 
-      function updateProgressUI(){
-        const { steps, percent } = computeProgress();
-        $("progBar").style.width = percent + "%";
-        $("progPercent").textContent = percent + "%";
-        $("sLetter").classList.toggle("done", steps.letter);
-        $("sPhotos").classList.toggle("done", steps.photos);
-        $("sQuiz").classList.toggle("done", steps.quiz);
-        $("sAsk").classList.toggle("done", steps.ask);
-      }
+    function renderHome(){
+      state.visited.home = true;
+      saveState();
 
-      function updateUIBits(){
-        $("toggleMusic").classList.toggle("on", state.musicOn);
-        $("toggleHearts").classList.toggle("on", state.heartsOn);
+      const askLocked = !state.askUnlocked;
 
-        $("btnMusic").classList.toggle("off", !state.musicOn);
-        $("musicState").textContent = state.musicOn ? "ON" : "OFF";
-
-        $("btnHearts").classList.toggle("off", !state.heartsOn);
-        $("heartsState").textContent = state.heartsOn ? "ON" : "OFF";
-
-        $("fsState").textContent = state.fullscreen ? "CINE" : "FULL";
-        document.body.classList.toggle("fullscreen", state.fullscreen);
-
-        const pill = $("statusPill");
-        const unlocked = !!state.askUnlocked;
-        pill.textContent = unlocked ? "Pregunta: desbloqueada ✅" : "Pregunta: bloqueada";
-        pill.classList.toggle("good", unlocked);
-        pill.classList.toggle("bad", !unlocked);
-
-        if(state.heartsOn){
-          startHearts();
-        }else{
-          stopHearts();
-          clearHearts();
-        }
-
-        if(state.musicOn){
-          // iOS requiere gesto: esto se dispara desde click/toggle
-        }else{
-          audio.pause();
-        }
-
-        updateProgressUI();
-      }
-
-      function safeScrollTop(){
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-
-      /* Routes */
-      function render(route){
-        safeScrollTop();
-        view.innerHTML = "";
-        view.classList.remove("fade-in");
-        void view.offsetWidth;
-        view.classList.add("fade-in");
-
-        if(route === "home") renderHome();
-        if(route === "letter") renderLetter();
-        if(route === "photos") renderPhotos();
-        if(route === "quiz") renderQuiz();
-        if(route === "ask") renderAsk();
-
-        updateUIBits();
-      }
-
-      function renderHome(){
-        state.visited.home = true;
-        saveState();
-
-        const askLocked = !state.askUnlocked;
-
-        view.innerHTML = `
-          <div class="section-head">
-            <div>
-              <h2 style="margin:0;">Menú</h2>
-              <p class="sub" style="margin-top:4px;">Todo está hecho para ti ✨</p>
-            </div>
-            <div class="hint-badge">🏠 inicio</div>
+      view.innerHTML = `
+        <div class="section-head">
+          <div>
+            <h2 style="margin:0;">Menú</h2>
+            <p class="sub" style="margin-top:4px;">Todo está hecho para ti ✨</p>
           </div>
+          <div class="hint-badge">🏠 inicio</div>
+        </div>
 
-          <div class="menu-grid">
-            <div class="tile" data-go="letter">
-              <div class="t-title">💌 Carta</div>
-              <div class="t-desc">Para leerla con calma (y con cariño).</div>
-            </div>
-            <div class="tile" data-go="photos">
-              <div class="t-title">📸 Fotos</div>
-              <div class="t-desc">Un collage con nuestros momentos.</div>
-            </div>
-            <div class="tile" data-go="quiz">
-              <div class="t-title">🧠 Mini test</div>
-              <div class="t-desc">Desbloquea la sorpresa final.</div>
-            </div>
-            <div class="tile ${askLocked ? "locked" : ""}" data-go="${askLocked ? "" : "ask"}">
-              <div class="t-title">💘 Pregunta</div>
-              <div class="t-desc">${askLocked ? "Se desbloquea con el mini test." : "Ya está lista para ti 😼💗"}</div>
-            </div>
+        <div class="menu-grid">
+          <div class="tile" data-go="letter">
+            <div class="t-title">💌 Carta</div>
+            <div class="t-desc">Para leerla con calma (y con cariño).</div>
           </div>
-
-          <div class="progress-wrap" style="margin-top:14px;">
-            <div style="font-weight:900; color:rgba(43,36,51,.78);">
-              Tip: completa el mini test para desbloquear la <b>Pregunta</b> 💞
-            </div>
+          <div class="tile" data-go="photos">
+            <div class="t-title">📸 Fotos</div>
+            <div class="t-desc">Un collage con nuestros momentos.</div>
           </div>
-        `;
+          <div class="tile" data-go="quiz">
+            <div class="t-title">🧠 Mini test</div>
+            <div class="t-desc">Desbloquea la sorpresa final.</div>
+          </div>
+          <div class="tile ${askLocked ? "locked" : ""}" data-go="${askLocked ? "" : "ask"}" ${askLocked ? 'title="Se desbloquea con el mini test"' : ""}>
+            <div class="t-title">💘 Pregunta</div>
+            <div class="t-desc">${askLocked ? "Se desbloquea con el mini test." : "Ya está lista para ti 😼💗"}</div>
+          </div>
+        </div>
 
-        view.querySelectorAll("[data-go]").forEach(el=>{
-          el.addEventListener("click", ()=>{
-            const go = el.getAttribute("data-go");
-            if(!go) return;
-            render(go);
-          }, { passive:true });
+        <div class="progress-wrap" style="margin-top:14px;">
+          <div style="font-weight:900; color:rgba(43,36,51,.78);">
+            Tip: completa el mini test para desbloquear la <b>Pregunta</b> 💞
+          </div>
+        </div>
+      `;
+
+      view.querySelectorAll("[data-go]").forEach(el=>{
+        el.addEventListener("click", ()=>{
+          const go = el.getAttribute("data-go");
+          if(!go) return;
+          render(go);
         });
-      }
+      });
+    }
 
-      /* Letter */
-      const LETTER_TEXT = `Holi mi amor, mi princesa, mi niña hermosa, mi todo; te dedico esta pequeña cartita con todo mi corazón.
+    /* =============================
+      Letter (typing effect)
+    ============================== */
+    const LETTER_TEXT = `Holi mi amor, mi princesa, mi niña hermosa, mi todo; te dedico esta pequeña cartita con todo mi corazón.  
 
-Quiero que sepas que haces mis días mejores. También quiero decirte que me haces muy feliz. Me gusta lo que hacemos juntos, lo que estamos logrando juntos, las visiones que tenemos juntos… y también hasta por las veces que no estamos de acuerdo.
+Quiero que sepas que haces mis días mejores. También quiero decirte que me haces muy feliz. Me gusta lo que hacemos juntos, lo que estamos logrando juntos, las visiones que tenemos juntos… y también hasta por las veces que no estamos de acuerdo.  
 
-Soy muy feliz a tu lado; la verdad, nunca quiero irme de esto… estoy muy seguro. Quiero que sepas que tienes mi lealtad y mi fidelidad.
+Soy muy feliz a tu lado; la verdad, nunca quiero irme de esto… estoy muy seguro. Quiero que sepas que tienes mi lealtad y mi fidelidad.  
 
-Me encanta tu sonrisa, tus ojos, la manera en que me ves… incluso cuando estás enojada o de mal humor, hshs. Muchas cosas pudiera decirte, pero no lo quiero hacer muy largo… solo espero que te guste <3
+Me encanta tu sonrisa, tus ojos, la manera en que me ves… incluso cuando estás enojada o de mal humor, hshs. Muchas cosas pudiera decirte, pero no lo quiero hacer muy largo… solo espero que te guste <3  
 
-Quiero que sepas también que eres el amor de mi vida y te amo mucho como no tienes idea, mi amor. Siempre quiero estar junto a ti: aun cuando no nos entendamos, aun en nuestros malos ratos… y claro, aún más en nuestros mejores momentos.
+Quiero que sepas también que eres el amor de mi vida y te amo mucho como no tienes idea, mi amor. Siempre quiero estar junto a ti: aun cuando no nos entendamos, aun en nuestros malos ratos… y claro, aún más en nuestros mejores momentos.  
 
-De verdad, contigo estoy muy seguro de todo, y de las cosas que quiero hacer junto a ti.
+De verdad, contigo estoy muy seguro de todo, y de las cosas que quiero hacer junto a ti.  
 
-Con mucho amor te hago esta carta. No solo de labios, sino de corazón… y con mucho amor, solo para ti, mi vida.
+Con mucho amor te hago esta carta. No solo de labios, sino de corazón… y con mucho amor, solo para ti, mi vida.  
 
-Quería hacerte algo diferente… algo muy “yo”, pero totalmente “tú”.
+Quería hacerte algo diferente… algo muy “yo”, pero totalmente “tú”.  
 
-Gracias por estar conmigo, por quererme como soy, y por hacer mis días más bonitos.
+Gracias por estar conmigo, por quererme como soy, y por hacer mis días más bonitos.  
 
 Me encantas. Me inspiras. Y me haces sentir en casa.`;
 
-      const LETTER_SIGN = `Con mucho cariño y amor,
+    const LETTER_SIGN = `Con mucho cariño y amor,
 tu hombre que te ama, Sergio 💗
 (si no eres tú, entonces no lo daré todo)`;
 
-      let typingTimer = null;
-      let typingToken = 0;
+    let typingTimer = null;
+    let typingToken = 0;
 
-      function stopTyping(clear=false){
-        typingToken++;
-        if(typingTimer){ clearInterval(typingTimer); typingTimer = null; }
-        if(clear){
-          const el = $("letterBody");
-          if(el) el.textContent = "";
-        }
+    function stopTyping(clear=false){
+      typingToken++;
+      if(typingTimer){
+        clearInterval(typingTimer);
+        typingTimer = null;
       }
+      if(clear){
+        const el = $("letterBody");
+        if(el) el.textContent = "";
+      }
+    }
 
-      function typeLetter(){
-        stopTyping(true);
-        const token = ++typingToken;
+    function typeLetter(){
+      stopTyping(true);
+      const token = ++typingToken;
 
-        const bodyEl = $("letterBody");
-        const signEl = $("letterSign");
-        const surpriseEl = $("surpriseBox");
-        const noteEl = $("noteBox");
+      const bodyEl = $("letterBody");
+      const signEl = $("letterSign");
+      const surpriseEl = $("surpriseBox");
 
-        signEl.textContent = "";
-        surpriseEl.style.display = "none";
-        noteEl.style.display = "none";
+      signEl.textContent = "";
+      surpriseEl.style.display = "none";
 
-        const full = LETTER_TEXT;
-        let i = 0;
+      const full = LETTER_TEXT;
+      let i = 0;
 
-        typingTimer = setInterval(()=>{
-          if(token !== typingToken){
-            clearInterval(typingTimer);
-            typingTimer = null;
+      typingTimer = setInterval(()=>{
+        if(token !== typingToken){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          return;
+        }
+
+        i++;
+        bodyEl.textContent = full.slice(0,i);
+
+        if(i >= full.length){
+          clearInterval(typingTimer);
+          typingTimer = null;
+          // sign appears strictly at end (fixes the “appears early” bug)
+          signEl.textContent = LETTER_SIGN;
+          // reveal surprise
+          surpriseEl.style.display = "block";
+          state.visited.letter = true;
+          saveState();
+        }
+      }, 14);
+    }
+
+    function renderLetter(){
+      state.visited.letter = true;
+      saveState();
+
+      view.innerHTML = `
+        <div class="section-head">
+          <div class="crumb">
+            <div class="back" id="backHome">← Menú</div>
+            <div>Una carta para ti 💌</div>
+          </div>
+          <div class="hint-badge">carta</div>
+        </div>
+
+        <div class="paper">
+          <div class="paper-inner" id="letterBody"></div>
+          <div class="paper-sign" id="letterSign"></div>
+
+          <div class="surprise" id="surpriseBox">
+            <div class="s-title">🥺💗 Una cosita más…</div>
+            <div class="s-text">Tócame, porfa. Prometo que es bonito 😽✨</div>
+            <div style="margin-top:10px;">
+              <div class="mini-btn" id="btnSurprise">🎉 Tocar aquí</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="letter-actions">
+          <div class="mini-btn" id="btnReread">✨ Releer con efecto</div>
+          <div class="mini-btn" id="btnGoQuiz">🧠 Ir al mini test</div>
+        </div>
+      `;
+
+      $("backHome").onclick = ()=> render("home");
+      $("btnReread").onclick = ()=> typeLetter();
+      $("btnGoQuiz").onclick = ()=> render("quiz");
+      $("btnSurprise").onclick = ()=>{
+        confettiBurst();
+        // mini extra message
+        const s = $("surpriseBox");
+        const t = s.querySelector(".s-text");
+        t.textContent = "Te amo muchísimo. Gracias por existir en mi vida 💗😽";
+      };
+
+      // auto start typing once entering
+      typeLetter();
+    }
+
+    /* =============================
+      Photos
+    ============================== */
+    const photosData = [
+      { file:"assets/photos/01.jpeg", cap:`Los mejores momentos son cuando nos reímos juntos ${emojiForCaption(1)}` },
+      { file:"assets/photos/02.png",  cap:`La mejor biker 🏍️💗` },
+      { file:"assets/photos/03.jpeg", cap:`Me gusta cuando me abrazas 🧸🤍` },
+      { file:"assets/photos/04.jpeg", cap:`Mi copilota <3 😽💞` },
+      { file:"assets/photos/05.png",  cap:`Bonitos outfits ✨💖` },
+      { file:"assets/photos/06.jpeg", cap:`Enamorado de tu hermosa carita! 🥺💗` },
+      { file:"assets/photos/07.jpeg", cap:`Me cautiva tu belleza 💘✨` }
+    ];
+
+    function photoCardHTML(p, h=220){
+      return `
+        <div class="photo" style="height:${h}px;" data-photo>
+          <img src="${p.file}" alt="foto" loading="lazy" />
+          <div class="cap">${p.cap}</div>
+        </div>
+      `;
+    }
+
+    function renderPhotos(){
+      state.visited.photos = true;
+      saveState();
+
+      // layout: left big, then smaller right column, then bottom wide
+      view.innerHTML = `
+        <div class="section-head">
+          <div class="crumb">
+            <div class="back" id="backHome">← Menú</div>
+            <div>Nuestros momentos 📸</div>
+          </div>
+          <div class="hint-badge">fotos</div>
+        </div>
+
+        <p class="sub">Un collage… pero con estilito, obvio 😌</p>
+
+        <div class="collage">
+          <div class="col">
+            ${photoCardHTML(photosData[0], 320)}
+            <div style="display:grid; grid-template-columns: 1fr; gap:12px;">
+              ${photoCardHTML(photosData[4], 200)}
+            </div>
+          </div>
+
+          <div class="col">
+            ${photoCardHTML(photosData[1], 200)}
+            ${photoCardHTML(photosData[2], 210)}
+            ${photoCardHTML(photosData[3], 210)}
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          ${photoCardHTML(photosData[5], 240)}
+        </div>
+        <div style="margin-top:12px;">
+          ${photoCardHTML(photosData[6], 240)}
+        </div>
+
+        <div class="tap-hint">Tip: toca cualquier foto para un “like” rápido 💗</div>
+      `;
+
+      $("backHome").onclick = ()=> render("home");
+
+      // tap = heart + subtle zoom
+      view.querySelectorAll("[data-photo]").forEach(card=>{
+        const img = card.querySelector("img");
+        const pop = ()=>{
+          // small zoom pop
+          img.animate([
+            { transform:"scale(1.02)" },
+            { transform:"scale(1.06)" },
+            { transform:"scale(1.02)" }
+          ], { duration: 260, easing:"ease-out" });
+
+          const h = document.createElement("div");
+          h.className = "pop-heart";
+          h.textContent = "💗";
+          card.appendChild(h);
+          setTimeout(()=>h.remove(), 700);
+        };
+        card.addEventListener("click", pop, { passive:true });
+      });
+    }
+
+    /* =============================
+      Quiz
+    ============================== */
+    const quiz = [
+      {
+        title: "1) ¿Qué prefiero hacer? 😼",
+        options: ["Ir al gym 💪", "Ir a la escuela 📚", "Jugar videojuegos 🎮"],
+        correct: 0
+      },
+      {
+        title: "2) ¿Qué estilo de moto prefiero? 🏍️",
+        options: ["Naked 😈", "Deportiva 🏁", "2 tiempos 💨"],
+        correct: 0
+      },
+      {
+        title: "3) ¿Me amas? 🥺💗",
+        options: ["Sí 💞", "No 🙄"],
+        correct: 0
+      }
+    ];
+
+    function renderQuiz(){
+      state.visited.quiz = true;
+      saveState();
+
+      view.innerHTML = `
+        <div class="section-head">
+          <div class="crumb">
+            <div class="back" id="backHome">← Menú</div>
+            <div>Mini test 🧠</div>
+          </div>
+          <div class="hint-badge">test</div>
+        </div>
+
+        <p class="sub">Respóndelo bien y se desbloquea la sorpresa final 💘</p>
+
+        <div class="quiz" id="quizBox"></div>
+
+        <div class="quiz-actions">
+          <div class="mini-btn" id="btnSend">✅ Enviar</div>
+          <div class="mini-btn" id="btnResetQuiz">🔁 Limpiar</div>
+        </div>
+
+        <div class="toast" id="toast"></div>
+      `;
+
+      $("backHome").onclick = ()=> render("home");
+
+      const box = $("quizBox");
+      const selected = new Array(quiz.length).fill(null);
+
+      quiz.forEach((q, qi)=>{
+        const qEl = document.createElement("div");
+        qEl.className = "q";
+        qEl.innerHTML = `
+          <h3>${q.title}</h3>
+          <div class="opts">
+            ${q.options.map((o, oi)=>`<div class="opt" data-q="${qi}" data-o="${oi}">${o}</div>`).join("")}
+          </div>
+        `;
+        box.appendChild(qEl);
+      });
+
+      box.querySelectorAll(".opt").forEach(opt=>{
+        opt.addEventListener("click", ()=>{
+          const qi = Number(opt.getAttribute("data-q"));
+          const oi = Number(opt.getAttribute("data-o"));
+          selected[qi] = oi;
+
+          // mark selected on that question
+          box.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(x=>x.classList.remove("selected"));
+          opt.classList.add("selected");
+        }, { passive:true });
+      });
+
+      $("btnResetQuiz").onclick = ()=>{
+        selected.fill(null);
+        box.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
+        showToast("", "");
+      };
+
+      $("btnSend").onclick = ()=>{
+        // validate all answered
+        for(let i=0;i<selected.length;i++){
+          if(selected[i] === null){
+            showToast("Te falta una 😼 (responde todas)", "bad");
             return;
           }
-          i++;
-          bodyEl.textContent = full.slice(0,i);
-
-          if(i >= full.length){
-            clearInterval(typingTimer);
-            typingTimer = null;
-            signEl.textContent = LETTER_SIGN;
-
-            celebrate();              // ✅ confetti + hearts al terminar
-            surpriseEl.style.display = "block";
-
-            state.visited.letter = true;
-            saveState();
-          }
-        }, 14);
-      }
-
-      function renderLetter(){
-        state.visited.letter = true;
-        saveState();
-
-        view.innerHTML = `
-          <div class="section-head">
-            <div class="crumb">
-              <div class="back" id="backHome">← Menú</div>
-              <div>Una carta para ti 💌</div>
-            </div>
-            <div class="hint-badge">carta</div>
-          </div>
-
-          <div class="paper">
-            <div class="paper-inner" id="letterBody"></div>
-            <div class="paper-sign" id="letterSign"></div>
-
-            <div class="surprise" id="surpriseBox">
-              <div class="s-title">🥺💗 Una cosita más…</div>
-              <div class="s-text">Tócame, porfa 😽✨</div>
-              <div style="margin-top:10px;">
-                <div class="mini-btn" id="btnSurprise">💌 Abrir</div>
-              </div>
-
-              <div class="note" id="noteBox">
-                <div class="big">TE AMO</div>
-                <div class="mini-btn" id="btnTeAmo">TE AMO 💗</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="letter-actions">
-            <div class="mini-btn" id="btnReread">✨ Releer con efecto</div>
-            <div class="mini-btn" id="btnGoQuiz">🧠 Ir al mini test</div>
-          </div>
-        `;
-
-        $("backHome").onclick = ()=> render("home");
-        $("btnReread").onclick = ()=> typeLetter();
-        $("btnGoQuiz").onclick = ()=> render("quiz");
-
-        $("btnSurprise").onclick = ()=>{
-          $("noteBox").style.display = "block";
-          heartBurst();
-        };
-
-        $("btnTeAmo").onclick = ()=> celebrate();
-
-        typeLetter();
-      }
-
-      /* Photos data */
-      const photosData = [
-        { file:"assets/photos/01.jpeg", cap:`Los mejores momentos son cuando nos reímos juntos 💞😹` },
-        { file:"assets/photos/02.png",  cap:`La mejor biker 🏍️💗` },
-        { file:"assets/photos/03.jpeg", cap:`Me gusta cuando me abrazas 🧸🤍` },
-        { file:"assets/photos/04.jpeg", cap:`Mi copilota <3 😽💞` },
-        { file:"assets/photos/05.png",  cap:`Bonitos outfits ✨💖` },
-        { file:"assets/photos/06.jpeg", cap:`Enamorado de tu hermosa carita! 🥺💗` },
-        { file:"assets/photos/07.jpeg", cap:`Me cautiva tu belleza 💘✨` }
-      ];
-
-      function photoCardHTML(p, h=260){
-        return `
-          <div class="photo" style="height:${h}px;" data-photo>
-            <img src="${p.file}" alt="foto" loading="lazy" />
-            <div class="cap">${p.cap}</div>
-          </div>
-        `;
-      }
-
-      function renderPhotos(){
-        state.visited.photos = true;
-        saveState();
-
-        view.innerHTML = `
-          <div class="section-head">
-            <div class="crumb">
-              <div class="back" id="backHome">← Menú</div>
-              <div>Nuestros momentos 📸</div>
-            </div>
-            <div class="hint-badge">fotos</div>
-          </div>
-
-          <p class="sub">Un collage… completo y con estilito 😌</p>
-
-          <div class="collage">
-            <div class="col">
-              ${photoCardHTML(photosData[0], 320)}
-              ${photoCardHTML(photosData[4], 250)}
-            </div>
-
-            <div class="col">
-              ${photoCardHTML(photosData[1], 230)}
-              ${photoCardHTML(photosData[2], 230)}
-              ${photoCardHTML(photosData[3], 230)}
-            </div>
-          </div>
-
-          <div style="margin-top:12px;">
-            ${photoCardHTML(photosData[5], 280)}
-          </div>
-          <div style="margin-top:12px;">
-            ${photoCardHTML(photosData[6], 280)}
-          </div>
-
-          <div class="tap-hint">Tip: toca cualquier foto para un “like” rápido 💗</div>
-        `;
-
-        $("backHome").onclick = ()=> render("home");
-
-        view.querySelectorAll("[data-photo]").forEach(card=>{
-          card.addEventListener("click", ()=>{
-            const img = card.querySelector("img");
-            img.animate([{transform:"scale(1)"},{transform:"scale(1.03)"},{transform:"scale(1)"}],
-              { duration: 240, easing:"ease-out" });
-
-            const h = document.createElement("div");
-            h.className = "pop-heart";
-            h.textContent = "💗";
-            card.appendChild(h);
-            setTimeout(()=>h.remove(), 700);
-            heartBurst();
-          }, { passive:true });
-        });
-      }
-
-      /* Quiz */
-      const quiz = [
-        { title: "1) ¿Qué prefiero hacer? 😼", options: ["Ir al gym 💪", "Ir a la escuela 📚", "Jugar videojuegos 🎮"], correct: 0 },
-        { title: "2) ¿Qué estilo de moto prefiero? 🏍️", options: ["Naked 😈", "Deportiva 🏁", "2 tiempos 💨"], correct: 0 },
-        { title: "3) ¿Me amas? 🥺💗", options: ["Sí 💞", "No 🙄"], correct: 0 }
-      ];
-
-      function renderQuiz(){
-        state.visited.quiz = true;
-        saveState();
-
-        view.innerHTML = `
-          <div class="section-head">
-            <div class="crumb">
-              <div class="back" id="backHome">← Menú</div>
-              <div>Mini test 🧠</div>
-            </div>
-            <div class="hint-badge">test</div>
-          </div>
-
-          <p class="sub">Respóndelo bien y se desbloquea la sorpresa final 💘</p>
-
-          <div class="quiz" id="quizBox"></div>
-
-          <div class="quiz-actions">
-            <div class="mini-btn" id="btnSend">✅ Enviar</div>
-            <div class="mini-btn" id="btnResetQuiz">🔁 Limpiar</div>
-          </div>
-
-          <div class="toast" id="toast"></div>
-        `;
-
-        $("backHome").onclick = ()=> render("home");
-
-        const box = $("quizBox");
-        const selected = new Array(quiz.length).fill(null);
-
-        quiz.forEach((q, qi)=>{
-          const qEl = document.createElement("div");
-          qEl.className = "q";
-          qEl.innerHTML = `
-            <h3>${q.title}</h3>
-            <div class="opts">
-              ${q.options.map((o, oi)=>`<div class="opt" data-q="${qi}" data-o="${oi}">${o}</div>`).join("")}
-            </div>
-          `;
-          box.appendChild(qEl);
-        });
-
-        box.querySelectorAll(".opt").forEach(opt=>{
-          opt.addEventListener("click", ()=>{
-            const qi = Number(opt.getAttribute("data-q"));
-            const oi = Number(opt.getAttribute("data-o"));
-            selected[qi] = oi;
-            box.querySelectorAll(\`.opt[data-q="\${qi}"]\`).forEach(x=>x.classList.remove("selected"));
-            opt.classList.add("selected");
-          }, { passive:true });
-        });
-
-        function showToast(msg, kind){
-          const t = $("toast");
-          if(!msg){ t.style.display="none"; t.className="toast"; t.textContent=""; return; }
-          t.style.display="block";
-          t.className = "toast " + (kind==="good" ? "good" : "bad");
-          t.textContent = msg;
         }
 
-        $("btnResetQuiz").onclick = ()=>{
-          selected.fill(null);
-          box.querySelectorAll(".opt").forEach(x=>x.classList.remove("selected"));
-          showToast("", "");
-        };
-
-        $("btnSend").onclick = ()=>{
-          for(let i=0;i<selected.length;i++){
-            if(selected[i] === null){ showToast("Te falta una 😼 (responde todas)", "bad"); return; }
+        // check
+        for(let i=0;i<quiz.length;i++){
+          if(selected[i] !== quiz[i].correct){
+            showToast("Uy no 😹 Intenta otra vez, mi amor 💗", "bad");
+            return;
           }
-          for(let i=0;i<quiz.length;i++){
-            if(selected[i] !== quiz[i].correct){
-              showToast("Uy no 😹 Intenta otra vez, mi amor 💗", "bad");
-              return;
-            }
-          }
+        }
 
-          state.quizPassed = true;
-          state.askUnlocked = true;
-          saveState();
+        state.quizPassed = true;
+        state.askUnlocked = true;
+        saveState();
+        confettiBurst();
+        showToast("Perfecto ✅ Ya se desbloqueó la Pregunta 💘", "good");
 
-          celebrate();
-          showToast("Perfecto ✅ Ya se desbloqueó la Pregunta 💘", "good");
-          setTimeout(()=> render("home"), 900);
-        };
+        // go to menu after a sec
+        setTimeout(()=> render("home"), 900);
+      };
+
+      function showToast(msg, kind){
+        const t = $("toast");
+        if(!msg){
+          t.style.display = "none";
+          t.className = "toast";
+          t.textContent = "";
+          return;
+        }
+        t.style.display = "block";
+        t.className = "toast " + (kind==="good" ? "good" : "bad");
+        t.textContent = msg;
+      }
+    }
+
+    /* =============================
+      Final Question
+    ============================== */
+    function renderAsk(){
+      if(!state.askUnlocked){
+        render("home");
+        return;
+      }
+      state.visited.ask = true;
+      saveState();
+
+      view.innerHTML = `
+        <div class="section-head">
+          <div class="crumb">
+            <div class="back" id="backHome">← Menú</div>
+            <div>Pregunta final 💘</div>
+          </div>
+          <div class="hint-badge">final</div>
+        </div>
+
+        <div class="final">
+          <h3>¿Quieres ser mi San Valentín? 💗</h3>
+          <p>(elige tu vibra 😼)</p>
+
+          <div class="yn">
+            <div class="yes" id="btnYes">Sí 💞</div>
+            <div class="no" id="btnNo">No 🙄</div>
+          </div>
+
+          <div class="final-msg" id="finalMsg">Ayyy sí 😭💗 ya sabíaaaaa. Te amo muchísimo 😽✨</div>
+        </div>
+      `;
+
+      $("backHome").onclick = ()=> render("home");
+
+      const btnNo = $("btnNo");
+      const btnYes = $("btnYes");
+      let dodgeCount = 0;
+
+      function dodge(){
+        // works on mouse + touch:
+        // move button around randomly within the .final box
+        const box = view.querySelector(".final");
+        const rect = box.getBoundingClientRect();
+
+        // keep inside with padding
+        const pad = 14;
+        const maxX = rect.width - 90;
+        const maxY = rect.height - 80;
+
+        const x = pad + Math.random() * (maxX - pad);
+        const y = 60 + Math.random() * (maxY - 60);
+
+        btnNo.style.position = "absolute";
+        btnNo.style.left = x + "px";
+        btnNo.style.top = y + "px";
+        box.style.position = "relative";
+
+        dodgeCount++;
+        // make it slightly smaller each dodge (but not too aggressive)
+        const scale = Math.max(0.72, 1 - dodgeCount*0.06);
+        btnNo.style.transform = `scale(${scale})`;
+
+        // after a few dodges, it becomes "Sí" (cute prank)
+        if(dodgeCount >= 6){
+          btnNo.textContent = "Sí 💞";
+          btnNo.classList.remove("no");
+          btnNo.classList.add("yes");
+          btnNo.onclick = ()=> acceptYes();
+        }
       }
 
-      /* Final ask */
-      function renderAsk(){
-        if(!state.askUnlocked){ render("home"); return; }
+      function acceptYes(){
+        confettiBurst();
+        $("finalMsg").style.display = "block";
+        // mark ask as done for progress
         state.visited.ask = true;
         saveState();
-
-        view.innerHTML = `
-          <div class="section-head">
-            <div class="crumb">
-              <div class="back" id="backHome">← Menú</div>
-              <div>Pregunta final 💘</div>
-            </div>
-            <div class="hint-badge">final</div>
-          </div>
-
-          <div class="final">
-            <h3>¿Quieres ser mi San Valentín? 💗</h3>
-            <p>(elige tu vibra 😼)</p>
-
-            <div class="yn">
-              <div class="yes" id="btnYes">Sí 💞</div>
-              <div class="no" id="btnNo">No 🙄</div>
-            </div>
-
-            <div class="final-msg" id="finalMsg">Ayyy sí 😭💗 ya sabíaaaaa. Te amo muchísimo 😽✨</div>
-          </div>
-        `;
-
-        $("backHome").onclick = ()=> render("home");
-
-        const btnNo = $("btnNo");
-        const btnYes = $("btnYes");
-        let dodgeCount = 0;
-
-        function dodge(){
-          const box = view.querySelector(".final");
-          const rect = box.getBoundingClientRect();
-          const pad = 14;
-          const maxX = rect.width - 110;
-          const maxY = rect.height - 90;
-
-          const x = pad + Math.random() * (maxX - pad);
-          const y = 70 + Math.random() * (maxY - 70);
-
-          btnNo.style.position = "absolute";
-          btnNo.style.left = x + "px";
-          btnNo.style.top = y + "px";
-
-          dodgeCount++;
-          const scale = Math.max(0.72, 1 - dodgeCount*0.06);
-          btnNo.style.transform = `scale(${scale})`;
-
-          if(dodgeCount >= 6){
-            btnNo.textContent = "Sí 💞";
-            btnNo.onclick = ()=> acceptYes();
-          }
-        }
-
-        function acceptYes(){
-          $("finalMsg").style.display = "block";
-          celebrate();
-          state.visited.ask = true;
-          saveState();
-        }
-
-        btnYes.onclick = acceptYes;
-        btnNo.addEventListener("mouseenter", dodge);
-        btnNo.addEventListener("click", dodge);
-        btnNo.addEventListener("touchstart", (e)=>{ e.preventDefault(); dodge(); }, { passive:false });
       }
 
-      /* Buttons (Top + Panel) */
-      function toggleMusic(){
-        state.musicOn = !state.musicOn;
-        saveState();
-        if(state.musicOn){
-          audio.volume = 0.9;
-          audio.play().catch(()=>{ /* iOS needs gesture; but this IS gesture */ });
-        }else{
-          audio.pause();
-        }
-      }
+      btnYes.onclick = acceptYes;
 
-      function toggleHearts(){
-        state.heartsOn = !state.heartsOn;
-        saveState();
-      }
+      // Desktop hover
+      btnNo.addEventListener("mouseenter", dodge);
+      // Mobile tap
+      btnNo.addEventListener("touchstart", (e)=>{
+        e.preventDefault();
+        dodge();
+      }, { passive:false });
+      btnNo.addEventListener("click", dodge);
+    }
 
-      $("btnMusic").addEventListener("click", toggleMusic);
-      $("toggleMusic").addEventListener("click", toggleMusic);
+    /* =============================
+      UI Bits + Events
+    ============================== */
+    function updateUIBits(){
+      // toggles
+      $("toggleMusic").classList.toggle("on", state.musicOn);
+      $("toggleHearts").classList.toggle("on", state.heartsOn);
 
-      $("btnHearts").addEventListener("click", toggleHearts);
-      $("toggleHearts").addEventListener("click", toggleHearts);
+      // top buttons
+      $("btnMusic").classList.toggle("off", !state.musicOn);
+      $("musicState").textContent = state.musicOn ? "ON" : "OFF";
 
-      $("btnConfetti").addEventListener("click", celebrate);
-      $("ctrlConfetti").addEventListener("click", celebrate);
+      $("btnHearts").classList.toggle("off", !state.heartsOn);
+      $("heartsState").textContent = state.heartsOn ? "ON" : "OFF";
 
-      $("btnFullscreen").addEventListener("click", ()=>{
-        state.fullscreen = !state.fullscreen;
-        saveState();
-      });
+      $("fsState").textContent = state.fullscreen ? "CINE" : "FULL";
+      document.body.classList.toggle("fullscreen", state.fullscreen);
 
-      $("btnCopy").addEventListener("click", async ()=>{
-        const url = location.href;
-        try{
-          await navigator.clipboard.writeText(url);
-          const btn = $("btnCopy");
-          const old = btn.textContent;
-          btn.textContent = "✅ Copiado";
-          setTimeout(()=> btn.textContent = old, 900);
-        }catch{
-          prompt("Copia este link:", url);
-        }
-      });
+      // status pill
+      const pill = $("statusPill");
+      const unlocked = !!state.askUnlocked;
+      pill.textContent = unlocked ? "Pregunta: desbloqueada ✅" : "Pregunta: bloqueada";
+      pill.classList.toggle("good", unlocked);
+      pill.classList.toggle("bad", !unlocked);
 
-      $("btnReset").addEventListener("click", ()=>{
-        if(confirm("¿Seguro? Esto borra el progreso guardado 😼")){
-          localStorage.removeItem(LS_KEY);
-          state = clone(defaultState);
-          stopHearts();
-          clearHearts();
-          audio.pause();
-          render("home");
-          updateUIBits();
-        }
-      });
-
-      /* Start */
+      // hearts
       if(state.heartsOn) startHearts();
-      updateUIBits();
-      render("home");
-    });
+      else stopHearts();
+
+      // music
+      if(state.musicOn){
+        // try play if user has toggled
+        audio.play().catch(()=>{});
+      }else{
+        audio.pause();
+      }
+
+      updateProgressUI();
+    }
+
+    // top buttons
+    $("btnMusic").onclick = toggleMusic;
+    $("toggleMusic").onclick = toggleMusic;
+
+    $("btnHearts").onclick = ()=>{
+      state.heartsOn = !state.heartsOn;
+      saveState();
+    };
+    $("toggleHearts").onclick = ()=>{
+      state.heartsOn = !state.heartsOn;
+      saveState();
+    };
+
+    $("btnFullscreen").onclick = toggleFullscreenUI;
+
+    $("btnCopy").onclick = async ()=>{
+      const url = location.href;
+      try{
+        await navigator.clipboard.writeText(url);
+        // tiny feedback
+        $("btnCopy").textContent = "✅ Copiado";
+        setTimeout(()=> $("btnCopy").textContent = "🔗 Copiar link", 900);
+      }catch{
+        // fallback prompt
+        prompt("Copia este link:", url);
+      }
+    };
+
+    $("btnReset").onclick = ()=>{
+      if(confirm("¿Seguro? Esto borra el progreso guardado en el cel 😼")){
+        hardReset();
+      }
+    };
+
+    // if first load, apply toggles
+    if(state.heartsOn) startHearts();
+    updateUIBits();
+
+    // Initial route
+    render("home");
   </script>
 </body>
 </html>
