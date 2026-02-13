@@ -9,14 +9,12 @@
       --bg1:#fff7fb;
       --bg2:#f3edff;
       --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.85);
       --stroke: rgba(140,120,160,.20);
       --text:#2b2433;
       --muted: rgba(43,36,51,.65);
       --shadow: 0 14px 50px rgba(30,18,44,.12);
       --shadow2: 0 10px 30px rgba(30,18,44,.10);
       --r: 22px;
-      --r2: 18px;
       --pad: 18px;
     }
 
@@ -355,6 +353,8 @@
       position:relative;
       overflow:hidden;
     }
+    /* FIX: overlays no bloquean clicks */
+    .paper::before, .paper::after{ pointer-events:none; }
     .paper::before{
       content:"";
       position:absolute; inset:-2px;
@@ -389,6 +389,8 @@
       font-weight: 650;
     }
     .paper-sign{
+      position:relative;
+      z-index:1;
       margin-top: 10px;
       font-weight: 900;
       color: rgba(43,36,51,.82);
@@ -398,6 +400,8 @@
       display:flex;
       gap: 10px;
       flex-wrap:wrap;
+      position:relative;
+      z-index:2;
     }
     .mini-btn{
       cursor:pointer;
@@ -424,6 +428,8 @@
       border: 1px solid rgba(255,120,190,.25);
       background: rgba(255,255,255,.70);
       box-shadow: 0 10px 24px rgba(30,18,44,.08);
+      position:relative;
+      z-index:2;
     }
     .surprise .s-title{
       font-weight: 1000;
@@ -434,6 +440,22 @@
       font-weight: 700;
       font-size: 13px;
       line-height: 1.3;
+    }
+    .note{
+      display:none;
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 16px;
+      border: 1px solid rgba(140,120,160,.16);
+      background: rgba(255,255,255,.78);
+      box-shadow: 0 10px 22px rgba(30,18,44,.10);
+      font-weight: 1000;
+      text-align:center;
+    }
+    .note .big{
+      font-size: 18px;
+      letter-spacing: 1px;
+      margin-bottom: 10px;
     }
 
     /* ===== Photos collage ===== */
@@ -460,15 +482,21 @@
       box-shadow: 0 12px 28px rgba(30,18,44,.10);
       transform: translateZ(0);
     }
+
+    /* FIX: que SIEMPRE se vea completa (cel + compu + cine) */
     .photo img{
       width:100%;
       height:100%;
-      object-fit: cover;
+      object-fit: contain;         /* <- completo */
+      object-position: center;
       display:block;
-      transform: scale(1.02);
+      background: rgba(255,255,255,.22);
       transition: transform .22s ease;
+      transform: scale(1);
+      padding: 10px;              /* respiro para no “pegar” bordes */
     }
-    .photo:hover img{ transform: scale(1.05); }
+    .photo:hover img{ transform: scale(1.02); }
+
     .cap{
       position:absolute;
       left: 10px;
@@ -503,6 +531,7 @@
       pointer-events:none;
       filter: drop-shadow(0 10px 18px rgba(0,0,0,.18));
       animation: popHeart .65s ease forwards;
+      z-index: 3;
     }
     @keyframes popHeart{
       0%{ opacity:0; transform: translate(-50%,-50%) scale(.5); }
@@ -586,6 +615,8 @@
       border: 1px solid rgba(140,120,160,.16);
       background: rgba(255,255,255,.68);
       box-shadow: 0 12px 28px rgba(30,18,44,.10);
+      position: relative;
+      overflow: hidden;
     }
     .final h3{
       margin: 0 0 6px 0;
@@ -613,9 +644,10 @@
       font-size: 14px;
       transition: transform .15s ease;
       position:relative;
+      z-index: 2;
     }
-    .yes:hover{ transform: translateY(-1px); }
-    .no:hover{ transform: translateY(-1px); }
+    .yes:hover, .no:hover{ transform: translateY(-1px); }
+
     .final-msg{
       margin-top: 12px;
       font-weight: 1000;
@@ -628,7 +660,7 @@
     }
 
     /* ===== Right controls panel ===== */
-    .controls .row{
+    .controls-panel .row{
       display:flex;
       justify-content:space-between;
       align-items:center;
@@ -639,7 +671,7 @@
       background: rgba(255,255,255,.62);
       margin-top: 10px;
     }
-    .controls .label{
+    .controls-panel .label{
       display:flex; align-items:center; gap:10px;
       font-weight: 950;
       color: rgba(43,36,51,.82);
@@ -697,21 +729,17 @@
 
     /* ===== Fullscreen mode ===== */
     .fullscreen .controls-panel{ display:none; }
-    .controls-panel{ }
     .fullscreen .wrap{ grid-template-columns: 1fr; }
     .fullscreen .topbar{ max-width: 980px; }
     .fullscreen .card{ box-shadow: 0 18px 60px rgba(30,18,44,.14); }
 
     /* small animation */
-    .fade-in{
-      animation: fadeIn .25s ease both;
-    }
+    .fade-in{ animation: fadeIn .25s ease both; }
     @keyframes fadeIn{
       from{ opacity:0; transform: translateY(6px); }
       to{ opacity:1; transform: translateY(0); }
     }
 
-    /* reduce motion */
     @media (prefers-reduced-motion: reduce){
       *{ animation: none !important; transition: none !important; }
     }
@@ -735,6 +763,9 @@
       <div class="btn" id="btnHearts" title="Corazones">
         💞 Corazones <span class="state" id="heartsState">ON</span>
       </div>
+      <div class="btn" id="btnConfetti" title="Confetti">
+        🎉 Confetti <span class="state" id="confettiState">GO</span>
+      </div>
       <div class="btn" id="btnFullscreen" title="Pantalla completa">
         📱 Pantalla <span class="state" id="fsState">FULL</span>
       </div>
@@ -748,12 +779,10 @@
   </div>
 
   <div class="wrap" id="app">
-    <!-- Left main -->
     <div class="card" id="mainCard">
       <div id="view"></div>
     </div>
 
-    <!-- Right controls -->
     <div class="card controls-panel" id="controlsPanel">
       <h2>Controles</h2>
       <p class="sub">Todo pensado para celular 📱</p>
@@ -766,6 +795,11 @@
       <div class="row">
         <div class="label">💞 Corazones</div>
         <div class="toggle on" id="toggleHearts"><div class="knob"></div></div>
+      </div>
+
+      <div class="row">
+        <div class="label">🎉 Confetti</div>
+        <div class="mini-btn" id="ctrlConfetti">Lanzar</div>
       </div>
 
       <div class="row">
@@ -799,20 +833,16 @@
     </div>
   </div>
 
-  <!-- Audio -->
   <audio id="audio" preload="auto" loop>
     <source src="assets/photos/music.mp3" type="audio/mpeg">
   </audio>
 
   <script>
-    /* =============================
-      State (localStorage)
-    ============================== */
-    const LS_KEY = "valentine_state_v3";
+    const LS_KEY = "valentine_state_v4";
     const defaultState = {
       visited: { home:true, letter:false, photos:false, quiz:false, ask:false },
       quizPassed: false,
-      askUnlocked: false,  // unlocked by quiz
+      askUnlocked: false,
       heartsOn: true,
       musicOn: false,
       fullscreen: false
@@ -836,22 +866,9 @@
       localStorage.setItem(LS_KEY, JSON.stringify(state));
       updateUIBits();
     }
-    function hardReset(){
-      localStorage.removeItem(LS_KEY);
-      state = structuredClone(defaultState);
-      stopTyping(true);
-      stopHearts();
-      startHearts();
-      pauseMusic();
-      render("home");
-      updateUIBits();
-    }
 
     let state = loadState();
 
-    /* =============================
-      Utilities
-    ============================== */
     const $ = (id)=>document.getElementById(id);
     const view = $("view");
     const audio = $("audio");
@@ -860,17 +877,15 @@
       window.scrollTo({ top: 0, behavior: "smooth" });
     }
 
-    function emojiForCaption(i){
-      // sutil y cute, no saturar
-      const list = ["💞","😹","🏍️","🤍","🧸","✨","😽","💗","📸","🥺"];
-      return list[i % list.length];
-    }
-
     /* =============================
       Hearts
     ============================== */
     const heartsLayer = $("heartsLayer");
     let heartsTimer = null;
+
+    function clearHearts(){
+      heartsLayer.innerHTML = "";
+    }
 
     function startHearts(){
       if(!state.heartsOn) return;
@@ -897,17 +912,22 @@
       heart.style.animationDuration = dur + "s";
       heart.style.animationDelay = (Math.random()*0.2) + "s";
       heartsLayer.appendChild(heart);
-      requestAnimationFrame(()=>{ /* let animation start */ });
       setTimeout(()=> heart.remove(), (dur+1)*1000);
+    }
+
+    function heartBurst(){
+      if(!state.heartsOn) return;
+      for(let i=0;i<12;i++){
+        setTimeout(()=>spawnHeart(), i*60);
+      }
     }
 
     /* =============================
       Confetti (mini)
     ============================== */
     function confettiBurst(){
-      // mini confetti, ligero
       const colors = ["#ff7ac3","#b89bff","#ffd1ea","#9be9c3","#ffe08a"];
-      for(let i=0;i<40;i++){
+      for(let i=0;i<44;i++){
         const p = document.createElement("div");
         p.style.position = "fixed";
         p.style.left = (50 + (Math.random()*30-15)) + "vw";
@@ -917,22 +937,27 @@
         p.style.background = colors[Math.floor(Math.random()*colors.length)];
         p.style.borderRadius = "3px";
         p.style.opacity = ".95";
-        p.style.zIndex = 50;
+        p.style.zIndex = 80;
         p.style.transform = "translate(-50%,-50%) rotate("+(Math.random()*180)+"deg)";
         document.body.appendChild(p);
 
         const dx = (Math.random()*2-1) * 180;
         const dy = 220 + Math.random()*180;
         const rot = (Math.random()*2-1) * 260;
-        const dur = 600 + Math.random()*500;
+        const dur = 650 + Math.random()*550;
 
         p.animate([
           { transform:`translate(-50%,-50%) translate(0,0) rotate(0deg)`, opacity:.95 },
           { transform:`translate(-50%,-50%) translate(${dx}px,${dy}px) rotate(${rot}deg)`, opacity:0 }
         ], { duration: dur, easing:"cubic-bezier(.2,.8,.2,1)" });
 
-        setTimeout(()=>p.remove(), dur+50);
+        setTimeout(()=>p.remove(), dur+60);
       }
+    }
+
+    function celebrate(){
+      confettiBurst();
+      heartBurst();
     }
 
     /* =============================
@@ -942,7 +967,7 @@
       state.musicOn = true;
       saveState();
       audio.volume = 0.9;
-      audio.play().catch(()=>{/* iOS can block until user gesture, but our toggle is a gesture */});
+      audio.play().catch(()=>{});
     }
     function pauseMusic(){
       state.musicOn = false;
@@ -966,28 +991,24 @@
       Progress
     ============================== */
     function computeProgress(){
-      // 4 steps: visited letter/photos + quizPassed + askUnlocked (or visited ask?) + accepted?
       let done = 0;
       const steps = {
         letter: !!state.visited.letter,
         photos: !!state.visited.photos,
         quiz: !!state.quizPassed,
-        ask: !!state.askUnlocked // unlocked means ready; visiting ask will also mark
+        ask: !!state.askUnlocked
       };
       done += steps.letter ? 1 : 0;
       done += steps.photos ? 1 : 0;
       done += steps.quiz ? 1 : 0;
       done += steps.ask ? 1 : 0;
-
       const percent = Math.round((done/4)*100);
-      return { steps, done, percent };
+      return { steps, percent };
     }
-
     function updateProgressUI(){
       const { steps, percent } = computeProgress();
       $("progBar").style.width = percent + "%";
       $("progPercent").textContent = percent + "%";
-
       $("sLetter").classList.toggle("done", steps.letter);
       $("sPhotos").classList.toggle("done", steps.photos);
       $("sQuiz").classList.toggle("done", steps.quiz);
@@ -995,7 +1016,7 @@
     }
 
     /* =============================
-      Menu tiles + routing
+      Routing
     ============================== */
     function render(route){
       safeScrollTop();
@@ -1112,9 +1133,11 @@ tu hombre que te ama, Sergio 💗
       const bodyEl = $("letterBody");
       const signEl = $("letterSign");
       const surpriseEl = $("surpriseBox");
+      const noteEl = $("noteBox");
 
       signEl.textContent = "";
       surpriseEl.style.display = "none";
+      noteEl.style.display = "none";
 
       const full = LETTER_TEXT;
       let i = 0;
@@ -1132,10 +1155,14 @@ tu hombre que te ama, Sergio 💗
         if(i >= full.length){
           clearInterval(typingTimer);
           typingTimer = null;
-          // sign appears strictly at end (fixes the “appears early” bug)
           signEl.textContent = LETTER_SIGN;
-          // reveal surprise
+
+          // ✅ celebración al terminar carta
+          celebrate();
+
+          // ✅ mostrar sorpresa (clickable)
           surpriseEl.style.display = "block";
+
           state.visited.letter = true;
           saveState();
         }
@@ -1161,9 +1188,14 @@ tu hombre que te ama, Sergio 💗
 
           <div class="surprise" id="surpriseBox">
             <div class="s-title">🥺💗 Una cosita más…</div>
-            <div class="s-text">Tócame, porfa. Prometo que es bonito 😽✨</div>
+            <div class="s-text">Tócame, porfa 😽✨</div>
             <div style="margin-top:10px;">
-              <div class="mini-btn" id="btnSurprise">🎉 Tocar aquí</div>
+              <div class="mini-btn" id="btnSurprise">💌 Abrir</div>
+            </div>
+
+            <div class="note" id="noteBox">
+              <div class="big">TE AMO</div>
+              <div class="mini-btn" id="btnTeAmo">TE AMO 💗</div>
             </div>
           </div>
         </div>
@@ -1177,12 +1209,17 @@ tu hombre que te ama, Sergio 💗
       $("backHome").onclick = ()=> render("home");
       $("btnReread").onclick = ()=> typeLetter();
       $("btnGoQuiz").onclick = ()=> render("quiz");
+
       $("btnSurprise").onclick = ()=>{
-        confettiBurst();
-        // mini extra message
-        const s = $("surpriseBox");
-        const t = s.querySelector(".s-text");
-        t.textContent = "Te amo muchísimo. Gracias por existir en mi vida 💗😽";
+        const note = $("noteBox");
+        note.style.display = "block";
+        // micro celebracion al abrir
+        heartBurst();
+      };
+
+      $("btnTeAmo").onclick = ()=>{
+        // ✅ confetti + corazones al presionar TE AMO
+        celebrate();
       };
 
       // auto start typing once entering
@@ -1193,7 +1230,7 @@ tu hombre que te ama, Sergio 💗
       Photos
     ============================== */
     const photosData = [
-      { file:"assets/photos/01.jpeg", cap:`Los mejores momentos son cuando nos reímos juntos ${emojiForCaption(1)}` },
+      { file:"assets/photos/01.jpeg", cap:`Los mejores momentos son cuando nos reímos juntos 💞😹` },
       { file:"assets/photos/02.png",  cap:`La mejor biker 🏍️💗` },
       { file:"assets/photos/03.jpeg", cap:`Me gusta cuando me abrazas 🧸🤍` },
       { file:"assets/photos/04.jpeg", cap:`Mi copilota <3 😽💞` },
@@ -1202,7 +1239,7 @@ tu hombre que te ama, Sergio 💗
       { file:"assets/photos/07.jpeg", cap:`Me cautiva tu belleza 💘✨` }
     ];
 
-    function photoCardHTML(p, h=220){
+    function photoCardHTML(p, h=260){
       return `
         <div class="photo" style="height:${h}px;" data-photo>
           <img src="${p.file}" alt="foto" loading="lazy" />
@@ -1215,7 +1252,6 @@ tu hombre que te ama, Sergio 💗
       state.visited.photos = true;
       saveState();
 
-      // layout: left big, then smaller right column, then bottom wide
       view.innerHTML = `
         <div class="section-head">
           <div class="crumb">
@@ -1225,28 +1261,26 @@ tu hombre que te ama, Sergio 💗
           <div class="hint-badge">fotos</div>
         </div>
 
-        <p class="sub">Un collage… pero con estilito, obvio 😌</p>
+        <p class="sub">Un collage… pero completo y con estilito 😌</p>
 
         <div class="collage">
           <div class="col">
             ${photoCardHTML(photosData[0], 320)}
-            <div style="display:grid; grid-template-columns: 1fr; gap:12px;">
-              ${photoCardHTML(photosData[4], 200)}
-            </div>
+            ${photoCardHTML(photosData[4], 250)}
           </div>
 
           <div class="col">
-            ${photoCardHTML(photosData[1], 200)}
-            ${photoCardHTML(photosData[2], 210)}
-            ${photoCardHTML(photosData[3], 210)}
+            ${photoCardHTML(photosData[1], 230)}
+            ${photoCardHTML(photosData[2], 230)}
+            ${photoCardHTML(photosData[3], 230)}
           </div>
         </div>
 
         <div style="margin-top:12px;">
-          ${photoCardHTML(photosData[5], 240)}
+          ${photoCardHTML(photosData[5], 280)}
         </div>
         <div style="margin-top:12px;">
-          ${photoCardHTML(photosData[6], 240)}
+          ${photoCardHTML(photosData[6], 280)}
         </div>
 
         <div class="tap-hint">Tip: toca cualquier foto para un “like” rápido 💗</div>
@@ -1254,22 +1288,23 @@ tu hombre que te ama, Sergio 💗
 
       $("backHome").onclick = ()=> render("home");
 
-      // tap = heart + subtle zoom
       view.querySelectorAll("[data-photo]").forEach(card=>{
         const img = card.querySelector("img");
         const pop = ()=>{
-          // small zoom pop
           img.animate([
-            { transform:"scale(1.02)" },
-            { transform:"scale(1.06)" },
-            { transform:"scale(1.02)" }
-          ], { duration: 260, easing:"ease-out" });
+            { transform:"scale(1)" },
+            { transform:"scale(1.03)" },
+            { transform:"scale(1)" }
+          ], { duration: 240, easing:"ease-out" });
 
           const h = document.createElement("div");
           h.className = "pop-heart";
           h.textContent = "💗";
           card.appendChild(h);
           setTimeout(()=>h.remove(), 700);
+
+          // mini extra: burst chiquito
+          heartBurst();
         };
         card.addEventListener("click", pop, { passive:true });
       });
@@ -1279,21 +1314,9 @@ tu hombre que te ama, Sergio 💗
       Quiz
     ============================== */
     const quiz = [
-      {
-        title: "1) ¿Qué prefiero hacer? 😼",
-        options: ["Ir al gym 💪", "Ir a la escuela 📚", "Jugar videojuegos 🎮"],
-        correct: 0
-      },
-      {
-        title: "2) ¿Qué estilo de moto prefiero? 🏍️",
-        options: ["Naked 😈", "Deportiva 🏁", "2 tiempos 💨"],
-        correct: 0
-      },
-      {
-        title: "3) ¿Me amas? 🥺💗",
-        options: ["Sí 💞", "No 🙄"],
-        correct: 0
-      }
+      { title: "1) ¿Qué prefiero hacer? 😼", options: ["Ir al gym 💪", "Ir a la escuela 📚", "Jugar videojuegos 🎮"], correct: 0 },
+      { title: "2) ¿Qué estilo de moto prefiero? 🏍️", options: ["Naked 😈", "Deportiva 🏁", "2 tiempos 💨"], correct: 0 },
+      { title: "3) ¿Me amas? 🥺💗", options: ["Sí 💞", "No 🙄"], correct: 0 }
     ];
 
     function renderQuiz(){
@@ -1343,9 +1366,7 @@ tu hombre que te ama, Sergio 💗
           const qi = Number(opt.getAttribute("data-q"));
           const oi = Number(opt.getAttribute("data-o"));
           selected[qi] = oi;
-
-          // mark selected on that question
-          box.querySelectorAll(`.opt[data-q="${qi}"]`).forEach(x=>x.classList.remove("selected"));
+          box.querySelectorAll(\`.opt[data-q="\${qi}"]\`).forEach(x=>x.classList.remove("selected"));
           opt.classList.add("selected");
         }, { passive:true });
       });
@@ -1357,15 +1378,12 @@ tu hombre que te ama, Sergio 💗
       };
 
       $("btnSend").onclick = ()=>{
-        // validate all answered
         for(let i=0;i<selected.length;i++){
           if(selected[i] === null){
             showToast("Te falta una 😼 (responde todas)", "bad");
             return;
           }
         }
-
-        // check
         for(let i=0;i<quiz.length;i++){
           if(selected[i] !== quiz[i].correct){
             showToast("Uy no 😹 Intenta otra vez, mi amor 💗", "bad");
@@ -1376,10 +1394,10 @@ tu hombre que te ama, Sergio 💗
         state.quizPassed = true;
         state.askUnlocked = true;
         saveState();
-        confettiBurst();
+
+        celebrate();
         showToast("Perfecto ✅ Ya se desbloqueó la Pregunta 💘", "good");
 
-        // go to menu after a sec
         setTimeout(()=> render("home"), 900);
       };
 
@@ -1398,7 +1416,7 @@ tu hombre que te ama, Sergio 💗
     }
 
     /* =============================
-      Final Question
+      Final Ask
     ============================== */
     function renderAsk(){
       if(!state.askUnlocked){
@@ -1437,51 +1455,39 @@ tu hombre que te ama, Sergio 💗
       let dodgeCount = 0;
 
       function dodge(){
-        // works on mouse + touch:
-        // move button around randomly within the .final box
         const box = view.querySelector(".final");
         const rect = box.getBoundingClientRect();
-
-        // keep inside with padding
         const pad = 14;
-        const maxX = rect.width - 90;
-        const maxY = rect.height - 80;
+        const maxX = rect.width - 110;
+        const maxY = rect.height - 90;
 
         const x = pad + Math.random() * (maxX - pad);
-        const y = 60 + Math.random() * (maxY - 60);
+        const y = 70 + Math.random() * (maxY - 70);
 
         btnNo.style.position = "absolute";
         btnNo.style.left = x + "px";
         btnNo.style.top = y + "px";
-        box.style.position = "relative";
 
         dodgeCount++;
-        // make it slightly smaller each dodge (but not too aggressive)
         const scale = Math.max(0.72, 1 - dodgeCount*0.06);
         btnNo.style.transform = `scale(${scale})`;
 
-        // after a few dodges, it becomes "Sí" (cute prank)
         if(dodgeCount >= 6){
           btnNo.textContent = "Sí 💞";
-          btnNo.classList.remove("no");
-          btnNo.classList.add("yes");
           btnNo.onclick = ()=> acceptYes();
         }
       }
 
       function acceptYes(){
-        confettiBurst();
         $("finalMsg").style.display = "block";
-        // mark ask as done for progress
+        celebrate(); // ✅ confetti + corazones al decir que sí
         state.visited.ask = true;
         saveState();
       }
 
       btnYes.onclick = acceptYes;
 
-      // Desktop hover
       btnNo.addEventListener("mouseenter", dodge);
-      // Mobile tap
       btnNo.addEventListener("touchstart", (e)=>{
         e.preventDefault();
         dodge();
@@ -1493,11 +1499,9 @@ tu hombre que te ama, Sergio 💗
       UI Bits + Events
     ============================== */
     function updateUIBits(){
-      // toggles
       $("toggleMusic").classList.toggle("on", state.musicOn);
       $("toggleHearts").classList.toggle("on", state.heartsOn);
 
-      // top buttons
       $("btnMusic").classList.toggle("off", !state.musicOn);
       $("musicState").textContent = state.musicOn ? "ON" : "OFF";
 
@@ -1507,20 +1511,21 @@ tu hombre que te ama, Sergio 💗
       $("fsState").textContent = state.fullscreen ? "CINE" : "FULL";
       document.body.classList.toggle("fullscreen", state.fullscreen);
 
-      // status pill
       const pill = $("statusPill");
       const unlocked = !!state.askUnlocked;
       pill.textContent = unlocked ? "Pregunta: desbloqueada ✅" : "Pregunta: bloqueada";
       pill.classList.toggle("good", unlocked);
       pill.classList.toggle("bad", !unlocked);
 
-      // hearts
-      if(state.heartsOn) startHearts();
-      else stopHearts();
+      // ✅ Hearts truly on/off
+      if(state.heartsOn){
+        startHearts();
+      }else{
+        stopHearts();
+        clearHearts(); // <- important: desaparecen de verdad
+      }
 
-      // music
       if(state.musicOn){
-        // try play if user has toggled
         audio.play().catch(()=>{});
       }else{
         audio.pause();
@@ -1529,18 +1534,19 @@ tu hombre que te ama, Sergio 💗
       updateProgressUI();
     }
 
-    // top buttons
+    // Top buttons
     $("btnMusic").onclick = toggleMusic;
     $("toggleMusic").onclick = toggleMusic;
 
-    $("btnHearts").onclick = ()=>{
+    function toggleHearts(){
       state.heartsOn = !state.heartsOn;
       saveState();
-    };
-    $("toggleHearts").onclick = ()=>{
-      state.heartsOn = !state.heartsOn;
-      saveState();
-    };
+    }
+    $("btnHearts").onclick = toggleHearts;
+    $("toggleHearts").onclick = toggleHearts;
+
+    $("btnConfetti").onclick = celebrate;
+    $("ctrlConfetti").onclick = celebrate;
 
     $("btnFullscreen").onclick = toggleFullscreenUI;
 
@@ -1548,26 +1554,31 @@ tu hombre que te ama, Sergio 💗
       const url = location.href;
       try{
         await navigator.clipboard.writeText(url);
-        // tiny feedback
         $("btnCopy").textContent = "✅ Copiado";
         setTimeout(()=> $("btnCopy").textContent = "🔗 Copiar link", 900);
       }catch{
-        // fallback prompt
         prompt("Copia este link:", url);
       }
     };
 
     $("btnReset").onclick = ()=>{
       if(confirm("¿Seguro? Esto borra el progreso guardado en el cel 😼")){
-        hardReset();
+        localStorage.removeItem(LS_KEY);
+        state = structuredClone(defaultState);
+
+        stopHearts();
+        clearHearts();
+        if(state.heartsOn) startHearts();
+
+        pauseMusic();
+        render("home");
+        updateUIBits();
       }
     };
 
-    // if first load, apply toggles
+    // Start
     if(state.heartsOn) startHearts();
     updateUIBits();
-
-    // Initial route
     render("home");
   </script>
 </body>
